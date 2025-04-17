@@ -18,6 +18,11 @@ h1 {
   margin-top: 20px;
   margin-left: 100px;
 }
+select {
+  height: 30px;
+  width: 200px;
+  font-size: 16px;
+}
 .guitar-neck {
   position: relative;
   margin-top: 40px;

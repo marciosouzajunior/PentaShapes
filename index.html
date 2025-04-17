@@ -10,7 +10,20 @@
 	<h1>PentaShapes</h1>
 
 	<div class="options">
-		<p>Root: C#</p>
+
+		SCALE:
+		<select id="scale-select">
+			<option value="penta_min">Pentatonic Minor</option>
+			<option value="penta_maj">Pentatonic Major</option>
+			<option value="major" disabled>Major</option>
+			<option value="minor" disabled>Minor</option>
+			<option value="blues" disabled>Blues</option>
+		</select>
+
+		<!-- select the available shapes -->
+
+		<p style="margin-top: 10px;">Root: <span id="root-note"></span></p>
+
 	</div>
 
 
