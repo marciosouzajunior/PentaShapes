@@ -23,6 +23,10 @@ select {
   width: 200px;
   font-size: 16px;
 }
+label {
+  font-size: 16px;
+  margin-right: 20px;
+}
 .guitar-neck {
   position: relative;
   margin-top: 40px;
@@ -42,7 +46,7 @@ select {
   color: #fff;
 }
 .guitar-neck .open-notes li.active {
-  color: #fa990f;
+  color: #ff8000;
 }
 .guitar-neck .fret {
   float: left;
@@ -71,7 +75,7 @@ select {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: #383530;
+  background: #dadada;
 }
 .guitar-neck .dots-3 {
   margin-left: 188px;
@@ -157,6 +161,10 @@ select {
   text-align: center;
   line-height: 20px;
   box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.75);
+  user-select: none;
+  -webkit-user-select: none; /* For Safari */
+  -moz-user-select: none;    /* For Firefox */
+  -ms-user-select: none;     /* For IE/Edge */
 }
 
 .guitar-neck .notes .mask ul li.active {

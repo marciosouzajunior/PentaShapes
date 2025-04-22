@@ -51,14 +51,29 @@ var penta_min = {
   };
 
 
-function inactiveAll(){
-	$('.guitar-neck .notes li').removeClass('active');
-	$('.guitar-neck .notes li').addClass('inactive');
+function reset(){
+
+	$('.guitar-neck .notes li').each(function() {
+		var note = $(this).data('note');
+		$(this).text(note);
+
+		// remove the class active
+		$(this).removeClass('active');
+		$(this).addClass('inactive');
+	});
+
+}
+
+function hideAll() {
+	$('.guitar-neck .notes li').each(function() {
+		$(this).css('visibility', 'hidden');
+	});
 }
 
 function renderShapes(string, index) {
 
-	inactiveAll();
+	reset();
+	hideAll();
 
 	// TODO: Add logic to render shapes for other strings
 	if (string == 'e_high' || string == 'b' || string == 'g') {
@@ -92,8 +107,16 @@ function renderShapes(string, index) {
 				var offset = noteData.offset;
 				var label = noteData.label;
 
-				$('.mask[data-string="' + stringName + '"] li[data-index="' + (offset + index) + '"]').removeClass('inactive');
-				$('.mask[data-string="' + stringName + '"] li[data-index="' + (offset + index) + '"]').addClass('active');
+				$('.mask[data-string="' + stringName + '"] li[data-index="' + (index + offset) + '"]').removeClass('inactive');
+				$('.mask[data-string="' + stringName + '"] li[data-index="' + (index + offset) + '"]').addClass('active');
+				$('.mask[data-string="' + stringName + '"] li[data-index="' + (index + offset) + '"]').text(label);
+				$('.mask[data-string="' + stringName + '"] li[data-index="' + (index + offset) + '"]').css('visibility', 'visible');
+
+
+
+
+
+
 				
 			}
 
