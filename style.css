@@ -62,9 +62,7 @@ label {
   font-size: 18px;
   color: #fff;
 }
-.guitar-neck .open-notes li.active {
-  color: #ff8000;
-}
+
 .guitar-neck .fret {
   float: left;
   width: 3px;
@@ -185,6 +183,11 @@ label {
 }
 
 .guitar-neck .notes .mask ul li.active {
+  background: #000000;
+  color: #fff;
+}
+
+.guitar-neck .notes .mask ul li.active-root {
   background: #fa990f;
   color: #fff;
 }
@@ -192,6 +195,7 @@ label {
 .guitar-neck .notes .mask ul li.inactive {
   background: #e9e9e9;
   color: #404040;
+  opacity: 0.8;
 }
 
 .guitar-neck .notes .mask.a {

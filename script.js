@@ -47,6 +47,52 @@ var penta_min = {
 		{ string: 'e_low', offset: 0, label: '1' },
 		{ string: 'e_low', offset: -2, label: '♭7' }
 	  ]
+	},
+	a: {
+	  shape_3: [
+		{ string: 'e_high', offset: 0, label: '5' },
+		{ string: 'e_high', offset: -2, label: '4' },
+		{ string: 'b', offset: 1, label: '♭3' },
+		{ string: 'b', offset: -2, label: '1' },
+		{ string: 'g', offset: 0, label: '♭7' },
+		{ string: 'g', offset: -3, label: '5' },
+		{ string: 'd', offset: 0, label: '4' },
+		{ string: 'd', offset: -2, label: '♭3' },
+		{ string: 'a', offset: 0, label: '1' },
+		{ string: 'a', 	offset: -2, label: '♭7' },
+		{ string: 'e_low', offset: 0, label: '5' },
+		{ string: 'e_low', offset: -2, label: '4' }
+	  ],
+	  shape_4: [
+		{ string: 'e_high', offset: 3, label: '♭7' },
+		{ string: 'e_high', offset: 0, label: '5' },
+		{ string: 'b', offset: 3, label: '4' },
+		{ string: 'b', offset: 1, label: '♭3' },
+		{ string: 'g', offset: 2, label: '1' },
+		{ string: 'g', offset: 0, label: '♭7' },
+		{ string: 'd', offset: 2, label: '5' },
+		{ string: 'd', offset: 0, label: '4' },
+		{ string: 'a', offset: 3, label: '♭3' },
+		{ string: 'a', offset: 0, label: '1' },
+		{ string: 'e_low', offset: 3, label:'♭7'},
+	    { string: 'e_low', offset: 0, label: '5'}
+	  ]
+	},
+	d: {
+		shape_2: [
+		  { string: 'e_high', offset: 3, label: '4' },
+		  { string: 'e_high', offset: 1, label: '♭3' },
+		  { string: 'b', offset: 3, label: '1' },
+		  { string: 'b', offset: 1, label: '♭7' },
+		  { string: 'g', offset: 2, label: '5' },
+		  { string: 'g', offset: 0, label: '4' },
+		  { string: 'd', offset: 3, label: '♭3' },
+		  { string: 'd', offset: 0, label: '1' },
+		  { string: 'a', offset: 3, label: '♭7' },
+		  { string: 'a', offset: 0, label: '5' },
+		  { string: 'e_low', offset: 3, label:'4'},
+		  { string: 'e_low', offset: 1, label: '♭3'}
+		]
 	}
   };
 
@@ -58,7 +104,7 @@ $('#reset-button').click(function() {
 	$('#reset-button').attr('disabled', 'disabled');
 });
 
-function reset(){
+function reset() {
 
 	$('.guitar-neck .notes li').each(function() {
 
@@ -67,13 +113,18 @@ function reset(){
 		$(this).text(note);
 
 		// Remove the class active
-		$(this).removeClass('active');
+		$(this).removeClass('active active-root');
 		$(this).addClass('inactive');
 
 		// Clean data-shape attr
 		$(this).attr('data-shape', '');
 
 	});
+
+	// Reset all checkboxes
+	$('#shape-checkbox input[type="checkbox"]')
+		.prop('checked', false)
+		.prop('disabled', true);
 
 }
 
@@ -91,17 +142,17 @@ function showAllNotes() {
 
 function renderShapes(string, index) {
 
-	$('.info-message').hide();
-	$('#reset-button').removeAttr('disabled');
-
-	reset();
-	hideAllNotes();
-
 	// TODO: Add logic to render shapes for other strings
 	if (string == 'e_high' || string == 'b' || string == 'g') {
 		alert('This string is not available. Select the root note in lower strings.');
 		return;
 	}
+
+	$('.info-message').hide();
+	$('#reset-button').removeAttr('disabled');
+
+	reset();
+	hideAllNotes();
 
 	// Display the root note
 	var rootNote = notes[string][index];
@@ -115,7 +166,6 @@ function renderShapes(string, index) {
 
 		// Get available shapes
 		var shapes = penta_min[string];
-		//console.log(shapes);
 
 		// Iterate the shapes and notes
 		for (var shape in shapes) {
@@ -136,7 +186,12 @@ function renderShapes(string, index) {
 
 				// Activate, set text and visibility
 				currentNote.removeClass('inactive');
-				currentNote.addClass('active');
+				if (label == '1') {
+					currentNote.addClass('active-root');
+				}
+				else {
+					currentNote.addClass('active');
+				}
 				currentNote.text(label);
 				currentNote.css('visibility', 'visible');
 
@@ -159,16 +214,13 @@ function renderShapes(string, index) {
 
 function shapeClick(){
 
-	// iterate all notes that has data-shape attr
+	// Iterate all notes that has data-shape attr
 	$('.guitar-neck .notes li[data-shape]').each(function() {
 
-		//var note = $(this);
 		var shape = $(this).attr('data-shape');
 		var shapeArray = shape.split(',');
 
-		console.log(shapeArray);
-
-		// Check if any shape is active
+		// Check if any shape present in the note has checked checkbox
 		var isActive = isAnyShapeActive(shapeArray);
 		if (isActive) {
 			// If any shape is active, set the note to active
@@ -188,7 +240,6 @@ function shapeClick(){
 function isAnyShapeActive(shapeArray) {
 	var isActive = false;
 
-	// Check if any shape is active
 	for (var i = 0; i < shapeArray.length; i++) {
 		if ($('#' + shapeArray[i]).is(':checked')) {
 			isActive = true;
