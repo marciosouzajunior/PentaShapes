@@ -23,13 +23,30 @@ select {
   width: 200px;
   font-size: 16px;
 }
+button {
+  height: 30px;
+  width: 200px;
+  font-size: 16px;
+}
+.info-message {
+  background-color: #e6f7ff;
+  color: #00529B;
+  border: 1px solid #b3d8ff;
+  padding: 12px 20px;
+  margin: 20px 0;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-left: 100px;
+  width: fit-content;
+  
+}
 label {
   font-size: 16px;
   margin-right: 20px;
 }
 .guitar-neck {
   position: relative;
-  margin-top: 40px;
+  margin-top: 20px;
   margin-left: 100px;
   width: 1350px;
   height: 200px;

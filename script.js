@@ -9,12 +9,12 @@ var notes = {
 }
 
 for (var i = 0; i < notes.e_low.length; i++) {
-	$('.mask.high-e ul').append('<li class="inactive" data-index=' + i + ' data-note=' + notes.e_high[i] 	+ ' onclick="renderShapes(\'e_high\',' 	+ i + ')">' + notes.e_high[i] + '</li>')
-	$('.mask.b ul')		.append('<li class="inactive" data-index=' + i + ' data-note=' + notes.b[i] 		+ ' onclick="renderShapes(\'b\',' 		+ i + ')">' + notes.b[i] + '</li>')
-	$('.mask.d ul')		.append('<li class="inactive" data-index=' + i + ' data-note=' + notes.d[i] 		+ ' onclick="renderShapes(\'d\',' 		+ i + ')">' + notes.d[i] + '</li>')
-	$('.mask.g ul')		.append('<li class="inactive" data-index=' + i + ' data-note=' + notes.g[i] 		+ ' onclick="renderShapes(\'g\',' 		+ i + ')">' + notes.g[i] + '</li>')
-	$('.mask.a ul')		.append('<li class="inactive" data-index=' + i + ' data-note=' + notes.a[i] 		+ ' onclick="renderShapes(\'a\',' 		+ i + ')">' + notes.a[i] + '</li>')
-	$('.mask.low-e ul')	.append('<li class="inactive" data-index=' + i + ' data-note=' + notes.e_low[i] 	+ ' onclick="renderShapes(\'e_low\',' 	+ i + ')">' + notes.e_low[i] + '</li>')
+	$('.mask.high-e ul').append('<li class="inactive" data-index=' + i + ' data-note=' + notes.e_high[i] 	+ ' data-shape=\'\' onclick="renderShapes(\'e_high\',' 	+ i + ')">' + notes.e_high[i] + '</li>')
+	$('.mask.b ul')		.append('<li class="inactive" data-index=' + i + ' data-note=' + notes.b[i] 		+ ' data-shape=\'\' onclick="renderShapes(\'b\',' 		+ i + ')">' + notes.b[i] + '</li>')
+	$('.mask.d ul')		.append('<li class="inactive" data-index=' + i + ' data-note=' + notes.d[i] 		+ ' data-shape=\'\' onclick="renderShapes(\'d\',' 		+ i + ')">' + notes.d[i] + '</li>')
+	$('.mask.g ul')		.append('<li class="inactive" data-index=' + i + ' data-note=' + notes.g[i] 		+ ' data-shape=\'\' onclick="renderShapes(\'g\',' 		+ i + ')">' + notes.g[i] + '</li>')
+	$('.mask.a ul')		.append('<li class="inactive" data-index=' + i + ' data-note=' + notes.a[i] 		+ ' data-shape=\'\' onclick="renderShapes(\'a\',' 		+ i + ')">' + notes.a[i] + '</li>')
+	$('.mask.low-e ul')	.append('<li class="inactive" data-index=' + i + ' data-note=' + notes.e_low[i] 	+ ' data-shape=\'\' onclick="renderShapes(\'e_low\',' 	+ i + ')">' + notes.e_low[i] + '</li>')
 }
 
 var penta_min = {
@@ -51,29 +51,51 @@ var penta_min = {
   };
 
 
+$('#reset-button').click(function() {
+	reset();
+	showAllNotes();
+	$('#root-note').text('');
+	$('#reset-button').attr('disabled', 'disabled');
+});
+
 function reset(){
 
 	$('.guitar-neck .notes li').each(function() {
+
+		// Reset the text to the note name
 		var note = $(this).data('note');
 		$(this).text(note);
 
-		// remove the class active
+		// Remove the class active
 		$(this).removeClass('active');
 		$(this).addClass('inactive');
+
+		// Clean data-shape attr
+		$(this).attr('data-shape', '');
+
 	});
 
 }
 
-function hideAll() {
+function hideAllNotes() {
 	$('.guitar-neck .notes li').each(function() {
 		$(this).css('visibility', 'hidden');
 	});
 }
 
+function showAllNotes() {
+	$('.guitar-neck .notes li').each(function() {
+		$(this).css('visibility', 'visible');
+	});
+}
+
 function renderShapes(string, index) {
 
+	$('.info-message').hide();
+	$('#reset-button').removeAttr('disabled');
+
 	reset();
-	hideAll();
+	hideAllNotes();
 
 	// TODO: Add logic to render shapes for other strings
 	if (string == 'e_high' || string == 'b' || string == 'g') {
@@ -87,7 +109,6 @@ function renderShapes(string, index) {
 
 	// Get selected scale
 	var selectedScale = $('#scale-select').val();
-	console.log(selectedScale);
 
 	// If is penta_min
 	if (selectedScale == 'penta_min') {
@@ -99,6 +120,10 @@ function renderShapes(string, index) {
 		// Iterate the shapes and notes
 		for (var shape in shapes) {
 
+			// Set checkbox checked and enabled
+			$('#' + shape).prop('checked', true);
+			$('#' + shape).removeAttr('disabled');
+
 			var shapeData = shapes[shape];
 
 			for (var noteData of shapeData) {
@@ -107,17 +132,21 @@ function renderShapes(string, index) {
 				var offset = noteData.offset;
 				var label = noteData.label;
 
-				$('.mask[data-string="' + stringName + '"] li[data-index="' + (index + offset) + '"]').removeClass('inactive');
-				$('.mask[data-string="' + stringName + '"] li[data-index="' + (index + offset) + '"]').addClass('active');
-				$('.mask[data-string="' + stringName + '"] li[data-index="' + (index + offset) + '"]').text(label);
-				$('.mask[data-string="' + stringName + '"] li[data-index="' + (index + offset) + '"]').css('visibility', 'visible');
+				var currentNote = $('.mask[data-string="' + stringName + '"] li[data-index="' + (index + offset) + '"]');
 
+				// Activate, set text and visibility
+				currentNote.removeClass('inactive');
+				currentNote.addClass('active');
+				currentNote.text(label);
+				currentNote.css('visibility', 'visible');
 
-
-
-
-
-				
+				// Add or update data-shape attr
+				if (currentNote.attr('data-shape') == '') {
+					currentNote.attr('data-shape', shape);
+				} else {
+					currentNote.attr('data-shape', currentNote.attr('data-shape') + ',' + shape);
+				}
+							
 			}
 
 		}
@@ -125,24 +154,48 @@ function renderShapes(string, index) {
 
 	}
 
+}
 
 
-	// activate the selected note
-	//$('.mask[data-string="' + string + '"] li[data-note="' + rootNote + '"]').removeClass('inactive');
-	//$('.mask[data-string="' + string + '"] li[data-note="' + rootNote + '"]').addClass('active');
-	//console.log('.guitar-neck .notes div[data-string="e_low"] .' + string + ' li[data-note="' + note + '"]');
-	
+function shapeClick(){
 
+	// iterate all notes that has data-shape attr
+	$('.guitar-neck .notes li[data-shape]').each(function() {
 
-	
+		//var note = $(this);
+		var shape = $(this).attr('data-shape');
+		var shapeArray = shape.split(',');
 
-	
+		console.log(shapeArray);
+
+		// Check if any shape is active
+		var isActive = isAnyShapeActive(shapeArray);
+		if (isActive) {
+			// If any shape is active, set the note to active
+			$(this).removeClass('inactive');
+			$(this).addClass('active');
+		} else {
+			// If no shape is active, set the note to inactive
+			$(this).removeClass('active');
+			$(this).addClass('inactive');
+		}
+
+	});
 
 
 }
 
-function getShapesByString(data, stringName) {
-	if (!data[stringName]) return [];
+function isAnyShapeActive(shapeArray) {
+	var isActive = false;
 
-	return Object.keys(data[stringName]);
+	// Check if any shape is active
+	for (var i = 0; i < shapeArray.length; i++) {
+		if ($('#' + shapeArray[i]).is(':checked')) {
+			isActive = true;
+			break;
+		}
+	}
+
+	return isActive;
+	
 }

@@ -23,13 +23,14 @@
 		<p style="margin-top: 10px;">Root: <span id="root-note"></span></p>
 
 		<div style="margin-top: 15px;">
-			<label><input type="checkbox" value="shape_1" disabled> Shape 1</label>
-			<label><input type="checkbox" value="shape_2" disabled> Shape 2</label>
-			<label><input type="checkbox" value="shape_3" disabled> Shape 3</label>
-			<label><input type="checkbox" value="shape_4" disabled> Shape 4</label>
-			<label><input type="checkbox" value="shape_5" disabled> Shape 5</label>
+			<label><input type="checkbox" id="shape_1" value="shape_1" disabled onclick="shapeClick()"> Shape 1</label>
+			<label><input type="checkbox" id="shape_2" value="shape_2" disabled onclick="shapeClick()"> Shape 2</label>
+			<label><input type="checkbox" id="shape_3" value="shape_3" disabled onclick="shapeClick()"> Shape 3</label>
+			<label><input type="checkbox" id="shape_4" value="shape_4" disabled onclick="shapeClick()"> Shape 4</label>
+			<label><input type="checkbox" id="shape_5" value="shape_5" disabled onclick="shapeClick()"> Shape 5</label>
 		</div>
 		
+		<button style="margin-top: 15px;" id="reset-button" disabled>RESET</button>
 
 	</div>
 
@@ -92,7 +93,12 @@
 			<div class="mask a" data-string="a"><ul></ul></div>
 			<div class="mask low-e" data-string="e_low"><ul></ul></div>
 		</div>
+
 	</div>
+
+	<div class="info-message">
+		<p>Select a root note on the guitar neck to see the scale.</p>
+	</div>	
 
 	<script src="./jquery-2.1.3.js"></script>
 	<script src="./script.js"></script>
