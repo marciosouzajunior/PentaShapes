@@ -79,6 +79,20 @@ var penta_min = {
 	  ]
 	},
 	d: {
+		shape_1: [
+		  { string: 'e_high', offset: -2, label: '1' },
+		  { string: 'e_high', offset: 1, label: '♭3' },
+		  { string: 'b', offset: -2, label: '5' },
+		  { string: 'b', offset: 1, label: '♭7' },
+		  { string: 'g', offset: -2, label: '♭3' },
+		  { string: 'g', offset: 0, label: '4' },
+		  { string: 'd', offset: -2, label: '♭7' },
+		  { string: 'd', offset: 0, label: '1' },
+		  { string: 'a', offset: -2, label: '4' },
+		  { string: 'a', offset: 0, label: '5' },
+		  { string: 'e_low', offset: -2, label:'1'},
+		  { string: 'e_low', offset: 1, label: '♭3'}
+		],
 		shape_2: [
 		  { string: 'e_high', offset: 3, label: '4' },
 		  { string: 'e_high', offset: 1, label: '♭3' },
