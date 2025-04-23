@@ -17,108 +17,14 @@ for (var i = 0; i < notes.e_low.length; i++) {
 	$('.mask.low-e ul')	.append('<li class="inactive" data-index=' + i + ' data-note=' + notes.e_low[i] 	+ ' data-shape=\'\' onclick="renderShapes(\'e_low\',' 	+ i + ')">' + notes.e_low[i] + '</li>')
 }
 
-var penta_min = {
-	e_low: {
-	  shape_1: [
-		{ string: 'e_high', offset: 0, label: '1' },
-		{ string: 'e_high', offset: 3, label: '♭3' },
-		{ string: 'b', offset: 0, label: '5' },
-		{ string: 'b', offset: 3, label: '♭7' },
-		{ string: 'g', offset: 0, label: '♭3' },
-		{ string: 'g', offset: 2, label: '4' },
-		{ string: 'd', offset: 0, label: '♭7' },
-		{ string: 'd', offset: 2, label: '1' },
-		{ string: 'a', offset: 0, label: '4' },
-		{ string: 'a', offset: 2, label: '5' },
-		{ string: 'e_low', offset: 0, label: '1' },
-		{ string: 'e_low', offset: 3, label: '♭3' }
-	  ],
-	  shape_5: [
-		{ string: 'e_high', offset: 0, label: '1' },
-		{ string: 'e_high', offset: -2, label: '♭7' },
-		{ string: 'b', offset: 0, label: '5' },
-		{ string: 'b', offset: -2, label: '4' },
-		{ string: 'g', offset: 0, label: '♭3' },
-		{ string: 'g', offset: -3, label: '1' },
-		{ string: 'd', offset: 0, label: '♭7' },
-		{ string: 'd', offset: -3, label: '5' },
-		{ string: 'a', offset: 0, label: '4' },
-		{ string: 'a', offset: -2, label: '♭3' },
-		{ string: 'e_low', offset: 0, label: '1' },
-		{ string: 'e_low', offset: -2, label: '♭7' }
-	  ]
-	},
-	a: {
-	  shape_3: [
-		{ string: 'e_high', offset: 0, label: '5' },
-		{ string: 'e_high', offset: -2, label: '4' },
-		{ string: 'b', offset: 1, label: '♭3' },
-		{ string: 'b', offset: -2, label: '1' },
-		{ string: 'g', offset: 0, label: '♭7' },
-		{ string: 'g', offset: -3, label: '5' },
-		{ string: 'd', offset: 0, label: '4' },
-		{ string: 'd', offset: -2, label: '♭3' },
-		{ string: 'a', offset: 0, label: '1' },
-		{ string: 'a', 	offset: -2, label: '♭7' },
-		{ string: 'e_low', offset: 0, label: '5' },
-		{ string: 'e_low', offset: -2, label: '4' }
-	  ],
-	  shape_4: [
-		{ string: 'e_high', offset: 3, label: '♭7' },
-		{ string: 'e_high', offset: 0, label: '5' },
-		{ string: 'b', offset: 3, label: '4' },
-		{ string: 'b', offset: 1, label: '♭3' },
-		{ string: 'g', offset: 2, label: '1' },
-		{ string: 'g', offset: 0, label: '♭7' },
-		{ string: 'd', offset: 2, label: '5' },
-		{ string: 'd', offset: 0, label: '4' },
-		{ string: 'a', offset: 3, label: '♭3' },
-		{ string: 'a', offset: 0, label: '1' },
-		{ string: 'e_low', offset: 3, label:'♭7'},
-	    { string: 'e_low', offset: 0, label: '5'}
-	  ]
-	},
-	d: {
-		shape_1: [
-		  { string: 'e_high', offset: -2, label: '1' },
-		  { string: 'e_high', offset: 1, label: '♭3' },
-		  { string: 'b', offset: -2, label: '5' },
-		  { string: 'b', offset: 1, label: '♭7' },
-		  { string: 'g', offset: -2, label: '♭3' },
-		  { string: 'g', offset: 0, label: '4' },
-		  { string: 'd', offset: -2, label: '♭7' },
-		  { string: 'd', offset: 0, label: '1' },
-		  { string: 'a', offset: -2, label: '4' },
-		  { string: 'a', offset: 0, label: '5' },
-		  { string: 'e_low', offset: -2, label:'1'},
-		  { string: 'e_low', offset: 1, label: '♭3'}
-		],
-		shape_2: [
-		  { string: 'e_high', offset: 3, label: '4' },
-		  { string: 'e_high', offset: 1, label: '♭3' },
-		  { string: 'b', offset: 3, label: '1' },
-		  { string: 'b', offset: 1, label: '♭7' },
-		  { string: 'g', offset: 2, label: '5' },
-		  { string: 'g', offset: 0, label: '4' },
-		  { string: 'd', offset: 3, label: '♭3' },
-		  { string: 'd', offset: 0, label: '1' },
-		  { string: 'a', offset: 3, label: '♭7' },
-		  { string: 'a', offset: 0, label: '5' },
-		  { string: 'e_low', offset: 3, label:'4'},
-		  { string: 'e_low', offset: 1, label: '♭3'}
-		]
-	}
-  };
-
-
 $('#reset-button').click(function() {
-	reset();
+	resetNotes();
 	showAllNotes();
 	$('#root-note').text('');
 	$('#reset-button').attr('disabled', 'disabled');
 });
 
-function reset() {
+function resetNotes() {
 
 	$('.guitar-neck .notes li').each(function() {
 
@@ -142,7 +48,7 @@ function reset() {
 
 }
 
-function hideAllNotes() {
+function hideNotes() {
 	$('.guitar-neck .notes li').each(function() {
 		$(this).css('visibility', 'hidden');
 	});
@@ -156,75 +62,78 @@ function showAllNotes() {
 
 function renderShapes(string, index) {
 
-	// TODO: Add logic to render shapes for other strings
-	if (string == 'e_high' || string == 'b' || string == 'g') {
-		alert('This string is not available. Select the root note in lower strings.');
+	// Get selected scale
+	var selectedScaleName = $('#scale-select').val();
+
+	// Get the selected scale data
+	var selectedScale = scales[selectedScaleName];
+
+	// Get available strings
+	var availableStrings = Object.keys(selectedScale);
+	if (availableStrings.indexOf(string) == -1) {
+		alert('This string is not available for this scale.\nSelect one of the available strings: ' + 
+			availableStrings.join(', ')
+			.replace(/_/g, ' ')
+			.split(' ')
+			.map(word => word.charAt(0).toUpperCase() + word.slice(1))
+			.join(' '));
 		return;
 	}
 
 	$('.info-message').hide();
 	$('#reset-button').removeAttr('disabled');
-
-	reset();
-	hideAllNotes();
+	
+	resetNotes();
+	hideNotes();
 
 	// Display the root note
 	var rootNote = notes[string][index];
 	$('#root-note').text(rootNote);
 
-	// Get selected scale
-	var selectedScale = $('#scale-select').val();
+	// Get available shapes by string
+	var shapes = selectedScale[string];
 
-	// If is penta_min
-	if (selectedScale == 'penta_min') {
+	// Iterate the shapes
+	for (var shape in shapes) {
 
-		// Get available shapes
-		var shapes = penta_min[string];
+		// Set checkbox checked and enabled for the available shapes
+		$('#' + shape).prop('checked', true);
+		$('#' + shape).removeAttr('disabled');
 
-		// Iterate the shapes and notes
-		for (var shape in shapes) {
+		var shapeData = shapes[shape];
 
-			// Set checkbox checked and enabled
-			$('#' + shape).prop('checked', true);
-			$('#' + shape).removeAttr('disabled');
+		// Iterate the shape data
+		for (var noteData of shapeData) {
 
-			var shapeData = shapes[shape];
+			var stringName = noteData.string;
+			var offset = noteData.offset;
+			var label = noteData.label;
 
-			for (var noteData of shapeData) {
+			var currentNote = $('.mask[data-string="' + stringName + '"] li[data-index="' + (index + offset) + '"]');
 
-				var stringName = noteData.string;
-				var offset = noteData.offset;
-				var label = noteData.label;
-
-				var currentNote = $('.mask[data-string="' + stringName + '"] li[data-index="' + (index + offset) + '"]');
-
-				// Activate, set text and visibility
-				currentNote.removeClass('inactive');
-				if (label == '1') {
-					currentNote.addClass('active-root');
-				}
-				else {
-					currentNote.addClass('active');
-				}
-				currentNote.text(label);
-				currentNote.css('visibility', 'visible');
-
-				// Add or update data-shape attr
-				if (currentNote.attr('data-shape') == '') {
-					currentNote.attr('data-shape', shape);
-				} else {
-					currentNote.attr('data-shape', currentNote.attr('data-shape') + ',' + shape);
-				}
-							
+			// Activate, set text and visibility
+			currentNote.removeClass('inactive');
+			if (label == '1') {
+				currentNote.addClass('active-root');
 			}
+			else {
+				currentNote.addClass('active');
+			}
+			currentNote.text(label);
+			currentNote.css('visibility', 'visible');
 
+			// Add or update data-shape attr
+			if (currentNote.attr('data-shape') == '') {
+				currentNote.attr('data-shape', shape);
+			} else {
+				currentNote.attr('data-shape', currentNote.attr('data-shape') + ',' + shape);
+			}
+						
 		}
-
 
 	}
 
 }
-
 
 function shapeClick(){
 
