@@ -17,14 +17,19 @@ for (var i = 0; i < notes.e_low.length; i++) {
 	$('.mask.low-e ul')	.append('<li class="inactive" data-index=' + i + ' data-note=' + notes.e_low[i] 	+ ' data-shape=\'\' onclick="renderShapes(\'e_low\',' 	+ i + ')">' + notes.e_low[i] + '</li>')
 }
 
+$('#scale-select').change(function() {
+	$('#reset-button').click();
+});
+
 $('#reset-button').click(function() {
-	resetNotes();
+	deactivateNotes();
 	showAllNotes();
 	$('#root-note').text('');
 	$('#reset-button').attr('disabled', 'disabled');
+	$('.info-message').show();
 });
 
-function resetNotes() {
+function deactivateNotes() {
 
 	$('.guitar-neck .notes li').each(function() {
 
@@ -83,7 +88,7 @@ function renderShapes(string, index) {
 	$('.info-message').hide();
 	$('#reset-button').removeAttr('disabled');
 	
-	resetNotes();
+	deactivateNotes();
 	hideNotes();
 
 	// Display the root note
@@ -113,7 +118,7 @@ function renderShapes(string, index) {
 
 			// Activate, set text and visibility
 			currentNote.removeClass('inactive');
-			if (label == '1') {
+			if (label == '1' || label == '8') {
 				currentNote.addClass('active-root');
 			}
 			else {
