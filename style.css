@@ -48,7 +48,7 @@ label {
   position: relative;
   margin-top: 20px;
   margin-left: 100px;
-  width: 1350px;
+  width: 1200px;
   height: 200px;
   background: #ffffff;
   box-shadow: inset -1px 0px 11px 0px rgba(0, 0, 0, 0.75);
@@ -68,7 +68,7 @@ label {
   width: 3px;
   height: 200px;
   background: #d7d6d6;
-  margin-left: 75px;
+  margin-left: 65px;
   border-right: 1px solid #686868;
 }
 .guitar-neck .fret.first {
@@ -81,7 +81,7 @@ label {
 }
 .guitar-neck .dots {
   position: absolute;
-  width: 1350px;
+  width: 1200px;
   height: 20px;
   top: 44%;
 }
@@ -93,19 +93,19 @@ label {
   background: #dadada;
 }
 .guitar-neck .dots-3 {
-  margin-left: 188px;
+  margin-left: 163px;
 }
 .guitar-neck .dots-5 {
-  margin-left: 138px;
+  margin-left: 118px;
 }
 .guitar-neck .dots-7 {
-  margin-left: 138px;
+  margin-left: 118px;
 }
 .guitar-neck .dots-9 {
-  margin-left: 138px;
+  margin-left: 118px;
 }
 .guitar-neck .dots-12-a {
-  margin-left: 217px;
+  margin-left: 187px;
   margin-top: 70px;
 }
 .guitar-neck .dots-12-b {
@@ -113,16 +113,16 @@ label {
   margin-top: -70px;
 }
 .guitar-neck .dots-15 {
-  margin-left: 138px;
+  margin-left: 118px;
 }
 .guitar-neck .dots-17 {
-  margin-left: 138px;
+  margin-left: 118px;
 }
 .guitar-neck .strings {
   position: absolute;
   left: 0;
   top: 10px;
-  width: 1350px;
+  width: 1200px;
   height: 200px;
 }
 .guitar-neck .strings li {
@@ -152,15 +152,15 @@ label {
 }
 .guitar-neck .notes {
   position: absolute;
-  left: 30px;
-  width: 1350px;
+  left: 25px;
+  width: 1200px;
   height: 200px;
   font-size: 12px;
 }
 .guitar-neck .notes .mask {
   position: absolute;
   bottom: 3px;
-  width: 1350px;
+  width: 1200px;
   height: 20px;
 }
 .guitar-neck .notes .mask ul {
@@ -171,7 +171,7 @@ label {
   float: left;
   width: 20px;
   height: 20px;
-  margin-right: 59px;
+  margin-right: 49px;
   border-radius: 50%;
   text-align: center;
   line-height: 20px;
