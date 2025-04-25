@@ -6,14 +6,6 @@ You choose the root note, scale type (like pentatonic), and which shapes to disp
 
 ---
 
-## 🚧 In Development
-
-- Snapshot mode: create and save fretboard sequences
-- Playback feature to loop note paths
-- Guided practice modes for gradual mastery
-
----
-
 ## 💭 Why this project?
 
 Many guitar players know scale shapes — but struggle to use them musically. **PentaShapes** was created to bridge that gap, by showing intervals clearly and helping players think beyond shapes.
