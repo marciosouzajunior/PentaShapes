@@ -1,5 +1,6 @@
 const scales = (() => {
     
+    // https://www.rob-silver.com/2010/05/chromatic-scales-for-guitar.html
     const chromatic = {
         e_low: {
             shape_1: [
@@ -43,6 +44,7 @@ const scales = (() => {
 
     };
 
+    // https://www.jazz-guitar-licks.com/medias/images/minor-pentatonic-scale-guitar-shapes.png
     const penta_min = {
         e_low: {
             shape_1: [
@@ -136,6 +138,7 @@ const scales = (() => {
         }
     };
 
+    // https://www.jazz-guitar-licks.com/medias/images/major-pentatonic-scale-guitar-shapes.png
     const penta_maj = {
         e_low: {
             shape_1: [
@@ -229,6 +232,7 @@ const scales = (() => {
         }
     };
     
+    // https://www.guitartricks.com/assets/news_images/GT-Diagrams-BBKingBox_comparison.gif
     const blues = {
         e_low: {
             shape_1: [
@@ -266,6 +270,7 @@ const scales = (() => {
         }
     };
 
+    // https://discoverguitaronline.com/diagrams/view/33
     const ionian = {
         e_low: {
             shape_1: [
