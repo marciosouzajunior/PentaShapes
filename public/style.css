@@ -213,3 +213,20 @@ label {
 .guitar-neck .notes .mask.high-e {
   bottom: 180px;
 }
+
+.footer-link {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  font-size: 13px;
+  color: #666;
+  text-decoration: none;
+  background: #f9f9f9;
+  padding: 6px 10px;
+  border-radius: 6px;
+  box-shadow: 0 0 4px rgba(0,0,0,0.1);
+}
+
+.footer-link:hover {
+  background: #eee;
+}

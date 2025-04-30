@@ -16,7 +16,7 @@ Many guitar players know scale shapes — but struggle to use them musically. **
 
 - If you're a dev who loves music: **let’s build it together!**
 - If you're a guitarist: open issues with feedback, ideas or requests.
-- Contributions in UX, performance or new scale systems are more than welcome!
+- Contributions in UX or new scale systems are more than welcome!
 
 ---
 
@@ -36,8 +36,10 @@ If you like the idea and want to support it:
 
 ---
 
-## 📬 Contact
+## License
 
-Get in touch: marciosouzajunior@gmail.com
+This project is licensed under the [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/).  
+You are free to use, modify, and share the code, even commercially, as long as you provide proper attribution to [Márcio Souza Junior](https://github.com/marciosouzajunior).
+
 
 ---
