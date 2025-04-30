@@ -39,7 +39,7 @@ If you like the idea and want to support it:
 ## License
 
 This project is licensed under the [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/).  
-You are free to use, modify, and share the code, even commercially, as long as you provide proper attribution to [Márcio Souza Junior](https://github.com/marciosouzajunior).
+Feel free to use, modify, and share the code, even commercially, as long as you give credit to [Márcio Souza Junior](https://github.com/marciosouzajunior).
 
 
 ---
