@@ -24,7 +24,8 @@ $('#scale-select').change(function() {
 $('#reset-button').click(function() {
 	deactivateNotes();
 	showAllNotes();
-	$('#root-note').text('');
+	$('#root-note').addClass('info-message');
+	$('#root-note').text('Select a root note on the guitar neck to see the scale.');
 	$('#reset-button').attr('disabled', 'disabled');
 	$('.info-message').show();
 });
@@ -69,6 +70,16 @@ function renderShapes(string, index) {
 
 	// Get selected scale
 	var selectedScaleName = $('#scale-select').val();
+	
+	// Display the root note
+	var rootNote = notes[string][index];
+	$('#root-note').text(rootNote);
+
+	// For the roots scale, we use a different function
+	if (selectedScaleName == 'roots') {
+		activateNotes(rootNote);
+		return;
+	}
 
 	// Get the selected scale data
 	var selectedScale = scales[selectedScaleName];
@@ -85,15 +96,11 @@ function renderShapes(string, index) {
 		return;
 	}
 
-	$('.info-message').hide();
+	$("#root-note").removeClass('info-message');
 	$('#reset-button').removeAttr('disabled');
 	
 	deactivateNotes();
 	hideNotes();
-
-	// Display the root note
-	var rootNote = notes[string][index];
-	$('#root-note').text(rootNote);
 
 	// Get available shapes by string
 	var shapes = selectedScale[string];
@@ -177,4 +184,18 @@ function isAnyShapeActive(shapeArray) {
 
 	return isActive;
 	
+}
+
+function activateNotes(note) {
+	
+	$('#reset-button').removeAttr('disabled');
+	$('.info-message').hide();
+
+	$('.guitar-neck .notes li').each(function() {
+		if ($(this).data('note') == note) {
+			$(this).removeClass('inactive');
+			$(this).addClass('active-root');
+		}
+	});
+
 }

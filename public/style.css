@@ -8,13 +8,11 @@ body {
   font-family: 'Source Sans Pro', sans-serif;
   letter-spacing: 0.05em;
 }
-h1 {
-  text-transform: uppercase;
-  margin-top: 40px;
+h2 {
+  margin-top: 30px;
   margin-left: 100px;
 }
 .options {
-  text-transform: uppercase;
   margin-top: 20px;
   margin-left: 100px;
 }
@@ -29,16 +27,7 @@ button {
   font-size: 16px;
 }
 .info-message {
-  background-color: #e6f7ff;
-  color: #00529B;
-  border: 1px solid #b3d8ff;
-  padding: 12px 20px;
-  margin: 20px 0;
-  border-radius: 5px;
-  font-size: 16px;
-  margin-left: 100px;
-  width: fit-content;
-  
+  color: #007ceb;
 }
 label {
   font-size: 16px;
@@ -229,4 +218,9 @@ label {
 
 .footer-link:hover {
   background: #eee;
+}
+
+hr {
+  margin-top: 20px;
+  border: 1px solid #ccc;
 }

@@ -20,12 +20,13 @@
 </head>
 <body>
 
-	<h1>PentaShapes</h1>
+	<h2>PentaShapes</h2>
 
 	<div class="options">
 
-		SCALE:
+		Scale:
 		<select id="scale-select">
+			<option value="roots">Roots</option>
 			<option value="chromatic">Chromatic</option>
 			<option value="penta_min" selected>Pentatonic Minor</option>
 			<option value="penta_maj">Pentatonic Major</option>
@@ -42,7 +43,7 @@
 			<option value="locrian" disabled>Locrian</option>
 		</select>
 
-		<p style="margin-top: 10px;">Root: <span id="root-note"></span></p>
+		<p style="margin-top: 10px;">Root: <span id="root-note" class="info-message">Select a root note on the guitar neck to see the scale.</span></p>
 
 		<div id="shape-checkbox" style="margin-top: 15px;">
 			<label><input type="checkbox" id="shape_1" value="shape_1" disabled onclick="shapeClick()"> Shape 1</label>
@@ -55,7 +56,6 @@
 		<button style="margin-top: 15px;" id="reset-button" disabled>RESET</button>
 
 	</div>
-
 
 	<div class="guitar-neck">
 		
@@ -118,9 +118,7 @@
 
 	</div>
 
-	<div class="info-message">
-		<p>Select a root note on the guitar neck to see the scale.</p>
-	</div>
+	<hr/>
 
 	<a class="footer-link" href="https://github.com/marciosouzajunior/PentaShapes" target="_blank">GitHub</a>
 
