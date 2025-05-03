@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
+
 <head>
 
 	<meta charset="UTF-8" />
@@ -11,74 +12,80 @@
 
 	<meta property="og:title" content="PentaShapes – Visualize Guitar Scales and Modes on the Fretboard">
 	<meta property="og:description" content="An interactive tool for guitarists to visualize scales and create solos on the fretboard. Explore pentatonic, blues, and more!">
-	<meta property="og:image" content="https://pentashapes.web.app/guitar.jpg">  <!-- Photo by Mikkel Bech on Unsplash -->
+	<meta property="og:image" content="https://pentashapes.web.app/guitar.jpg">
+	<!-- Photo by Mikkel Bech on Unsplash -->
 	<meta property="og:url" content="https://pentashapes.web.app">
 
 	<link rel="icon" href="favicon.ico" type="image/x-icon">
 	<link rel="stylesheet" href="./style.css">
 
 </head>
+
 <body>
 
-	<h2>PentaShapes</h2>
+	<container>
+		<h2>PentaShapes</h2>
 
-	<div class="options">
+		<div class="options">
 
-		Scale:
-		<select id="scale-select">
-			<option value="roots">Roots</option>
-			<option value="chromatic">Chromatic</option>
-			<option value="penta_min" selected>Pentatonic Minor</option>
-			<option value="penta_maj">Pentatonic Major</option>
-			<option value="blues">Blues</option>
-			<option value="major" disabled>Major</option>
-			<option value="minor" disabled>Minor</option>
-			<option disabled>_________</option>
-			<option value="ionian">Ionian</option>
-			<option value="dorian" disabled>Dorian</option>
-			<option value="phrygian" disabled>Phrygian</option>
-			<option value="lydian" disabled>Lydian</option>
-			<option value="mixolydian" disabled>Mixolydian</option>
-			<option value="aeolian" disabled>Aeolian</option>
-			<option value="locrian" disabled>Locrian</option>
-		</select>
+			Scale:
+			<select id="scale-select">
+				<option value="roots">Roots</option>
+				<option value="chromatic">Chromatic</option>
+				<option value="penta_min" selected>Pentatonic Minor</option>
+				<option value="penta_maj">Pentatonic Major</option>
+				<option value="blues">Blues</option>
+				<option value="major" disabled>Major</option>
+				<option value="minor" disabled>Minor</option>
+				<option disabled>_________</option>
+				<option value="ionian">Ionian</option>
+				<option value="dorian" disabled>Dorian</option>
+				<option value="phrygian" disabled>Phrygian</option>
+				<option value="lydian" disabled>Lydian</option>
+				<option value="mixolydian" disabled>Mixolydian</option>
+				<option value="aeolian" disabled>Aeolian</option>
+				<option value="locrian" disabled>Locrian</option>
+			</select>
 
-		<p style="margin-top: 10px;">Root: <span id="root-note" class="info-message">Select a root note on the guitar neck to see the scale.</span></p>
+			<p style="margin-top: 20px;">Root: <span id="root-note" class="info-message">Select a root note on the
+					guitar neck to see the scale.</span></p>
 
-		<div id="shape-checkbox" style="margin-top: 15px;">
-			<label><input type="checkbox" id="shape_1" value="shape_1" disabled onclick="shapeClick()"> Shape 1</label>
-			<label><input type="checkbox" id="shape_2" value="shape_2" disabled onclick="shapeClick()"> Shape 2</label>
-			<label><input type="checkbox" id="shape_3" value="shape_3" disabled onclick="shapeClick()"> Shape 3</label>
-			<label><input type="checkbox" id="shape_4" value="shape_4" disabled onclick="shapeClick()"> Shape 4</label>
-			<label><input type="checkbox" id="shape_5" value="shape_5" disabled onclick="shapeClick()"> Shape 5</label>
+			<div class="shape" id="shape-checkbox" style="margin-top: 20px;">
+				<label><input type="checkbox" id="shape_1" value="shape_1" disabled onclick="shapeClick()"> Shape1</label>
+				<label><input type="checkbox" id="shape_2" value="shape_2" disabled onclick="shapeClick()"> Shape2</label>
+				<label><input type="checkbox" id="shape_3" value="shape_3" disabled onclick="shapeClick()"> Shape3</label>
+				<label><input type="checkbox" id="shape_4" value="shape_4" disabled onclick="shapeClick()"> Shape4</label>
+				<label><input type="checkbox" id="shape_5" value="shape_5" disabled onclick="shapeClick()"> Shape5</label>
+			</div>
+
+			<button style="margin-top: 15px;" id="reset-button" disabled>RESET</button>
+
 		</div>
-		
-		<button style="margin-top: 15px;" id="reset-button" disabled>RESET</button>
-
-	</div>
+	</container>
 
 	<div class="guitar-neck">
-		
 
-		<div class="fret first"></div>
-		<div class="fret"></div>
-		<div class="fret"></div>
-		<div class="fret"></div>
-		<div class="fret"></div>
-		<div class="fret"></div>
-		<div class="fret"></div>
-		<div class="fret"></div>
-		<div class="fret"></div>
-		<div class="fret"></div>
-		<div class="fret"></div>
-		<div class="fret"></div>
-		<div class="fret"></div>
-		<div class="fret"></div>
-		<div class="fret"></div>
-		<div class="fret"></div>
-		<div class="fret"></div>
-		<div class="fret"></div>
-		
+		<div style="width: 1200px;">
+			<div class="fret first"></div>
+			<div class="fret second"></div>
+			<div class="fret"></div>
+			<div class="fret"></div>
+			<div class="fret"></div>
+			<div class="fret"></div>
+			<div class="fret"></div>
+			<div class="fret"></div>
+			<div class="fret"></div>
+			<div class="fret"></div>
+			<div class="fret"></div>
+			<div class="fret"></div>
+			<div class="fret"></div>
+			<div class="fret"></div>
+			<div class="fret"></div>
+			<div class="fret"></div>
+			<div class="fret"></div>
+			<div class="fret"></div>
+		</div>
+
 		<ul class="dots">
 			<li class="dots-3"></li>
 			<li class="dots-5"></li>
@@ -98,7 +105,7 @@
 			<li></li>
 			<li></li>
 		</ul>
-		
+
 		<ul class="open-notes">
 			<li class="low-e">E</li>
 			<li class="b">B</li>
@@ -108,17 +115,29 @@
 			<li class="high-e">E</li>
 		</ul>
 		<div class="notes">
-			<div class="mask high-e" data-string="e_high"><ul></ul></div>
-			<div class="mask b" data-string="b"><ul></ul></div>
-			<div class="mask g" data-string="g"><ul></ul></div>
-			<div class="mask d" data-string="d"><ul></ul></div>
-			<div class="mask a" data-string="a"><ul></ul></div>
-			<div class="mask low-e" data-string="e_low"><ul></ul></div>
+			<div class="mask high-e" data-string="e_high">
+				<ul></ul>
+			</div>
+			<div class="mask b" data-string="b">
+				<ul></ul>
+			</div>
+			<div class="mask g" data-string="g">
+				<ul></ul>
+			</div>
+			<div class="mask d" data-string="d">
+				<ul></ul>
+			</div>
+			<div class="mask a" data-string="a">
+				<ul></ul>
+			</div>
+			<div class="mask low-e" data-string="e_low">
+				<ul></ul>
+			</div>
 		</div>
 
 	</div>
 
-	<hr/>
+	<hr />
 
 	<a class="footer-link" href="https://github.com/marciosouzajunior/PentaShapes" target="_blank">GitHub</a>
 
@@ -130,10 +149,11 @@
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-LSF88NKB7D"></script>
 	<script>
 		window.dataLayer = window.dataLayer || [];
-		function gtag(){dataLayer.push(arguments);}
+		function gtag() { dataLayer.push(arguments); }
 		gtag('js', new Date());
 		gtag('config', 'G-LSF88NKB7D');
 	</script>
 
 </body>
+
 </html>

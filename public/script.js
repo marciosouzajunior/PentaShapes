@@ -25,6 +25,7 @@ $('#reset-button').click(function() {
 	deactivateNotes();
 	showAllNotes();
 	$('#root-note').addClass('info-message');
+	$('#root-note').removeClass('root');
 	$('#root-note').text('Select a root note on the guitar neck to see the scale.');
 	$('#reset-button').attr('disabled', 'disabled');
 	$('.info-message').show();
@@ -97,7 +98,9 @@ function renderShapes(string, index) {
 	}
 
 	$("#root-note").removeClass('info-message');
+	$("#root-note").addClass('root');
 	$('#reset-button').removeAttr('disabled');
+	
 	
 	deactivateNotes();
 	hideNotes();
