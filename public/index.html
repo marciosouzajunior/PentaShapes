@@ -56,24 +56,35 @@
 			</p>
 
 			<div class="shape" id="shape-checkbox" style="margin-top: 20px;">
-				<input type="checkbox" id="shape_1" disabled>
+				<input type="checkbox" id="shape_1" value="shape_1" disabled onclick="shapeClick()">
 				<label for="shape_1">Shape1</label>
 
-				<input type="checkbox" id="shape_2" disabled>
+				<input type="checkbox" id="shape_2" value="shape_2" disabled onclick="shapeClick()">
 				<label for="shape_2">Shape2</label>
 
-				<input type="checkbox" id="shape_3" disabled>
+				<input type="checkbox" id="shape_3" value="shape_3" disabled onclick="shapeClick()">
 				<label for="shape_3">Shape3</label>
 
-				<input type="checkbox" id="shape_4" disabled>
+				<input type="checkbox" id="shape_4" value="shape_4" disabled onclick="shapeClick()">
 				<label for="shape_4">Shape4</label>
 
-				<input type="checkbox" id="shape_5" disabled>
+				<input type="checkbox" id="shape_5" value="shape_5" disabled onclick="shapeClick()">
 				<label for="shape_5">Shape5</label>
 			</div>
 
-			<button style="margin-top: 15px;" id="reset-button" disabled>RESET</button>
+		</div>
 
+		<div class="radio-toggle">
+
+			<button id="reset-button" disabled>RESET</button>
+			<label>
+				<input type="radio" name="mode" value="real" onchange="setMode(this.value)">
+				Real
+			</label>
+			<label>
+				<input type="radio" name="mode" value="standard" checked onchange="setMode(this.value)">
+				Standard
+			</label>
 		</div>
 	</container>
 
@@ -149,17 +160,6 @@
 			</div>
 		</div>
 
-	</div>
-
-	<div class="radio-toggle">
-		<label>
-			<input type="radio" name="mode" value="standard" checked onchange="setMode(this.value)">
-			Standard
-		</label>
-		<label>
-			<input type="radio" name="mode" value="real" onchange="setMode(this.value)">
-			Real
-		</label>
 	</div>
 
 	<hr />
