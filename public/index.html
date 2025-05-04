@@ -6,12 +6,15 @@
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>PentaShapes – Visualize Guitar Scales and Modes on the Fretboard</title>
-	<meta name="description" content="PentaShapes is an interactive web tool designed for guitarists to visualize and understand scales across the fretboard. Choose your root note, scale type (e.g., pentatonic), and preferred shapes, and the app displays intervals on the neck, making it easier to connect patterns and create solos.">
-	<meta name="keywords" content="guitar scales, pentatonic shapes, CAGED system, blues scale, guitar fretboard, guitar modes, intervals, improvise guitar solo, visualize scales, minor pentatonic, major pentatonic, guitar practice tool, backing track, interactive guitar tool">
+	<meta name="description"
+		content="PentaShapes is an interactive web tool designed for guitarists to visualize and understand scales across the fretboard. Choose your root note, scale type (e.g., pentatonic), and preferred shapes, and the app displays intervals on the neck, making it easier to connect patterns and create solos.">
+	<meta name="keywords"
+		content="guitar scales, pentatonic shapes, CAGED system, blues scale, guitar fretboard, guitar modes, intervals, improvise guitar solo, visualize scales, minor pentatonic, major pentatonic, guitar practice tool, backing track, interactive guitar tool">
 	<meta name="author" content="Marcio Souza Junior" />
 
 	<meta property="og:title" content="PentaShapes – Visualize Guitar Scales and Modes on the Fretboard">
-	<meta property="og:description" content="An interactive tool for guitarists to visualize scales and create solos on the fretboard. Explore pentatonic, blues, and more!">
+	<meta property="og:description"
+		content="An interactive tool for guitarists to visualize scales and create solos on the fretboard. Explore pentatonic, blues, and more!">
 	<meta property="og:image" content="https://pentashapes.web.app/guitar.jpg">
 	<!-- Photo by Mikkel Bech on Unsplash -->
 	<meta property="og:url" content="https://pentashapes.web.app">
@@ -47,19 +50,29 @@
 				<option value="locrian" disabled>Locrian</option>
 			</select>
 
-			<p style="margin-top: 20px;">Root: <span id="root-note" class="info-message">Select a root note on the
-					guitar neck to see the scale.</span></p>
+			<p style="margin-top: 20px;">
+				<span id="root-label">Root:</span>
+				<span id="root-note" class="info-message">Select a root note on the guitar neck to see the scale.</span>
+			</p>
 
 			<div class="shape" id="shape-checkbox" style="margin-top: 20px;">
-				<label><input type="checkbox" id="shape_1" value="shape_1" disabled onclick="shapeClick()"> Shape1</label>
-				<label><input type="checkbox" id="shape_2" value="shape_2" disabled onclick="shapeClick()"> Shape2</label>
-				<label><input type="checkbox" id="shape_3" value="shape_3" disabled onclick="shapeClick()"> Shape3</label>
-				<label><input type="checkbox" id="shape_4" value="shape_4" disabled onclick="shapeClick()"> Shape4</label>
-				<label><input type="checkbox" id="shape_5" value="shape_5" disabled onclick="shapeClick()"> Shape5</label>
+				<input type="checkbox" id="shape_1" disabled>
+				<label for="shape_1">Shape1</label>
+
+				<input type="checkbox" id="shape_2" disabled>
+				<label for="shape_2">Shape2</label>
+
+				<input type="checkbox" id="shape_3" disabled>
+				<label for="shape_3">Shape3</label>
+
+				<input type="checkbox" id="shape_4" disabled>
+				<label for="shape_4">Shape4</label>
+
+				<input type="checkbox" id="shape_5" disabled>
+				<label for="shape_5">Shape5</label>
 			</div>
 
 			<button style="margin-top: 15px;" id="reset-button" disabled>RESET</button>
-			<button style="margin-top: 15px;" id="style-button">STYLE</button>
 
 		</div>
 	</container>
@@ -69,13 +82,13 @@
 		<div style="width: 1200px;">
 			<div class="fret first"></div>
 			<div class="fret second"></div>
-			<div id="fret" class="fret"></div>
-			<div id="fret" class="fret"></div>
-			<div id="fret" class="fret"></div>
 			<div class="fret"></div>
 			<div class="fret"></div>
 			<div class="fret"></div>
-			<div id="fret" class="fret"></div>
+			<div class="fret"></div>
+			<div class="fret"></div>
+			<div class="fret"></div>
+			<div class="fret"></div>
 			<div class="fret"></div>
 			<div class="fret"></div>
 			<div class="fret"></div>
@@ -136,6 +149,17 @@
 			</div>
 		</div>
 
+	</div>
+
+	<div class="radio-toggle">
+		<label>
+			<input type="radio" name="mode" value="standard" checked onchange="setMode(this.value)">
+			Standard
+		</label>
+		<label>
+			<input type="radio" name="mode" value="real" onchange="setMode(this.value)">
+			Real
+		</label>
 	</div>
 
 	<hr />
