@@ -56,7 +56,8 @@ label {
   width: 85%;
   height: 240px;
   overflow: auto;
-  background: #ffffff;
+  /*background: #ffffff;*/
+  background-image: url('wood_neck.jpg');
   box-shadow: inset -1px 0px 11px 0px rgba(0, 0, 0, 0.75);
 }
 
@@ -76,7 +77,8 @@ label {
   float: left;
   width: 3px;
   height: 240px;
-  background: #d7d6d6;
+  /*background: #d7d6d6;*/
+  background-image: url('metal_texture.jpg');
   margin-left: 65px;
   border-right: 1px solid #686868;
 }
@@ -108,6 +110,22 @@ label {
   height: 20px;
   border-radius: 50%;
   background: #dadada;
+}
+
+.guitar-neck .dots-real {
+  position: absolute;
+  width: 1200px;
+  height: 20px;
+  top: 44%;
+  margin-left: 50px;
+}
+
+.guitar-neck .dots-real li {
+  float: left;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-image: url('stone_texture.jpg');
 }
 
 .guitar-neck .dots-3 {
@@ -152,11 +170,30 @@ label {
   margin-left: 55px;
 }
 
+.guitar-neck .strings-real {
+  position: absolute;
+  left: 0;
+  top: 25px;
+  width: 1250px;
+  margin-left: 55px;
+}
+
 .guitar-neck .strings li {
   height: 1px;
   display: inline-block;
   width: 100%;
   background: #ffffff;
+  margin-bottom: 28px;
+  border-top: 1px solid #505050;
+  border-bottom: 1px solid #505050;
+  box-sizing: border-box;
+}
+
+.guitar-neck .strings-real li {
+  height: 1px;
+  display: inline-block;
+  width: 100%;
+  background-image: url('strings_texture.jpg');
   margin-bottom: 28px;
   border-top: 1px solid #505050;
   border-bottom: 1px solid #505050;
@@ -180,6 +217,28 @@ label {
 }
 
 .guitar-neck .strings li:nth-child(6) {
+  height: 6px;
+}
+
+/* ------------- */
+
+.guitar-neck .strings-real li:nth-child(2) {
+  height: 2px;
+}
+
+.guitar-neck .strings-real li:nth-child(3) {
+  height: 3px;
+}
+
+.guitar-neck .strings-real li:nth-child(4) {
+  height: 4px;
+}
+
+.guitar-neck .strings-real li:nth-child(5) {
+  height: 5px;
+}
+
+.guitar-neck .strings-real li:nth-child(6) {
   height: 6px;
 }
 
@@ -283,7 +342,7 @@ hr {
 .root {
   color: white;
   background-color: #fa990f;
-  border-radius: 50%;
+  border-radius: 25%;
   padding: 7px;
   font-weight: bold;
 }

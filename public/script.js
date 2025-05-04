@@ -202,3 +202,12 @@ function activateNotes(note) {
 	});
 
 }
+
+/* Isso é apenas um teste */
+
+$('#style-button').click(function() {
+	$('#strings').removeClass('strings');
+	$('#strings').addClass('strings-real');
+	$('#dots').removeClass('dots');
+	$('#dots').addClass('dots-real');
+});
