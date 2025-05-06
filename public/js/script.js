@@ -48,9 +48,9 @@ function deactivateNotes() {
 	});
 
 	// Reset all checkboxes
-	$('#shape-checkbox input[type="checkbox"]')
+	$('.shape-checkbox')
 		.prop('checked', false)
-		.prop('disabled', true);
+			.prop('disabled', true);
 
 }
 

@@ -11,11 +11,12 @@
 
 	<meta property="og:title" content="PentaShapes – Visualize Guitar Scales and Modes on the Fretboard">
 	<meta property="og:description" content="An interactive tool for guitarists to visualize scales and create solos on the fretboard. Explore pentatonic, blues, and more!">
-	<meta property="og:image" content="https://pentashapes.web.app/guitar.jpg">  <!-- Photo by Mikkel Bech on Unsplash -->
+	<meta property="og:image" content="https://pentashapes.web.app/images/guitar.jpg">  <!-- Photo by Mikkel Bech on Unsplash -->
 	<meta property="og:url" content="https://pentashapes.web.app">
 
-	<link rel="icon" href="favicon.ico" type="image/x-icon">
-	<link rel="stylesheet" href="./style.css">
+	<link rel="icon" href="./images/favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" href="./css/style.css">
+	<link rel="stylesheet" href="./css/custom-checkbox.css">
 
 </head>
 <body>
@@ -45,12 +46,27 @@
 
 		<p style="margin-top: 10px;">Root: <span id="root-note" class="info-message">Select a root note on the guitar neck to see the scale.</span></p>
 
-		<div id="shape-checkbox" style="margin-top: 15px;">
-			<label><input type="checkbox" id="shape_1" value="shape_1" disabled onclick="shapeClick()"> Shape 1</label>
-			<label><input type="checkbox" id="shape_2" value="shape_2" disabled onclick="shapeClick()"> Shape 2</label>
-			<label><input type="checkbox" id="shape_3" value="shape_3" disabled onclick="shapeClick()"> Shape 3</label>
-			<label><input type="checkbox" id="shape_4" value="shape_4" disabled onclick="shapeClick()"> Shape 4</label>
-			<label><input type="checkbox" id="shape_5" value="shape_5" disabled onclick="shapeClick()"> Shape 5</label>
+		<div style="margin-top: 15px;">
+			<label class="custom-checkbox">
+			  <input type="checkbox" id="shape_1" value="shape_1" class="shape-checkbox" disabled onclick="shapeClick()">
+			  <span class="checkmark"></span> Shape 1
+			</label>
+			<label class="custom-checkbox">
+			  <input type="checkbox" id="shape_2" value="shape_2" class="shape-checkbox" disabled onclick="shapeClick()">
+			  <span class="checkmark"></span> Shape 2
+			</label>
+			<label class="custom-checkbox">
+			  <input type="checkbox" id="shape_3" value="shape_3" class="shape-checkbox" disabled onclick="shapeClick()">
+			  <span class="checkmark"></span> Shape 3
+			</label>
+			<label class="custom-checkbox">
+			  <input type="checkbox" id="shape_4" value="shape_4" class="shape-checkbox" disabled onclick="shapeClick()">
+			  <span class="checkmark"></span> Shape 4
+			</label>
+			<label class="custom-checkbox">
+			  <input type="checkbox" id="shape_5" value="shape_5" class="shape-checkbox" disabled onclick="shapeClick()">
+			  <span class="checkmark"></span> Shape 5
+			</label>
 		</div>
 		
 		<button style="margin-top: 15px;" id="reset-button" disabled>RESET</button>
@@ -122,9 +138,9 @@
 
 	<a class="footer-link" href="https://github.com/marciosouzajunior/PentaShapes" target="_blank">GitHub</a>
 
-	<script src="./jquery-2.1.3.js"></script>
-	<script src="./scales.js"></script>
-	<script src="./script.js"></script>
+	<script src="./js/jquery-2.1.3.js"></script>
+	<script src="./js/scales.js"></script>
+	<script src="./js/script.js"></script>
 
 	<!-- Google tag (gtag.js) -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-LSF88NKB7D"></script>
