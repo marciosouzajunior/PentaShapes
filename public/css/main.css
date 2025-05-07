@@ -8,14 +8,6 @@ body {
   font-family: 'Source Sans Pro', sans-serif;
   letter-spacing: 0.05em;
 }
-h2 {
-  margin-top: 30px;
-  margin-left: 100px;
-}
-.options {
-  margin-top: 20px;
-  margin-left: 100px;
-}
 select {
   height: 30px;
   width: 200px;
@@ -35,8 +27,6 @@ label {
 }
 .guitar-neck {
   position: relative;
-  margin-top: 20px;
-  margin-left: 100px;
   width: 1200px;
   height: 200px;
   background: #ffffff;
@@ -221,6 +211,5 @@ label {
 }
 
 hr {
-  margin-top: 20px;
   border: 1px solid #ccc;
 }

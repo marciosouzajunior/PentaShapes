@@ -15,15 +15,15 @@
 	<meta property="og:url" content="https://pentashapes.web.app">
 
 	<link rel="icon" href="./images/favicon.ico" type="image/x-icon">
-	<link rel="stylesheet" href="./css/style.css">
-	<link rel="stylesheet" href="./css/custom-checkbox.css">
+	<link rel="stylesheet" href="./css/main.css">
+	<link rel="stylesheet" href="./css/utilities.css">
 
 </head>
 <body>
 
-	<h2>PentaShapes</h2>
+	<h2 class="mt-30 ml-100">PentaShapes</h2>
 
-	<div class="options">
+	<div class="mt-20 ml-100">
 
 		Scale:
 		<select id="scale-select">
@@ -44,9 +44,9 @@
 			<option value="locrian" disabled>Locrian</option>
 		</select>
 
-		<p style="margin-top: 10px;">Root: <span id="root-note" class="info-message">Select a root note on the guitar neck to see the scale.</span></p>
+		<p class="mt-15">Root: <span id="root-note" class="info-message">Select a root note on the guitar neck to see the scale.</span></p>
 
-		<div style="margin-top: 15px;">
+		<div class="mt-15">
 			<label class="custom-checkbox">
 			  <input type="checkbox" id="shape_1" value="shape_1" class="shape-checkbox" disabled onclick="shapeClick()">
 			  <span class="checkmark"></span> Shape 1
@@ -69,11 +69,11 @@
 			</label>
 		</div>
 		
-		<button style="margin-top: 15px;" id="reset-button" disabled>RESET</button>
+		<button class="mt-15" id="reset-button" disabled>RESET</button>
 
 	</div>
 
-	<div class="guitar-neck">
+	<div class="guitar-neck mt-20 ml-100">
 		
 
 		<div class="fret first"></div>
@@ -134,7 +134,7 @@
 
 	</div>
 
-	<hr/>
+	<hr class="mt-20"/>
 
 	<a class="footer-link" href="https://github.com/marciosouzajunior/PentaShapes" target="_blank">GitHub</a>
 

@@ -1,0 +1,105 @@
+/*
+* Custom Checkbox Styles
+* This CSS file contains styles for a custom checkbox component.
+* The checkbox is styled to look like a circular button with a checkmark.
+*/
+
+.custom-checkbox input[type="checkbox"] {
+    display: none;
+}
+
+.custom-checkbox .checkmark {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    background-color: white;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+    vertical-align: middle;
+}
+
+.custom-checkbox input[type="checkbox"]:checked+.checkmark {
+    background-color: green;
+    border-color: green;
+}
+
+.custom-checkbox .checkmark::after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 6px;
+    top: 2px;
+    width: 4px;
+    height: 8px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.custom-checkbox input[type="checkbox"]:checked+.checkmark::after {
+    display: block;
+}
+
+.custom-checkbox input[type="checkbox"]:disabled+.checkmark {
+    background-color: #d3d3d3;
+    border-color: #a9a9a9;
+    cursor: not-allowed;
+}
+
+.custom-checkbox input[type="checkbox"]:disabled:checked+.checkmark {
+    background-color: #a9a9a9;
+}
+
+.custom-checkbox input[type="checkbox"]:disabled:checked+.checkmark::after {
+    border-color: #7f7f7f;
+}
+
+/* 
+* Utility Classes for Margin and Padding
+* These classes provide a quick way to apply margin and padding to elements.
+* The classes follow a naming convention of m{direction}-{size} for margin and p{direction}-{size} for padding.
+* The size values can be 0, 5, 10, 15, 20, or 30 pixels.
+*/
+
+/* Margin Top */
+.mt-0 { margin-top: 0px; }
+.mt-5 { margin-top: 5px; }
+.mt-10 { margin-top: 10px; }
+.mt-15 { margin-top: 15px; }
+.mt-20 { margin-top: 20px; }
+.mt-30 { margin-top: 30px; }
+.mt-50 { margin-top: 50px; }
+.mt-100 { margin-top: 100px; }
+
+/* Margin Bottom */
+.mb-0 { margin-bottom: 0px; }
+.mb-5 { margin-bottom: 5px; }
+.mb-10 { margin-bottom: 10px; }
+.mb-15 { margin-bottom: 15px; }
+.mb-20 { margin-bottom: 20px; }
+.mb-30 { margin-bottom: 30px; }
+.mb-50 { margin-bottom: 50px; }
+.mb-100 { margin-bottom: 100px; }
+
+/* Margin Left */
+.ml-0 { margin-left: 0px; }
+.ml-5 { margin-left: 5px; }
+.ml-10 { margin-left: 10px; }
+.ml-15 { margin-left: 15px; }
+.ml-20 { margin-left: 20px; }
+.ml-30 { margin-left: 30px; }
+.ml-50 { margin-left: 50px; }
+.ml-100 { margin-left: 100px; }
+
+/* Margin Right */
+.mr-0 { margin-right: 0px; }
+.mr-5 { margin-right: 5px; }
+.mr-10 { margin-right: 10px; }
+.mr-15 { margin-right: 15px; }
+.mr-20 { margin-right: 20px; }
+.mr-30 { margin-right: 30px; }
+.mr-50 { margin-right: 50px; }
+.mr-100 { margin-right: 100px; }
