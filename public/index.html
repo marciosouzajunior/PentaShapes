@@ -69,7 +69,7 @@
 			</label>
 		</div>
 		
-		<button class="mt-15" id="reset-button" disabled>RESET</button>
+		<button class="mt-15" id="reset-button" disabled>Reset</button>
 
 	</div>
 
@@ -135,6 +135,42 @@
 	</div>
 
 	<hr class="mt-20"/>
+
+	<div class="mt-20 ml-100 mb-100" style="width: 600px;" >
+		<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+		  <h3 style="margin: 0;">Scale Progression</h3>
+		  <button id="add-to-progression">Add to Progression</button>
+		</div>		
+		  
+		<table id="progression-table">
+		  <thead>
+			<tr>
+			  <th>#</th>
+			  <th>Scale</th>
+			  <th>Root Note</th>
+			  <th style="width: 30px;"></th>
+			</tr>
+		  </thead>
+		  <tbody>
+			<tr id="empty-message">
+			  <td colspan="4" style="text-align: center; color: #999;">No scales added to the progression.</td>
+			</tr>
+		  </tbody>
+		</table>
+
+		<div style="display: flex; justify-content: start; align-items: center; margin-top: 10px;">
+			<button id="play-stop-btn">▶ Play</button>
+			<label style="margin-left: 20px;">
+				Interval <input type="number" id="intervalInput" value="5" min="1" style="width: 50px; padding: 4px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px;" /> secs
+			</label>
+
+			<svg class="progress-circle" width="18" height="18" viewBox="0 0 18 18">
+				<circle class="track" r="7" cx="9" cy="9" />
+				<circle class="fill" r="7" cx="9" cy="9" />
+			</svg>					
+		</div>
+
+	</div>
 
 	<a class="footer-link" href="https://github.com/marciosouzajunior/PentaShapes" target="_blank">GitHub</a>
 

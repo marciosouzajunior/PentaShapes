@@ -213,3 +213,42 @@ label {
 hr {
   border: 1px solid #ccc;
 }
+
+#progression-table {
+  width: 500px;
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#progression-table th, #progression-table td {
+  padding: 8px;
+  text-align: center;
+}
+
+.remove-row {
+  font-size: 16px;
+  text-decoration: none;
+  color: black;
+}
+
+#progression-table tbody tr.selected {
+	background-color: #e0e0e0;
+}
+
+.progress-circle .track {
+  display: none;
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 3;
+}
+
+.progress-circle .fill {
+  fill: none;
+  stroke: #4caf50;
+  stroke-width: 3;
+  stroke-dasharray: 43.98; /* 2 * π * 7 */
+  stroke-dashoffset: 43.98;
+  transform: rotate(-90deg);
+  transform-origin: center;
+}
