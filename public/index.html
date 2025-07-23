@@ -170,13 +170,26 @@
 			</svg>					
 		</div>
 
+		<select class="mt-10" id="preset-select">
+			<option value="">-- Choose a preset --</option>
+			<option value="circleOfFourthsMajor" disabled>Circle of Fourths (Major)</option>
+			<option value="circleOfFourthsMinor">Circle of Fourths (Minor)</option>
+			<!-- add more presets here -->
+
+
+		</select>
+
+		<button id="load-preset">Load</button>
+
 	</div>
 
 	<a class="footer-link" href="https://github.com/marciosouzajunior/PentaShapes" target="_blank">GitHub</a>
 
 	<script src="./js/jquery-2.1.3.js"></script>
 	<script src="./js/scales.js"></script>
-	<script src="./js/script.js"></script>
+	<script src="./js/main.js"></script>
+	<script src="./js/scale-progression.js"></script>
+	<script src="./presets/circle_of_fourths_minor.js"></script>
 
 	<!-- Google tag (gtag.js) -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-LSF88NKB7D"></script>
