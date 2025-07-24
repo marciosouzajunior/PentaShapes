@@ -19,7 +19,25 @@ for (var i = 0; i < notes.e_low.length; i++) {
 
 $('#scale-select').change(function() {
 	$('#reset-button').click();
+
+	// Set custom shape labels if available
+	var selectedScaleName = $(this).val();
+	var selectedScale = scales[selectedScaleName];	
+	if (selectedScale && selectedScale.shape_labels) {
+		$('span[name="shape_label"]').each(function(index) {			
+			$(this).parent().show();			
+			let shape_label = selectedScale.shape_labels[index];			
+			if (!shape_label) {
+				$(this).parent().hide();				
+				return;
+			}
+			$(this).text(shape_label);
+		});	
+	}
 });
+
+// Auto select penta_min
+$('#scale-select').val('penta_min').change();
 
 $('#reset-button').click(function() {
 	deactivateNotes();
@@ -98,7 +116,7 @@ function renderShapes(string, index) {
 
 	$("#root-note").removeClass('info-message');
 	$('#reset-button').removeAttr('disabled');
-	
+
 	deactivateNotes();
 	hideNotes();
 

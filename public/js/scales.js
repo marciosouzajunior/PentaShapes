@@ -46,6 +46,13 @@ const scales = (() => {
 
     // https://www.jazz-guitar-licks.com/medias/images/minor-pentatonic-scale-guitar-shapes.png
     const penta_min = {
+        shape_labels: [
+            'Shape 1 (E)',
+            'Shape 2 (D)',
+            'Shape 3 (C)',
+            'Shape 4 (A)',
+            'Shape 5 (G)'
+        ],
         e_low: {
             shape_1: [
                 { string: 'e_high', offset: 0, label: '1' },
@@ -140,6 +147,13 @@ const scales = (() => {
 
     // https://www.jazz-guitar-licks.com/medias/images/major-pentatonic-scale-guitar-shapes.png
     const penta_maj = {
+        shape_labels: [
+            'Shape 1 (E)',
+            'Shape 2 (D)',
+            'Shape 3 (C)',
+            'Shape 4 (A)',
+            'Shape 5 (G)'
+        ],
         e_low: {
             shape_1: [
                 { string: 'e_high', offset: 2, label: '2' },
@@ -234,6 +248,11 @@ const scales = (() => {
     
     // https://www.guitartricks.com/assets/news_images/GT-Diagrams-BBKingBox_comparison.gif
     const blues = {
+        shape_labels: [
+            'Pattern 1',
+            'Albert King Box',
+            'BB King Box'
+        ],
         e_low: {
             shape_1: [
                 { string: 'e_high', offset: 3, label: '♭3' },
