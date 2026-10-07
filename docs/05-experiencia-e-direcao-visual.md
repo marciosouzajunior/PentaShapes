@@ -114,6 +114,7 @@ Oferecer tônica e família separadas da região do braço. Mostrar nome da nota
 - Notas com rótulos legíveis; tônica com aro e marca textual, notas do acorde com tratamento adicional consistente.
 - Distinguir “nota fora do exercício”, “nota permitida”, “alvo atual” e “nota selecionada”. Não tratar todas as notas não usadas como erros musicais.
 - Alternar nome/grau com explicação: `Lá (A)` e `1 — tônica`. Evitar `∆3` e outros símbolos sem legenda no início.
+- Ensinar graus como distâncias a partir da tônica no braço: primeiro localizar `1`, depois ouvir e encontrar `♭3`, `5` ou `♭7` em poucas casas. A escala maior serve como referência para os nomes dos intervalos, mas não deve ser um pré-requisito de memorização para a primeira frase. A landing page apresenta apenas o braço e a animação da ideia musical; notas e graus serão explicados nas lições, quando ajudarem a resolver uma tarefa concreta.
 - Indicar dedos sugeridos somente quando útil e como informação distinta do grau musical. O número 1 não pode significar tônica e indicador no mesmo código visual.
 - Modo canhoto muda apresentação, sem alterar alturas reais, IDs das cordas ou avaliações.
 - Se houver animação de nota, fazê-la acompanhar a referência sonora. A tela não deve fingir rastrear o instrumento do usuário.

@@ -6,22 +6,33 @@ const stylesheet = `
   .scroll { max-width:100%; overflow-x:auto; overflow-y:hidden; padding:8px 4px 14px; scrollbar-width:none; overscroll-behavior-inline:contain; }
   .scroll::-webkit-scrollbar { display:none; }
   .board { position:relative; display:grid; grid-template-columns:48px repeat(var(--frets),minmax(44px,1fr)); width:min(100%,calc(48px + var(--frets) * 64px)); min-width:calc(48px + var(--frets) * 44px); margin-inline:auto; isolation:isolate; }
+  :host([demo]) .scroll { padding-inline:0; }
+  :host([demo]) .board { --demo-gutter:48px; padding-right:var(--demo-gutter); width:min(100%,calc(96px + var(--frets) * 64px)); min-width:calc(96px + var(--frets) * 44px); }
+  :host([demo]) .board::before { content:''; position:absolute; z-index:5; top:0; left:48px; right:var(--demo-gutter); height:calc(var(--strings) * 44px); border:1px solid #cbd4e3; border-radius:12px 0 0 12px; pointer-events:none; -webkit-mask-image:linear-gradient(to right,#000 0%,#000 92%,transparent 100%); mask-image:linear-gradient(to right,#000 0%,#000 92%,transparent 100%); }
+  :host([demo]) .board.left::before { border-radius:0 12px 12px 0; -webkit-mask-image:linear-gradient(to left,#000 0%,#000 92%,transparent 100%); mask-image:linear-gradient(to left,#000 0%,#000 92%,transparent 100%); }
+  @media (max-width:360px) { :host([demo]) .board { --demo-gutter:32px; width:min(100%,calc(80px + var(--frets) * 64px)); min-width:calc(80px + var(--frets) * 44px); } }
   .board.left { grid-template-columns:repeat(var(--frets),minmax(44px,1fr)) 48px; }
   .board.has-open::after { content:''; position:absolute; z-index:4; top:0; left:calc(48px + (100% - 48px) / var(--frets) - 3px); width:6px; height:calc(var(--strings) * 44px); border-radius:3px; background:#11162f; pointer-events:none; }
   .board.left.has-open::after { left:auto; right:calc(48px + (100% - 48px) / var(--frets) - 3px); }
   .number { padding-top:8px; height:30px; text-align:center; font-size:11px; font-weight:600; color:#646878; }
+  :host([demo]) .number { padding-top:12px; font-weight:500; color:#8b95a8; }
   .string-label { height:44px; display:flex; flex-direction:column; align-items:flex-end; padding-right:10px; justify-content:center; font-size:12px; font-weight:650; color:#646878; }
   .left .string-label { align-items:flex-start; padding-right:0; padding-left:12px; }
+  :host([demo]) .string-label { padding-right:17px; font-size:11px; font-weight:500; color:#8b95a8; }
+  :host([demo]) .left .string-label { padding-right:0; padding-left:17px; }
   .cell { position:relative; height:44px; background:var(--fretboard-surface,#fff); }
   .cell::before { content:''; position:absolute; z-index:1; left:0; right:0; top:calc(50% - var(--thickness) / 2); height:var(--thickness); background:#7d859d; pointer-events:none; }
+  :host([demo]) .cell.body-edge::before { -webkit-mask-image:linear-gradient(to right,#000 0%,#000 68%,transparent 100%); mask-image:linear-gradient(to right,#000 0%,#000 68%,transparent 100%); }
+  :host([demo]) .board.left .cell.body-edge::before { -webkit-mask-image:linear-gradient(to left,#000 0%,#000 68%,transparent 100%); mask-image:linear-gradient(to left,#000 0%,#000 68%,transparent 100%); }
   .cell::after { content:''; position:absolute; z-index:2; top:0; bottom:0; right:-1px; width:2px; background:#bac2d8; pointer-events:none; }
   .left .cell::after { right:auto; left:-1px; }
+  :host([demo]) .cell.body-edge::after { display:none; }
   .cell.open::after { display:none; }
   .cell.open::before { left:50%; }
   .left .cell.open::before { left:0; right:50%; }
   .semitone-link { position:absolute; z-index:0; top:6px; height:32px; left:calc(50% - 16px); width:calc(100% + 32px); border-radius:18px; background:var(--fretboard-link,#d8e3ff); pointer-events:none; }
   .note { position:relative; z-index:3; display:grid; place-items:center; padding:0; width:100%; height:44px; min-width:44px; border:0; background:transparent; cursor:pointer; color:var(--fretboard-ink,#10152f); font:inherit; touch-action:manipulation; }
-  .dot { display:grid; place-items:center; width:28px; height:28px; border:2px solid #9ca6be; border-radius:50%; background:#fff; font-family:Arial,Helvetica,sans-serif; font-size:13px; font-weight:700; line-height:1; }
+  .dot { display:grid; place-items:center; width:28px; height:28px; border:2px solid #9ca6be; border-radius:50%; background:#fff; font-family:Inter,Arial,Helvetica,sans-serif; font-size:14px; font-weight:600; line-height:1; }
   .emphasized .dot,.root .dot { color:var(--fretboard-note-ink,#fff); background:var(--fretboard-note,#3156e8); border-color:var(--fretboard-note,#3156e8); }
   .root .dot { outline:2px solid var(--fretboard-note,#3156e8); outline-offset:3px; }
   .note[aria-pressed=true] .dot { border:3px solid #10152f; }
@@ -51,7 +62,7 @@ export class PentaFretboard extends HTMLElement {
   #configuration = {};
   #model;
   #selected = null;
-  #highlighted = null;
+  #highlighted = new Set();
   #showHint = true;
 
   constructor() {
@@ -88,9 +99,13 @@ export class PentaFretboard extends HTMLElement {
   }
 
   set highlightedPosition(value) {
-    this.#highlighted = value ? positionKey(value) : null;
+    this.highlightedPositions = value ? [value] : [];
+  }
+
+  set highlightedPositions(values) {
+    this.#highlighted = new Set(values.map(positionKey));
     for (const button of this.shadowRoot.querySelectorAll('button[data-position]')) {
-      button.classList.toggle('playing', button.dataset.position === this.#highlighted);
+      button.classList.toggle('playing', this.#highlighted.has(button.dataset.position));
     }
   }
 
@@ -145,7 +160,8 @@ export class PentaFretboard extends HTMLElement {
       const label = make('span', 'string-label', string.id === 'e_high' && openNote.letter === 'E' ? 'e' : openNote.letter);
       label.title = string.name;
       const cells = notes.map((note, col) => {
-        const cell = make('div', `cell${note.fret === 0 ? ' open' : ''}`);
+        const bodyEdge = this.#model.handedness === 'left' ? col === 0 : col === notes.length - 1;
+        const cell = make('div', `cell${note.fret === 0 ? ' open' : ''}${bodyEdge ? ' body-edge' : ''}`);
         cell.style.setProperty('--thickness', `${1 + row * 0.3}px`);
         if (note.linkNext) {
           const link = make('span', 'semitone-link');
@@ -154,7 +170,7 @@ export class PentaFretboard extends HTMLElement {
         }
         if (note.visible) {
           visibleCount++;
-          const button = make('button', `note${note.isRoot ? ' root' : ''}${note.emphasized ? ' emphasized' : ''}${this.#highlighted === positionKey(note) ? ' playing' : ''}`);
+          const button = make('button', `note${note.isRoot ? ' root' : ''}${note.emphasized ? ' emphasized' : ''}${this.#highlighted.has(positionKey(note)) ? ' playing' : ''}`);
           button.type = 'button';
           button.dataset.position = positionKey(note);
           button.dataset.row = row;
