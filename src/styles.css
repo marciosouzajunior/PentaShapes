@@ -167,14 +167,9 @@ a { color: inherit; }
   font-weight: 700;
   letter-spacing: .09em;
 }
-.demo-degrees {
-  padding: 6px 9px;
-  border-radius: 8px;
-  background: #f2f5ff;
-  color: #3156e8;
-  letter-spacing: 0;
-  white-space: nowrap;
-}
+.demo-phrase { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 12px; margin-top: 4px; padding: 10px 12px; border-radius: 10px; background: #f2f5ff; color: #405171; font-size: 12px; font-weight: 700; line-height: 1.6; }
+.phrase-pair { white-space: nowrap; }
+.phrase-divider { margin-left: 12px; color: #8a96ad; }
 .board-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
 .board-kicker { font-size: 10px; font-weight: 700; letter-spacing: .12em; color: #3156e8; }
 .board-top h2 { margin: 6px 0 20px; font-size: 18px; letter-spacing: -.025em; }
