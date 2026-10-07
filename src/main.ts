@@ -32,6 +32,15 @@ else renderLanding(app);
 
 function renderLanding(app: HTMLDivElement): void {
 const ctaLabel = readProgress(FOUNDATIONS_L01) ? 'Continuar lição' : 'Começar agora';
+const melody = [
+  { position: { stringId: 'g', fret: 7 }, note: 'D', degree: '1', atMs: 0, durationMs: 390 },
+  { position: { stringId: 'b', fret: 5 }, note: 'E', degree: '2', atMs: 480, durationMs: 390 },
+  { position: { stringId: 'b', fret: 6 }, note: 'F', degree: '♭3', atMs: 960, durationMs: 390 },
+  { position: { stringId: 'b', fret: 8 }, note: 'G', degree: '4', atMs: 1440, durationMs: 390 },
+  { position: { stringId: 'b', fret: 5 }, note: 'E', degree: '2', atMs: 1920, durationMs: 600 },
+  { position: { stringId: 'g', fret: 5 }, note: 'C', degree: '♭7', atMs: 2700, durationMs: 390 },
+  { position: { stringId: 'g', fret: 7 }, note: 'D', degree: '1', atMs: 3180, durationMs: 880 },
+];
 
 app.innerHTML = `
   <a class="skip-link" href="#main">Ir para o conteúdo</a>
@@ -47,8 +56,11 @@ app.innerHTML = `
         <a class="start-link" href="/lesson/">${ctaLabel} <span aria-hidden="true">→</span></a>
       </div>
       <div class="board-panel hero-board">
-        <div class="demo-heading"><span>UMA IDEIA EM RÉ MENOR</span><span class="demo-degrees" aria-label="Graus das notas visíveis: um, dois, terça menor, quatro e sétima menor">1 · 2 · ♭3 · 4 · ♭7</span></div>
+        <div class="demo-heading"><span>UMA IDEIA EM RÉ MENOR</span></div>
         <penta-fretboard id="preview-board"></penta-fretboard>
+        <div class="demo-phrase" role="img" aria-label="Frase em Ré menor: Ré, grau um; Mi, grau dois; Fá, terça menor; Sol, grau quatro; Mi, grau dois; Dó, sétima menor; Ré, grau um">
+          ${melody.map(({ note, degree }, index) => `<span class="phrase-pair">${note} (${degree})${index < melody.length - 1 ? '<span class="phrase-divider">·</span>' : ''}</span>`).join('')}
+        </div>
       </div>
     </section>
     <section class="tracks" id="tracks" aria-labelledby="tracks-title">
@@ -101,15 +113,6 @@ board.setAttribute('demo', '');
 board.showHint = false;
 board.configuration = config;
 
-const melody = [
-  { position: { stringId: 'g', fret: 7 }, atMs: 0, durationMs: 390 },
-  { position: { stringId: 'b', fret: 5 }, atMs: 480, durationMs: 390 },
-  { position: { stringId: 'b', fret: 6 }, atMs: 960, durationMs: 390 },
-  { position: { stringId: 'b', fret: 8 }, atMs: 1440, durationMs: 390 },
-  { position: { stringId: 'b', fret: 5 }, atMs: 1920, durationMs: 600 },
-  { position: { stringId: 'g', fret: 5 }, atMs: 2700, durationMs: 390 },
-  { position: { stringId: 'g', fret: 7 }, atMs: 3180, durationMs: 880 },
-];
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 let animationTimers: number[] = [];
 function stopAnimation(): void {

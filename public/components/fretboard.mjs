@@ -38,6 +38,8 @@ const stylesheet = `
   .note:focus-visible { outline:3px solid #263c88; outline-offset:-3px; border-radius:8px; }
   .marker { height:16px; display:flex; align-items:center; justify-content:center; gap:4px; }
   .marker i { display:block; width:6px; height:6px; border-radius:50%; background:#bac2d8; }
+  :host([demo]) .marker { height:0; }
+  :host([demo]) .marker i { display:none; }
   .hint { margin:8px 4px 0; color:#59667b; font-size:12px; line-height:1.6; }
   .empty { margin:12px 4px; font-size:14px; }
   @media (prefers-reduced-motion:reduce) { :host([demo]) .note.playing .dot { animation:none; transform:none; box-shadow:none; color:#fff; background:#3156e8; border-color:#3156e8; } }
