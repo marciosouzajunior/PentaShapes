@@ -157,19 +157,15 @@ a { color: inherit; }
 }
 .hero-board { align-self: center; }
 .demo-heading {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  color: #64718b;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: .09em;
+  margin: 0;
+  color: #53627e;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: -.02em;
+  line-height: 1.5;
+  text-align: center;
 }
-.demo-phrase { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 12px; margin-top: 4px; padding: 10px 12px; border-radius: 10px; background: #f2f5ff; color: #405171; font-size: 12px; font-weight: 700; line-height: 1.6; }
-.phrase-pair { white-space: nowrap; }
-.phrase-divider { margin-left: 12px; color: #8a96ad; }
+.demo-heading span { margin-left: 3px; color: #5b6d92; font-family: Georgia, "Times New Roman", serif; font-size: 17px; font-style: italic; font-weight: 400; letter-spacing: -.02em; }
 .board-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
 .board-kicker { font-size: 10px; font-weight: 700; letter-spacing: .12em; color: #3156e8; }
 .board-top h2 { margin: 6px 0 20px; font-size: 18px; letter-spacing: -.025em; }

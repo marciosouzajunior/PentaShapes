@@ -20,6 +20,7 @@ type BoardConfiguration = {
 type FretboardElement = HTMLElement & {
   configuration: BoardConfiguration;
   highlightedPosition: { stringId: string; fret: number } | null;
+  highlightedPositions: { stringId: string; fret: number }[];
   showHint: boolean;
 };
 
@@ -33,14 +34,15 @@ else renderLanding(app);
 function renderLanding(app: HTMLDivElement): void {
 const ctaLabel = readProgress(FOUNDATIONS_L01) ? 'Continuar lição' : 'Começar agora';
 const melody = [
-  { position: { stringId: 'g', fret: 7 }, note: 'D', degree: '1', atMs: 0, durationMs: 390 },
-  { position: { stringId: 'b', fret: 5 }, note: 'E', degree: '2', atMs: 480, durationMs: 390 },
-  { position: { stringId: 'b', fret: 6 }, note: 'F', degree: '♭3', atMs: 960, durationMs: 390 },
-  { position: { stringId: 'b', fret: 8 }, note: 'G', degree: '4', atMs: 1440, durationMs: 390 },
-  { position: { stringId: 'b', fret: 5 }, note: 'E', degree: '2', atMs: 1920, durationMs: 600 },
-  { position: { stringId: 'g', fret: 5 }, note: 'C', degree: '♭7', atMs: 2700, durationMs: 390 },
-  { position: { stringId: 'g', fret: 7 }, note: 'D', degree: '1', atMs: 3180, durationMs: 880 },
+  { position: { stringId: 'g', fret: 7 }, atMs: 0 },
+  { position: { stringId: 'b', fret: 5 }, atMs: 680 },
+  { position: { stringId: 'b', fret: 6 }, atMs: 1360 },
+  { position: { stringId: 'b', fret: 8 }, atMs: 2040 },
+  { position: { stringId: 'b', fret: 5 }, atMs: 2720 },
+  { position: { stringId: 'g', fret: 5 }, atMs: 3640 },
+  { position: { stringId: 'g', fret: 7 }, atMs: 4320 },
 ];
+const noteDurationMs = 1100;
 
 app.innerHTML = `
   <a class="skip-link" href="#main">Ir para o conteúdo</a>
@@ -56,11 +58,8 @@ app.innerHTML = `
         <a class="start-link" href="/lesson/">${ctaLabel} <span aria-hidden="true">→</span></a>
       </div>
       <div class="board-panel hero-board">
-        <div class="demo-heading"><span>UMA IDEIA EM RÉ MENOR</span></div>
+        <h2 class="demo-heading">Uma ideia em <span>Ré menor</span></h2>
         <penta-fretboard id="preview-board"></penta-fretboard>
-        <div class="demo-phrase" role="img" aria-label="Frase em Ré menor: Ré, grau um; Mi, grau dois; Fá, terça menor; Sol, grau quatro; Mi, grau dois; Dó, sétima menor; Ré, grau um">
-          ${melody.map(({ note, degree }, index) => `<span class="phrase-pair">${note} (${degree})${index < melody.length - 1 ? '<span class="phrase-divider">·</span>' : ''}</span>`).join('')}
-        </div>
       </div>
     </section>
     <section class="tracks" id="tracks" aria-labelledby="tracks-title">
@@ -112,24 +111,31 @@ const config: BoardConfiguration = {
 board.setAttribute('demo', '');
 board.showHint = false;
 board.configuration = config;
+board.style.setProperty('--flash-duration', `${noteDurationMs}ms`);
 
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 let animationTimers: number[] = [];
+const activePositions = new Map<string, { stringId: string; fret: number }>();
 function stopAnimation(): void {
   for (const timer of animationTimers) window.clearTimeout(timer);
   animationTimers = [];
-  board!.highlightedPosition = null;
+  activePositions.clear();
+  board!.highlightedPositions = [];
 }
 function playPhrase(): void {
   if (document.hidden || reducedMotion.matches) return;
-  melody.forEach(({ position, atMs, durationMs }) => {
+  melody.forEach(({ position, atMs }) => {
+    const key = `${position.stringId}:${position.fret}`;
     animationTimers.push(window.setTimeout(() => {
-      board!.style.setProperty('--flash-duration', `${durationMs}ms`);
-      board!.highlightedPosition = position;
+      activePositions.set(key, position);
+      board!.highlightedPositions = [...activePositions.values()];
     }, atMs));
-    animationTimers.push(window.setTimeout(() => { board!.highlightedPosition = null; }, atMs + durationMs));
+    animationTimers.push(window.setTimeout(() => {
+      activePositions.delete(key);
+      board!.highlightedPositions = [...activePositions.values()];
+    }, atMs + noteDurationMs));
   });
-  animationTimers.push(window.setTimeout(() => { animationTimers = []; playPhrase(); }, 5300));
+  animationTimers.push(window.setTimeout(() => { animationTimers = []; playPhrase(); }, 6400));
 }
 function syncAnimation(): void {
   stopAnimation();
