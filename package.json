@@ -1,0 +1,18 @@
+{
+  "name": "pentashapes",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --configLoader native",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test",
+    "check": "npm run typecheck && npm run test",
+    "build": "npm run check && vite build --configLoader native",
+    "preview": "vite preview --configLoader native"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2",
+    "vite": "7.3.7"
+  }
+}

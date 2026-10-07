@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f8fc">
+  <title>PentaShapes · Seu primeiro espaço para improvisar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" href="/legacy/images/favicon.ico">
+  <link rel="stylesheet" href="./lab.css">
+  <script type="module" src="./lab.mjs"></script>
+</head>
+<body>
+  <a class="skip-link" href="#practice">Ir para o braço</a>
+  <header class="site-header">
+    <a class="brand" href="./" aria-label="PentaShapes, início da demonstração"><span class="brand-icon" aria-hidden="true">p</span>Penta<span>Shapes</span></a>
+    <a class="legacy-link" href="/legacy/">Abrir versão original <span aria-hidden="true">↗</span></a>
+  </header>
+  <main>
+    <div class="intro"><p class="eyebrow">PENTASHAPES</p><h1>Um espaço para <span>improvisar.</span></h1></div>
+    <div class="workspace" id="workspace">
+      <section class="practice" id="practice" aria-labelledby="practice-title" tabindex="-1">
+        <div class="practice-top">
+          <div><p class="eyebrow" id="context-label">CONHEÇA SEU INSTRUMENTO</p><h2 id="practice-title">Notas naturais no braço.</h2></div>
+          <span class="context-pill" id="context-pill" aria-label="Contexto musical">ABC</span>
+        </div>
+        <p class="objective" id="objective">A corda mais fina fica em cima. Comece pelas duas cordas graves, destacadas em azul.</p>
+        <div class="mode-switch" aria-label="Modo de prática">
+          <button type="button" data-mode="natural" aria-pressed="true">01 <span>Conheça o braço</span></button>
+          <button type="button" data-mode="phrase" aria-pressed="false">02 <span>Uma pequena frase</span></button>
+          <button type="button" data-mode="explore" aria-pressed="false">03 <span>Explore as notas</span></button>
+        </div>
+        <div class="board-heading"><span id="range-label">CASAS 5–8</span><span>Afinação padrão · E A D G B E</span></div>
+        <penta-fretboard id="lesson-board"></penta-fretboard>
+        <div class="note-feedback" id="note-feedback" role="status" aria-live="polite">Toque em uma nota para ver sua posição.</div>
+        <p class="scroll-guidance" id="scroll-guidance" hidden>Deslize o braço para ver as demais casas.</p>
+        <details class="adjustments">
+          <summary>Ajustar visualização</summary>
+          <div class="adjustment-content">
+          <div class="explore-settings" id="natural-settings">
+            <label>Parte do braço<select id="natural-region"><option value="0,12">Soltas até a casa 12</option><option value="0,4">Soltas até a casa 4</option><option value="5,8">Casas 5–8</option><option value="9,12">Casas 9–12</option></select></label>
+          </div>
+          <div class="explore-settings" id="explore-settings" hidden>
+            <label>Centro musical<select id="tonic"><option value="9">Lá (A)</option><option value="7">Sol (G)</option><option value="0">Dó (C)</option></select></label>
+            <label>Mostrar<select id="scale"><option value="minorPentatonic">Pentatônica menor</option><option value="majorPentatonic">Pentatônica maior</option><option value="roots">Somente tônicas</option></select></label>
+            <label>Região<select id="region"><option value="5,8">Casas 5–8</option><option value="7,10">Casas 7–10</option><option value="0,4">Soltas até a casa 4</option><option value="0,17">Braço até a casa 17</option></select></label>
+          </div>
+          <div class="display-settings">
+            <label>Rótulos<select id="labels"><option value="name">Lá, Dó, Mi</option><option value="letter" selected>A, C, E</option><option value="degree">Graus: 1, ♭3, 5</option></select></label>
+            <label>Orientação<select id="handedness"><option value="right">Destro</option><option value="left">Canhoto</option></select></label>
+          </div>
+          <div class="preview-toolbar" aria-label="Largura da demonstração"><span>Prévia</span><div class="segmented"><button type="button" id="preview-fluid" aria-pressed="true">Adaptável</button><button type="button" id="preview-mobile" aria-pressed="false">Mobile</button></div></div>
+          </div>
+        </details>
+      </section>
+    </div>
+    <details class="comparison"><summary>Ver outra aplicação do braço</summary><div class="comparison-content"><div><h2>O mesmo braço, outro recorte.</h2><p>Dó maior pentatônica em três cordas.</p></div><div class="mini-board"><penta-fretboard id="comparison-board"></penta-fretboard><p class="mini-caption" id="comparison-feedback" role="status">Casas 5–8 · Cordas 1, 2 e 3</p></div></div></details>
+    <footer>Demonstração visual · Lições e progresso ainda em planejamento.</footer>
+  </main>
+  <noscript>Ative JavaScript para visualizar e selecionar as notas do braço.</noscript>
+</body>
+</html>

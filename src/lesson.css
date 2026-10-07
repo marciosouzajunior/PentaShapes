@@ -1,0 +1,44 @@
+.lesson-header, .lesson-layout { width: min(100% - 40px, 1000px); margin-inline: auto; }
+.back-link { font-size: 13px; font-weight: 700; color: #596479; text-decoration: none; }
+.back-link:hover { color: #3156e8; }
+.lesson-layout {
+  padding: 68px 0 100px;
+  display: grid;
+  grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+  gap: 28px 38px;
+}
+.lesson-intro { align-self: center; }
+.lesson-intro h1 { margin: 16px 0 18px; font-size: clamp(38px, 5vw, 58px); line-height: 1.06; letter-spacing: -.05em; }
+.lesson-intro > p:last-child, .lesson-practice > p:not(.eyebrow) { max-width: 520px; font-size: 17px; line-height: 1.65; color: #596479; }
+.lesson-board { align-self: start; }
+.lesson-tempo { font-size: 11px; font-weight: 700; color: #657188; white-space: nowrap; }
+.lesson-practice { padding: 28px 0; }
+.lesson-practice h2 { margin: 10px 0; font-size: 30px; letter-spacing: -.035em; }
+.lesson-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+.action-button, .complete-button {
+  padding: 13px 17px;
+  border: 1px solid #3156e8;
+  border-radius: 11px;
+  background: #3156e8;
+  color: #fff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.action-button.secondary { background: #fff; color: #3156e8; }
+.action-button:disabled, .text-button:disabled { opacity: .5; cursor: default; }
+.text-button { padding: 12px; border: 0; background: transparent; color: #596479; font: inherit; font-size: 13px; cursor: pointer; }
+.lesson-status { min-height: 48px; margin: 18px 0 10px; font-size: 14px !important; }
+.complete-button { background: #10162e; border-color: #10162e; }
+.storage-warning { color: #9a4b16 !important; font-size: 13px !important; }
+.lesson-tip { align-self: start; padding: 20px 22px; border: 1px solid #e1e5ee; border-radius: 16px; background: #fff; }
+.lesson-tip summary { font-weight: 700; cursor: pointer; }
+.lesson-tip p { margin-bottom: 0; line-height: 1.6; color: #596479; }
+.action-button:focus-visible, .complete-button:focus-visible, .text-button:focus-visible, .back-link:focus-visible, .lesson-tip summary:focus-visible { outline: 3px solid #10162e; outline-offset: 3px; }
+@media (max-width: 760px) {
+  .lesson-header, .lesson-layout { width: min(100% - 32px, 1000px); }
+  .lesson-layout { padding: 44px 0 70px; grid-template-columns: 1fr; gap: 22px; }
+  .lesson-practice { padding: 4px 0; }
+  .lesson-intro > p:last-child, .lesson-practice > p:not(.eyebrow) { font-size: 15px; }
+}
