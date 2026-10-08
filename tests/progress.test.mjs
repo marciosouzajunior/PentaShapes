@@ -5,7 +5,7 @@ import { createServer } from 'vite';
 const vite = await createServer({ configFile: false, server: { middlewareMode: true }, appType: 'custom' });
 after(() => vite.close());
 const { FOUNDATIONS_L01, lessonKey } = await vite.ssrLoadModule('/src/content-identity.ts');
-const { readProgress, saveProgress, readActiveLessonKey, readCompletion } = await vite.ssrLoadModule('/src/progress.ts');
+const { readProgress, saveProgress, readActiveLessonKey, readCompletion, readNextIncompleteLessonKey } = await vite.ssrLoadModule('/src/progress.ts');
 const { lessons } = await vite.ssrLoadModule('/src/lesson-content.ts');
 
 function storage() {
@@ -16,6 +16,36 @@ function storage() {
   };
   return values;
 }
+
+test('resume finds the first unfinished lesson, even when the last visited lesson is later', () => {
+  storage();
+  const refs = lessons.map(lesson => lesson.ref);
+  assert.equal(readNextIncompleteLessonKey(refs), null);
+  saveProgress(refs[0], 'complete');
+  saveProgress(refs[1], 'complete');
+  saveProgress(refs[5], 'practice');
+  assert.equal(readNextIncompleteLessonKey(refs), lessonKey(refs[2]));
+  saveProgress(refs[0], 'practice');
+  assert.equal(readNextIncompleteLessonKey(refs), lessonKey(refs[0]));
+  refs.forEach(ref => saveProgress(ref, 'complete'));
+  assert.equal(readNextIncompleteLessonKey(refs), null);
+});
+
+test('resume stays in the active module and safely handles unavailable progress', () => {
+  const values = storage();
+  const refs = lessons.map(lesson => lesson.ref);
+  const other = [
+    { source: 'system', trackId: 'blues', lessonId: 'l01' },
+    { source: 'system', trackId: 'blues', lessonId: 'l02' },
+  ];
+  const catalog = [...refs, ...other];
+  saveProgress(other[0], 'complete');
+  assert.equal(readNextIncompleteLessonKey(catalog), lessonKey(other[1]));
+  saveProgress(refs[2], 'listen');
+  assert.equal(readNextIncompleteLessonKey(catalog), lessonKey(refs[0]));
+  values.set('pentashapes.progress.v2', '{broken');
+  assert.equal(readNextIncompleteLessonKey(catalog), null);
+});
 
 test('official and user lesson IDs cannot collide, even with similar local IDs', () => {
   assert.equal(lessonKey(FOUNDATIONS_L01), 'system:fundamentals:l01');
