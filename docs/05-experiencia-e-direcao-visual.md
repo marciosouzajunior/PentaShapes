@@ -41,6 +41,8 @@ Card principal: “Continue sua primeira frase”, etapa e duração aproximada,
 
 Na tela de lição, manter uma navegação curta e persistente: voltar para a trilha, lição anterior e próxima lição. O botão seguinte deve mostrar o estado (“Próxima lição”, “Revisar lição” ou “Bloqueada: conclua L02”). A pessoa pode voltar para consultar uma explicação ou repetir um exercício sem perder o ponto salvo. Em celular, essas ações ficam próximas do polegar e não competem com o botão principal da prática.
 
+Quando houver ao menos duas lições navegáveis na mesma trilha, mostrar no topo da lição um seletor nativo, identificado como "Lições da trilha". Cada opção traz número e título (por exemplo, "L01 · Encontre o repouso") e pode indicar conclusão ou bloqueio em texto. A seleção leva diretamente a uma lição disponível; uma lição bloqueada explica seu pré-requisito fora do seletor. Manter ações "Anterior" e "Próxima" junto à prática para o fluxo linear. O seletor é complemento para revisitar ou saltar entre lições, não substitui o mapa da trilha. Enquanto existir somente L01, não mostrar um seletor de opção única. Durante o protótipo, L02 e L03 podem aparecer como prévias explicitamente rotuladas, sem progresso ou exercício simulado.
+
 O progresso salvo deve ser discreto e verificável: “Salvo neste navegador”. Falha recebe estado persistente com ação de exportar; não uma notificação que desaparece antes de ser lida.
 
 O rodapé da landing page e a tela de configurações terão um link **Sobre o método**. Ele abre uma página curta com a promessa, as referências pedagógicas e os créditos. Na lição, referências específicas aparecem apenas dentro do painel opcional de teoria, sob o rótulo **Contexto e referências**. Não colocar bibliografia na área principal da prática.

@@ -65,6 +65,8 @@ Sem microfone, “identificar na tela” é verificado automaticamente; “mante
 
 ## 5. Primeira trilha — 12 lições
 
+Atualização de implementação, 8 de outubro de 2026: L01–L12 estão no catálogo do app. A tabela abaixo registra o plano pedagógico; o exemplo autoral e os textos finais de cada lição estão em `src/lesson-content.ts`. O estado de validação e os ajustes de prática estão no [registro da implementação](08-inicio-da-implementacao.md). Conteúdo implementado não significa que a revisão musical, visual e com praticantes esteja concluída.
+
 Preparação opcional, sem estrelas: orientação das cordas, números das casas, instrumento afinado em EADGBE e como escutar o exemplo. Não ensinar acordes do zero nem exigir que o aluno acompanhe e sole simultaneamente. O app fornece o acompanhamento.
 
 Nas primeiras lições, usar vamp de Am, métrica 4/4, andamento inicial de 60 BPM com redução possível. A partir de L09, introduzir Am7 e depois Am7–Dm7 como nova cor harmônica. As velocidades e durações são ajustáveis. “Critério” na tabela é o objetivo para a rubrica, não reconhecimento de áudio já disponível.

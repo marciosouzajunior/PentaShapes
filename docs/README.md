@@ -2,7 +2,7 @@
 
 Data: 6 de outubro de 2026. Base examinada: commit `e4be80a` (`custom shape labels`).
 
-Esta documentação começou pelo diagnóstico do legado e planejamento do novo produto. A versão antiga agora está em `legacy/`; a nova entrada, ainda inicial, usa Vite e TypeScript. O laboratório visual permanece em `public/lab/` e o componente musical em `public/components/`. Currículo, progresso e gamificação continuam planejados, ainda sem implementação.
+Esta documentação começou pelo diagnóstico do legado e planejamento do novo produto. A versão antiga agora está em `legacy/`; a nova entrada usa Vite e TypeScript. O laboratório visual permanece em `public/lab/` e o componente musical em `public/components/`. Atualização de 8 de outubro: as 12 lições de Fundamentos e seu progresso local estão implementados, com validação automatizada; revisão visual, auditiva e com praticantes permanece pendente. Gamificação e as demais trilhas continuam propostas.
 
 ## Direção recomendada
 
@@ -23,6 +23,8 @@ Começar com um recorte da pentatônica menor de Lá, ritmo, pausas e resoluçã
 | [07 — Prontidão para implementação](07-prontidao-implementacao.md) | Decisões congeladas, configurações, localização, mobile, privacidade, QA e ordem de construção |
 | [08 — Início da implementação](08-inicio-da-implementacao.md) | Estrutura do mesmo repositório, legado isolado, nova entrada, execução e próximo incremento |
 | [09 — Lições oficiais e dos usuários](09-licoes-oficiais-e-dos-usuarios.md) | Identidade, autoria, categorias, revisões e separação do progresso para um futuro editor |
+| [10 — Trilhas de pentatônicas e CAGED](10-trilhas-pentatonicas-e-caged.md) | Relação acorde–posição–escala, prática em região fixa e preparação do contrato de lições |
+| [11 — Blues no box do B.B. King](11-trilha-blues-box-bb-king.md) | Trilha proposta de fraseado, alvos por acorde, mistura maior/menor e bends em um recorte compacto |
 | [Auditoria reproduzível](tools/audit-legacy.cjs) | Conferência das notas, intervalos e estrutura dos presets existentes |
 
 ## O que já está estabelecido

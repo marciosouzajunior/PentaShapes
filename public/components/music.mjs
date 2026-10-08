@@ -17,6 +17,8 @@ export const SCALES = Object.freeze({
 
 const NAMES = ['Dó', 'Dó♯', 'Ré', 'Ré♯', 'Mi', 'Fá', 'Fá♯', 'Sol', 'Sol♯', 'Lá', 'Lá♯', 'Si'];
 const LETTERS = ['C', 'C♯', 'D', 'D♯', 'E', 'F', 'F♯', 'G', 'G♯', 'A', 'A♯', 'B'];
+const FLAT_NAMES = ['Dó', 'Ré♭', 'Ré', 'Mi♭', 'Mi', 'Fá', 'Sol♭', 'Sol', 'Lá♭', 'Lá', 'Si♭', 'Si'];
+const FLAT_LETTERS = ['C', 'D♭', 'D', 'E♭', 'E', 'F', 'G♭', 'G', 'A♭', 'A', 'B♭', 'B'];
 const DEGREES = ['1', '♭2', '2', '♭3', '3', '4', '♭5', '5', '♭6', '6', '♭7', '7'];
 export const mod12 = value => ((value % 12) + 12) % 12;
 export const positionKey = ({ stringId, fret }) => `${stringId}:${fret}`;
@@ -41,11 +43,17 @@ export function noteAt(string, fret, tonic = 9) {
   };
 }
 
-/** Validate the entire next configuration before rendering it. No DOM state is read. */
+/** Validate the entire next configuration before rendering it. No DOM state is read.
+ * @param {{tonic?: number, scaleId?: string, startFret?: number, endFret?: number,
+ * tuning?: Array<{id: string, number: number, midi: number, name: string}>,
+ * positions?: Array<{stringId: string, fret: number}> | null,
+ * handedness?: string, labelMode?: string, spelling?: string, viewMode?: string, focusStrings?: string[],
+ * showSemitoneLinks?: boolean, roles?: Array<{stringId: string, fret: number, roles: string[]}>}} [config]
+ */
 export function buildFretboard({
   tonic = 9, scaleId = 'minorPentatonic', startFret = 5, endFret = 8,
   tuning = STANDARD_TUNING, positions = null, handedness = 'right', labelMode = 'name',
-  viewMode = 'scale', focusStrings = [], showSemitoneLinks = false,
+  viewMode = 'scale', focusStrings = [], showSemitoneLinks = false, roles = [], spelling = 'sharp',
 } = {}) {
   integer(tonic, 0, 11, 'Tônica');
   integer(startFret, 0, 24, 'Casa inicial');
@@ -53,6 +61,7 @@ export function buildFretboard({
   if (!Object.hasOwn(SCALES, scaleId)) throw new TypeError('Escala desconhecida.');
   if (!['left', 'right'].includes(handedness)) throw new TypeError('Orientação inválida.');
   if (!['name', 'letter', 'degree'].includes(labelMode)) throw new TypeError('Rótulo inválido.');
+  if (!['sharp', 'flat'].includes(spelling)) throw new TypeError('Grafia inválida.');
   if (!['scale', 'natural'].includes(viewMode)) throw new TypeError('Visualização inválida.');
   if (viewMode === 'natural' && labelMode === 'degree') throw new TypeError('O mapa de notas naturais não define graus de uma tonalidade.');
   if (typeof showSemitoneLinks !== 'boolean') throw new TypeError('Destaque de semitons inválido.');
@@ -84,6 +93,17 @@ export function buildFretboard({
       allowed.add(positionKey(pos));
     }
   }
+  if (!Array.isArray(roles)) throw new TypeError('Papéis devem ser uma lista.');
+  const roleMap = new Map();
+  for (const entry of roles) {
+    if (!entry || !ids.has(entry.stringId)) throw new TypeError('Papel com corda desconhecida.');
+    integer(entry.fret, startFret, endFret, 'Casa do papel');
+    if (!Array.isArray(entry.roles) || entry.roles.some(role => !['chord', 'target', 'context'].includes(role))) throw new TypeError('Papel musical desconhecido.');
+    const note = noteAt(tuning.find(string => string.id === entry.stringId), entry.fret, tonic);
+    if (!isIncluded(note) && !entry.roles.includes('context')) throw new TypeError('Papel fora da escala precisa ser contextual.');
+    const key = positionKey(entry);
+    roleMap.set(key, [...new Set([...(roleMap.get(key) ?? []), ...entry.roles])]);
+  }
   const frets = Array.from({ length: endFret - startFret + 1 }, (_, i) => startFret + i);
   if (handedness === 'left') frets.reverse();
   const rows = tuning.map(string => ({
@@ -92,10 +112,13 @@ export function buildFretboard({
       const note = noteAt(string, fret, tonic);
       return {
         ...note,
+        name: spelling === 'flat' ? FLAT_NAMES[note.pitchClass] : note.name,
+        letter: spelling === 'flat' ? FLAT_LETTERS[note.pitchClass] : note.letter,
         isRoot: viewMode === 'scale' && note.isRoot,
         degree: viewMode === 'scale' ? note.degree : null,
         emphasized: focusStrings.includes(string.id),
-        visible: isIncluded(note) && (allowed === null || allowed.has(positionKey(note))),
+        roles: roleMap.get(positionKey(note)) ?? [],
+        visible: Boolean((isIncluded(note) || roleMap.get(positionKey(note))?.includes('context')) && (allowed === null || allowed.has(positionKey(note)) || roleMap.get(positionKey(note))?.includes('context'))),
       };
     }),
   }));
@@ -106,5 +129,5 @@ export function buildFretboard({
     note.linkNext = showSemitoneLinks && note.visible && Boolean(next?.visible)
       && Math.abs(note.fret - next.fret) === 1 && ['0,11', '4,5'].includes(pitches);
   });
-  return { rows, frets, tonic, labelMode, handedness, startFret, endFret, scaleId, viewMode };
+  return { rows, frets, tonic, labelMode, spelling, handedness, startFret, endFret, scaleId, viewMode };
 }
