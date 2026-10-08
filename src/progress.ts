@@ -51,6 +51,21 @@ export function readProgress(ref: LessonRef = FOUNDATIONS_L01): LessonProgress |
   }
 }
 
+export function readActiveLessonKey(): string | null {
+  try { return loadStore().activeLessonKey; } catch { return null; }
+}
+
+export function readCompletion(refs: readonly LessonRef[]): { completed: number; total: number; percent: number } {
+  const keys = [...new Set(refs.map(lessonKey))];
+  let completed = 0;
+  try {
+    const { entries } = loadStore();
+    completed = keys.filter(key => entries[key]?.step === 'complete').length;
+  } catch { /* Keep the landing usable when local progress is unavailable. */ }
+  const total = keys.length;
+  return { completed, total, percent: total ? Math.round(completed / total * 100) : 0 };
+}
+
 export function saveProgress(ref: LessonRef, step: LessonStep, contentRevision = 1): boolean {
   try {
     if (!isStep(step) || !Number.isInteger(contentRevision) || contentRevision < 1) return false;

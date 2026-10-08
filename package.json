@@ -14,5 +14,8 @@
   "devDependencies": {
     "typescript": "7.0.2",
     "vite": "7.3.7"
+  },
+  "dependencies": {
+    "abcjs": "^6.7.1"
   }
 }

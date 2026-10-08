@@ -1,7 +1,8 @@
 import '../public/components/fretboard.mjs';
 import './styles.css';
-import { readProgress } from './progress';
-import { FOUNDATIONS_L01 } from './content-identity';
+import { readActiveLessonKey, readCompletion } from './progress';
+import { lessonKey } from './content-identity';
+import { lessons } from './lesson-content';
 import { renderLesson } from './lesson';
 import { renderTrackPlaceholder } from './track-placeholder';
 import foundationsArt from './assets/track-foundations.svg';
@@ -21,18 +22,23 @@ type FretboardElement = HTMLElement & {
   configuration: BoardConfiguration;
   highlightedPosition: { stringId: string; fret: number } | null;
   highlightedPositions: { stringId: string; fret: number }[];
-  showHint: boolean;
 };
 
 const app = document.querySelector<HTMLDivElement>('#app');
 if (!app) throw new Error('Elemento principal ausente.');
 
-if (location.pathname.startsWith('/lesson')) renderLesson(app);
+const currentLesson = lessons.find(lesson => lesson.href.replace(/\/$/, '') === location.pathname.replace(/\/$/, ''));
+if (currentLesson) renderLesson(app, currentLesson.id);
+else if (location.pathname.startsWith('/lesson')) renderLesson(app);
 else if (location.pathname.startsWith('/track/')) renderTrackPlaceholder(app, location.pathname);
 else renderLanding(app);
 
 function renderLanding(app: HTMLDivElement): void {
-const ctaLabel = readProgress(FOUNDATIONS_L01) ? 'Continuar lição' : 'Começar agora';
+const activeKey = readActiveLessonKey();
+const activeLesson = lessons.find(lesson => lessonKey(lesson.ref) === activeKey);
+const ctaLabel = activeLesson ? 'Continuar lição' : 'Começar agora';
+const lessonRefs = lessons.map(lesson => lesson.ref);
+const completion = readCompletion(lessonRefs);
 const melody = [
   { position: { stringId: 'g', fret: 7 }, atMs: 0 },
   { position: { stringId: 'b', fret: 5 }, atMs: 680 },
@@ -55,7 +61,7 @@ app.innerHTML = `
         <p class="eyebrow">PARA IR ALÉM DOS ACORDES</p>
         <h1 id="hero-title">Sua próxima frase começa aqui.</h1>
         <p class="lead">Aprenda a improvisar no violão ou na guitarra. Comece com poucas notas, ouça como elas se encaixam e crie suas próprias frases.</p>
-        <a class="start-link" href="/lesson/">${ctaLabel} <span aria-hidden="true">→</span></a>
+        <a class="start-link" href="${activeLesson?.href ?? '/lesson/'}">${ctaLabel} <span aria-hidden="true">→</span></a>
       </div>
       <div class="board-panel hero-board">
         <h2 class="demo-heading">Uma ideia em <span>Ré menor</span></h2>
@@ -67,7 +73,7 @@ app.innerHTML = `
       <div class="track-grid">
         <article class="track-card">
           <img class="track-art" src="${foundationsArt}" alt="" loading="lazy">
-          <div class="track-content"><span class="level">INICIANTE</span><h3>Primeiras frases</h3><p>Transforme poucas notas em frases que você consegue ouvir e repetir.</p><a class="track-link" href="/lesson/">Ir para a lição <span aria-hidden="true">→</span></a></div>
+          <div class="track-content"><div class="track-meta"><span class="level">INICIANTE</span><span class="track-progress" id="foundations-progress" aria-label="${completion.completed} de ${completion.total} lições concluídas">${completion.percent}% concluído</span></div><h3>Primeiras frases</h3><p>Transforme poucas notas em frases que você consegue ouvir e repetir.</p><a class="track-link" href="/lesson/">Ir para a lição <span aria-hidden="true">→</span></a></div>
         </article>
         <article class="track-card">
           <img class="track-art" src="${phrasesArt}" alt="" loading="lazy">
@@ -92,6 +98,15 @@ app.innerHTML = `
 `;
 
 const board = app.querySelector<FretboardElement>('#preview-board');
+const refreshCompletion = (): void => {
+  const chip = app.querySelector<HTMLElement>('#foundations-progress');
+  if (!chip) return;
+  const progress = readCompletion(lessonRefs);
+  chip.textContent = `${progress.percent}% concluído`;
+  chip.setAttribute('aria-label', `${progress.completed} de ${progress.total} lições concluídas`);
+};
+window.addEventListener('pageshow', refreshCompletion);
+window.addEventListener('storage', refreshCompletion);
 if (!board) throw new Error('Prévia do braço incompleta.');
 
 const config: BoardConfiguration = {
@@ -109,7 +124,6 @@ const config: BoardConfiguration = {
   ],
 };
 board.setAttribute('demo', '');
-board.showHint = false;
 board.configuration = config;
 board.style.setProperty('--flash-duration', `${noteDurationMs}ms`);
 

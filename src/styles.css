@@ -14,15 +14,20 @@ button { font: inherit; }
 a { color: inherit; }
 
 .skip-link {
-  position: absolute;
+  position: fixed;
   top: -100px;
-  left: 16px;
+  left: 50%;
   z-index: 10;
-  padding: 12px 16px;
+  transform: translateX(-50%);
+  padding: 10px 16px;
+  border-radius: 12px;
   background: #10162e;
   color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
 }
-.skip-link:focus { top: 12px; }
+.skip-link:focus-visible { top: 20px; }
 
 .header, .hero, .tracks, .footer {
   width: min(100% - 40px, 1120px);
@@ -118,6 +123,8 @@ a { color: inherit; }
 .track-art { display: block; width: 100%; height: auto; aspect-ratio: 16 / 7; }
 .track-content { flex: 1; display: flex; flex-direction: column; padding: 23px 25px 24px; }
 .level { font-size: 10px; font-weight: 700; letter-spacing: .12em; color: #68778f; }
+.track-meta { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+.track-progress { padding: 4px 8px; border-radius: 999px; background: #eef2ff; color: #4059a0; font-size: 10px; font-weight: 600; white-space: nowrap; }
 .track-card h3 { margin: 15px 0 8px; color: #253f91; font-size: 24px; letter-spacing: -.03em; }
 .track-card p { margin: 0; line-height: 1.55; font-size: 14px; color: #596479; }
 .track-link {
