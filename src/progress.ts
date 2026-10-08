@@ -55,6 +55,21 @@ export function readActiveLessonKey(): string | null {
   try { return loadStore().activeLessonKey; } catch { return null; }
 }
 
+export function readNextIncompleteLessonKey(refs: readonly LessonRef[]): string | null {
+  try {
+    const store = loadStore();
+    const active = refs.find(ref => lessonKey(ref) === store.activeLessonKey);
+    if (!active) return null;
+    const next = refs.find(ref => {
+      const sameModule = active.source === 'system'
+        ? ref.source === 'system' && ref.trackId === active.trackId
+        : ref.source === 'user' && ref.ownerId === active.ownerId;
+      return sameModule && store.entries[lessonKey(ref)]?.step !== 'complete';
+    });
+    return next ? lessonKey(next) : null;
+  } catch { return null; }
+}
+
 export function readCompletion(refs: readonly LessonRef[]): { completed: number; total: number; percent: number } {
   const keys = [...new Set(refs.map(lessonKey))];
   let completed = 0;

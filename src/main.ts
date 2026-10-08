@@ -1,6 +1,6 @@
 import '../public/components/fretboard.mjs';
 import './styles.css';
-import { readActiveLessonKey, readCompletion } from './progress';
+import { readActiveLessonKey, readCompletion, readNextIncompleteLessonKey } from './progress';
 import { lessonKey } from './content-identity';
 import { lessons } from './lesson-content';
 import { renderLesson } from './lesson';
@@ -34,10 +34,18 @@ else if (location.pathname.startsWith('/track/')) renderTrackPlaceholder(app, lo
 else renderLanding(app);
 
 function renderLanding(app: HTMLDivElement): void {
-const activeKey = readActiveLessonKey();
-const activeLesson = lessons.find(lesson => lessonKey(lesson.ref) === activeKey);
-const ctaLabel = activeLesson ? 'Continuar lição' : 'Começar agora';
 const lessonRefs = lessons.map(lesson => lesson.ref);
+const readResume = () => {
+  const activeKey = readActiveLessonKey();
+  const activeLesson = lessons.find(lesson => lessonKey(lesson.ref) === activeKey);
+  const nextKey = readNextIncompleteLessonKey(lessonRefs);
+  const nextLesson = lessons.find(lesson => lessonKey(lesson.ref) === nextKey);
+  return {
+    href: nextLesson?.href ?? activeLesson?.href ?? '/lesson/',
+    label: nextLesson ? 'Continuar lição' : activeLesson ? 'Revisar lições' : 'Começar agora',
+  };
+};
+const resume = readResume();
 const completion = readCompletion(lessonRefs);
 const melody = [
   { position: { stringId: 'g', fret: 7 }, atMs: 0 },
@@ -61,7 +69,7 @@ app.innerHTML = `
         <p class="eyebrow">PARA IR ALÉM DOS ACORDES</p>
         <h1 id="hero-title">Sua próxima frase começa aqui.</h1>
         <p class="lead">Aprenda a improvisar no violão ou na guitarra. Comece com poucas notas, ouça como elas se encaixam e crie suas próprias frases.</p>
-        <a class="start-link" href="${activeLesson?.href ?? '/lesson/'}">${ctaLabel} <span aria-hidden="true">→</span></a>
+        <a class="start-link" href="${resume.href}"><span class="start-label">${resume.label}</span> <span aria-hidden="true">→</span></a>
       </div>
       <div class="board-panel hero-board">
         <h2 class="demo-heading">Uma ideia em <span>Ré menor</span></h2>
@@ -99,6 +107,13 @@ app.innerHTML = `
 
 const board = app.querySelector<FretboardElement>('#preview-board');
 const refreshCompletion = (): void => {
+  const resume = readResume();
+  const startLink = app.querySelector<HTMLAnchorElement>('.start-link');
+  const startLabel = startLink?.querySelector('.start-label');
+  if (startLink && startLabel) {
+    startLink.href = resume.href;
+    startLabel.textContent = resume.label;
+  }
   const chip = app.querySelector<HTMLElement>('#foundations-progress');
   if (!chip) return;
   const progress = readCompletion(lessonRefs);
