@@ -1,0 +1,11 @@
+# Capa de Purple Haze por dentro
+
+Retrato artístico de Jimi Hendrix em performance, gerado em 14 de outubro de 2026 com a ferramenta integrada de geração de imagens. Não é uma fotografia de arquivo nem uma imagem declarada de domínio público.
+
+Arquivo usado pelo site: track-purple-haze.webp. O original foi mantido no diretório de imagens geradas do Codex. A versão do site foi reduzida para 960 px de largura e comprimida em WebP, sem alterar a composição.
+
+Esta versão substitui a imagem anterior de uma mão anônima na guitarra, a pedido do autor, para dar à capa a presença e a atitude associadas a Hendrix.
+
+## Prompt final
+
+Use case: stylized-concept. Asset type: wide cover illustration for a minimal blue-and-white guitar learning website, 16:7 landscape composition. Primary request: unmistakable Jimi Hendrix performing an expressive electric-guitar solo on stage, standing and leaning into the phrase with confident stage presence. Show his recognizable face, afro hair, small mustache and late-1960s patterned headband, an open vintage patterned shirt and flowing sleeves. His expression is absorbed and intense, head slightly tilted toward the guitar. Show a cream Strat-style electric guitar played LEFT-HANDED: his right hand frets the neck, his left hand picks at the guitar body; the neck points toward the left of the image. Natural believable hands and six guitar strings. Style: sophisticated editorial portrait illustration with realistic likeness, softly painted photographic detail, very fine grain, restrained vintage music-poster sensibility. This is original artwork, not an archival photograph. Composition: upper-body performance close-up, face, expressive posture and guitar all readable together at a small card thumbnail size. Keep the face and guitar fully inside the wide frame. Background: uncluttered pale powder-blue and ivory with a subtle hint of lavender stage haze. Palette: light desaturated blue-gray, cream, deep natural skin tones, restrained violet accents in the clothing; elegant contrast without a dark background. Mood: Hendrix's soulful stage energy and attitude, not a seated home guitarist. No lettering, no logos, no watermarks, no music notation, no fretboard note markers, no frames, no user-interface mockup, no other people.

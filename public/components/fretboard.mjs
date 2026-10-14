@@ -11,8 +11,6 @@ const stylesheet = `
   .board.left::before { left:var(--body-gutter); right:48px; border-radius:0 12px 12px 0; -webkit-mask-image:linear-gradient(to left,#000 0%,#000 92%,transparent 100%); mask-image:linear-gradient(to left,#000 0%,#000 92%,transparent 100%); }
   @media (max-width:360px) { .board { --body-gutter:32px; width:min(100%,calc(80px + var(--frets) * 64px)); min-width:calc(80px + var(--frets) * 44px); } }
   .board.left { grid-template-columns:repeat(var(--frets),minmax(44px,1fr)) 48px; padding-right:0; padding-left:var(--body-gutter); }
-  .board.has-open::after { content:''; position:absolute; z-index:4; top:0; left:calc(48px + (100% - 48px - var(--body-gutter)) / var(--frets) - 3px); width:6px; height:calc(var(--strings) * 44px); border-radius:3px; background:#11162f; pointer-events:none; }
-  .board.left.has-open::after { left:auto; right:calc(48px + (100% - 48px - var(--body-gutter)) / var(--frets) - 3px); }
   .number { padding-top:8px; height:30px; text-align:center; font-size:11px; font-weight:600; color:#646878; }
   :host([demo]) .number { padding-top:12px; font-weight:500; color:#8b95a8; }
   .string-label { height:44px; display:flex; flex-direction:column; align-items:flex-end; padding-right:10px; justify-content:center; font-size:12px; font-weight:650; color:#646878; }
@@ -26,18 +24,19 @@ const stylesheet = `
   .cell::after { content:''; position:absolute; z-index:2; top:0; bottom:0; right:-1px; width:2px; background:#bac2d8; pointer-events:none; }
   .left .cell::after { right:auto; left:-1px; }
   .cell.body-edge::after { display:none; }
-  .cell.open::after { display:none; }
-  .cell.open::before { left:50%; }
-  .left .cell.open::before { left:0; right:50%; }
   .semitone-link { position:absolute; z-index:0; top:6px; height:32px; left:calc(50% - 16px); width:calc(100% + 32px); border-radius:18px; background:var(--fretboard-link,#d8e3ff); pointer-events:none; }
   .note { position:relative; z-index:3; display:grid; place-items:center; padding:0; width:100%; height:44px; min-width:44px; border:0; background:transparent; cursor:pointer; color:var(--fretboard-ink,#10152f); font:inherit; touch-action:manipulation; }
+  .note.open-note { width:48px; justify-self:center; }
+  .board.has-open .string-label { align-items:center; padding-inline:0; }
+  .board.open-only { grid-template-columns:48px; width:96px; min-width:96px; }
+  .board.open-only::before,.board.open-only::after { display:none; }
   .dot { position:relative; display:grid; place-items:center; width:28px; height:28px; border:2px solid #9ca6be; border-radius:50%; background:#fff; font-family:Inter,Arial,Helvetica,sans-serif; font-size:14px; font-weight:600; line-height:1; }
   .emphasized .dot,.root .dot { color:var(--fretboard-note-ink,#fff); background:var(--fretboard-note,#3156e8); border-color:var(--fretboard-note,#3156e8); }
   .root .dot { color:#10152f; background:#fff; border-color:#9ca6be; outline:2px solid var(--fretboard-note,#3156e8); outline-offset:3px; }
   .chord .dot { color:#182239; background:var(--fretboard-chord,#edf4f2); border-color:#9bafac; }
   .target .dot { font-weight:800; }
   .target:not(.root) .dot::after { content:''; position:absolute; left:50%; bottom:-9px; width:4px; height:4px; border-radius:50%; background:#182239; transform:translateX(-50%); }
-  .context .dot { border-style:dashed; }
+  .context .dot { border-style:var(--fretboard-context-border-style,dashed); }
   .note.playing .dot { animation:note-flash var(--flash-duration,1100ms) ease-in-out both; }
   :host([demo]) .root .dot { outline:none; }
   @keyframes note-flash {
@@ -47,6 +46,7 @@ const stylesheet = `
     100% { color:#10152f; background:#fff; border-color:#9ca6be; box-shadow:0 0 0 8px #3156e800; transform:scale(1); }
   }
   .note:hover .dot { border-color:#10152f; }
+  .note-annotation { position:absolute; top:1px; left:calc(50% + 12px); color:#657188; font:10px Manrope,Arial,sans-serif; white-space:nowrap; pointer-events:none; }
   .note:focus-visible { outline:2px solid #10152f; outline-offset:-2px; border-radius:8px; }
   .marker { height:16px; display:flex; align-items:center; justify-content:center; gap:4px; }
   .marker i { display:block; width:6px; height:6px; border-radius:50%; background:#bac2d8; }
@@ -115,46 +115,59 @@ export class PentaFretboard extends HTMLElement {
     const scroll = make('div', 'scroll');
     scroll.setAttribute('role', 'region');
     scroll.setAttribute('aria-label', `Braço do instrumento, casas ${this.#model.startFret} a ${this.#model.endFret}`);
-    const board = make('div', `board ${this.#model.handedness}${this.#model.startFret === 0 ? ' has-open' : ''}`);
-    board.style.setProperty('--frets', this.#model.frets.length);
+    const frets = this.#model.frets.filter(fret => fret > 0);
+    const board = make('div', `board ${this.#model.handedness}${this.#model.startFret === 0 ? ' has-open' : ''}${frets.length ? '' : ' open-only'}`);
+    board.style.setProperty('--frets', frets.length);
     board.style.setProperty('--strings', this.#model.rows.length);
     const appendRow = (label, cells) => board.append(...(this.#model.handedness === 'left' ? [...cells, label] : [label, ...cells]));
     let visibleCount = 0;
+    const makeNote = (note, string, outside = false) => {
+      visibleCount++;
+      const button = make('button', `note${outside ? ' open-note' : ''}${note.isRoot ? ' root' : ''}${note.emphasized ? ' emphasized' : ''} ${note.roles.join(' ')}${this.#highlighted.has(positionKey(note)) ? ' playing' : ''}`);
+      button.type = 'button';
+      button.dataset.position = positionKey(note);
+      const role = note.isRoot ? ', tônica' : note.degree ? `, grau ${note.degree}` : ', nota natural';
+      const roleLabels = { chord: 'nota do acorde', target: 'nota-alvo', context: 'nota contextual' };
+      button.setAttribute('aria-label', `${string.number}ª corda, ${note.fret === 0 ? 'solta' : `casa ${note.fret}`}, ${note.name}${role}${note.roles.map(item => ', ' + roleLabels[item]).join('')}${note.emphasized ? ', corda em destaque' : ''}`);
+      button.append(make('span', 'dot', note[this.#model.labelMode]));
+      const annotation=(this.#configuration.annotations??[]).find(item=>item.stringId===note.stringId&&item.fret===note.fret);
+      if(annotation){
+        const mark=make('span','note-annotation',annotation.label);
+        mark.setAttribute('aria-hidden','true');button.append(mark);
+        button.title=annotation.description;
+        button.setAttribute('aria-label',button.getAttribute('aria-label')+', '+annotation.description);
+      }
+      return button;
+    };
     this.#model.rows.forEach(({ string, notes }, row) => {
-      const openNote = noteAt(string, 0);
-      const label = make('span', 'string-label', string.id === 'e_high' && openNote.letter === 'E' ? 'e' : openNote.letter);
+      const openNote = notes.find(note => note.fret === 0);
+      const openPitch = noteAt(string, 0);
+      const label = openNote?.visible
+        ? makeNote(openNote, string, true)
+        : make('span', 'string-label', string.id === 'e_high' && openPitch.letter === 'E' ? 'e' : openPitch.letter);
       label.title = string.name;
-      const cells = notes.map((note, col) => {
-        const bodyEdge = this.#model.handedness === 'left' ? col === 0 : col === notes.length - 1;
-        const cell = make('div', `cell${note.fret === 0 ? ' open' : ''}${bodyEdge ? ' body-edge' : ''}`);
+      const frettedNotes = notes.filter(note => note.fret > 0);
+      const cells = frettedNotes.map((note, col) => {
+        const bodyEdge = this.#model.handedness === 'left' ? col === 0 : col === frettedNotes.length - 1;
+        const cell = make('div', `cell${bodyEdge ? ' body-edge' : ''}`);
         cell.style.setProperty('--thickness', `${1 + row * 0.3}px`);
         if (note.linkNext) {
           const link = make('span', 'semitone-link');
           link.setAttribute('aria-hidden', 'true');
           cell.append(link);
         }
-        if (note.visible) {
-          visibleCount++;
-          const button = make('button', `note${note.isRoot ? ' root' : ''}${note.emphasized ? ' emphasized' : ''} ${note.roles.join(' ')}${this.#highlighted.has(positionKey(note)) ? ' playing' : ''}`);
-          button.type = 'button';
-          button.tabIndex = 0;
-          button.dataset.position = positionKey(note);
-          const role = note.isRoot ? ', tônica' : note.degree ? `, grau ${note.degree}` : ', nota natural';
-          const roleLabels = { chord: 'nota do acorde', target: 'nota-alvo', context: 'nota contextual' };
-          button.setAttribute('aria-label', `${string.number}ª corda, ${note.fret === 0 ? 'solta' : `casa ${note.fret}`}, ${note.name}${role}${note.roles.map(item => ', ' + roleLabels[item]).join('')}${note.emphasized ? ', corda em destaque' : ''}`);
-          button.append(make('span', 'dot', note[this.#model.labelMode]));
-          cell.append(button);
-        } else cell.setAttribute('aria-hidden', 'true');
+        if (note.visible) cell.append(makeNote(note, string));
+        else cell.setAttribute('aria-hidden', 'true');
         return cell;
       });
       appendRow(label, cells);
     });
-    appendRow(make('span', 'number'), this.#model.frets.map(fret => make('span', 'number', fret === 0 ? 'Solta' : fret)));
-    appendRow(make('span'), this.#model.frets.map(fret => {
+    appendRow(make('span', 'number'), frets.map(fret => make('span', 'number', fret)));
+    appendRow(make('span'), frets.map(fret => {
       const marker = make('span', 'marker');
       marker.setAttribute('aria-hidden', 'true');
       if ([3, 5, 7, 9].includes(fret % 12)) marker.append(make('i'));
-      if (fret > 0 && fret % 12 === 0) marker.append(make('i'), make('i'));
+      if (fret % 12 === 0) marker.append(make('i'), make('i'));
       return marker;
     }));
     scroll.append(board);

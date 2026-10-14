@@ -29,7 +29,7 @@ a { color: inherit; }
 }
 .skip-link:focus-visible { top: 20px; }
 
-.header, .hero, .tracks, .footer {
+.header, .hero, .tracks, .footer, .song-page {
   width: min(100% - 40px, 1120px);
   margin-inline: auto;
 }
@@ -121,6 +121,7 @@ a { color: inherit; }
   overflow: hidden;
 }
 .track-art { display: block; width: 100%; height: auto; aspect-ratio: 16 / 7; }
+.track-art--photo { object-fit: cover; object-position: center; }
 .track-content { flex: 1; display: flex; flex-direction: column; padding: 23px 25px 24px; }
 .level { font-size: 10px; font-weight: 700; letter-spacing: .12em; color: #68778f; }
 .track-meta { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
@@ -197,7 +198,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid #10162e; outline-offs
 }
 
 @media (max-width: 760px) {
-  .header, .hero, .tracks, .footer { width: min(100% - 32px, 1120px); }
+  .header, .hero, .tracks, .footer, .song-page { width: min(100% - 32px, 1120px); }
   .header { height: 68px; }
   .hero { padding: 58px 0 54px; grid-template-columns: 1fr; gap: 32px; }
   .tracks { padding-top: 48px; padding-bottom: 64px; }

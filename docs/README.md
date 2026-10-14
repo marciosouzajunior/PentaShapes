@@ -4,6 +4,9 @@ Data: 6 de outubro de 2026. Base examinada: commit `e4be80a` (`custom shape labe
 
 Esta documentação começou pelo diagnóstico do legado e planejamento do novo produto. A versão antiga agora está em `legacy/`; a nova entrada usa Vite e TypeScript. O laboratório visual permanece em `public/lab/` e o componente musical em `public/components/`. Atualização de 8 de outubro: as 12 lições de Fundamentos e seu progresso local estão implementados, com validação automatizada; revisão visual, auditiva e com praticantes permanece pendente. Gamificação e as demais trilhas continuam propostas.
 
+
+Atualização de 14 de outubro: o piloto **Purple Haze por dentro** está em `/track/purple-haze-por-dentro/`, com quatro lições de trechos de Purple Haze revisados por tablatura e uma lição dos acordes da base do verso. O MIDI local serve de origem e apoio, com edições documentadas. O braço é estático, com cartões fixos e destaque do trecho ativo. O formato de leitura do caderno compartilhado foi aprovado pelo autor; o teste prático no instrumento permanece pendente. Ver [12 — Piloto Purple Haze por dentro](12-piloto-rock-em-movimento.md) e [15 — Leitura de estudo](15-leitura-de-estudo.md).
+
 ## Direção recomendada
 
 Transformar o visualizador em uma prática guiada de improvisação para **quem já toca acordes e quer começar a improvisar**, público confirmado pelo autor. A primeira experiência deve levar a uma pequena frase musical com acompanhamento e objetivo claro.
@@ -23,8 +26,13 @@ Começar com um recorte da pentatônica menor de Lá, ritmo, pausas e resoluçã
 | [07 — Prontidão para implementação](07-prontidao-implementacao.md) | Decisões congeladas, configurações, localização, mobile, privacidade, QA e ordem de construção |
 | [08 — Início da implementação](08-inicio-da-implementacao.md) | Estrutura do mesmo repositório, legado isolado, nova entrada, execução e próximo incremento |
 | [09 — Lições oficiais e dos usuários](09-licoes-oficiais-e-dos-usuarios.md) | Identidade, autoria, categorias, revisões e separação do progresso para um futuro editor |
-| [10 — Trilhas de pentatônicas e CAGED](10-trilhas-pentatonicas-e-caged.md) | Relação acorde–posição–escala, prática em região fixa e preparação do contrato de lições |
+| [10 — Trilhas de pentatônicas e CAGED](10-trilhas-pentatonicas-e-caged.md) | Relação acorde–posição–escala, leitura sobre nomes de intervalos e graus em PM01–PM02, prática em região fixa e contrato de lições |
 | [11 — Blues no box do B.B. King](11-trilha-blues-box-bb-king.md) | Trilha proposta de fraseado, alvos por acorde, mistura maior/menor e bends em um recorte compacto |
+| [12 — Piloto Purple Haze por dentro](12-piloto-rock-em-movimento.md) | Braço estático, trechos reais e cartões fixos com destaque do trecho ativo |
+| [13 — Tom de voz e linguagem](13-tom-de-voz-e-linguagem.md) | Padrão de escrita do sistema: voz calma, conceitos claros e aprofundamento opcional |
+| [14 — Revisão das posições de Purple Haze](14-revisao-digitacao-purple-haze.md) | Referências de tablatura, ajustes por frase e diferenças preservadas no MIDI |
+| [15 — Leitura de estudo](15-leitura-de-estudo.md) | Modal, leitura contínua e ilustrações estáticas de intervalos, graus e posições |
+| [16 — Diagrama de piano](16-diagrama-de-piano.md) | Componente reutilizável para notas, tons e semitons nos exemplos de intervalos |
 | [Auditoria reproduzível](tools/audit-legacy.cjs) | Conferência das notas, intervalos e estrutura dos presets existentes |
 
 ## O que já está estabelecido

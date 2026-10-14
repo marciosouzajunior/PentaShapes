@@ -1,0 +1,9 @@
+.piano-diagram{max-width:100%;overflow-x:auto;padding:2px 0 6px}
+.piano-diagram svg{display:block;width:100%;min-width:var(--piano-min-width,280px);height:auto;max-height:160px}
+.piano-key rect,.piano-key path{stroke:#dfe5ef;stroke-width:1}
+.piano-white path{fill:#fff}.piano-black path{fill:#3f485b;stroke:#3f485b}
+.piano-white.piano-start path,.piano-white.piano-end path,.piano-white.piano-selected path{fill:#eaf0ff}
+.piano-black.piano-start path,.piano-black.piano-end path,.piano-black.piano-selected path{fill:#5976c4;stroke:#5976c4}
+.piano-key text{text-anchor:middle;font:13px Manrope,Arial,sans-serif;fill:#69758b}
+.piano-black text{fill:#fff;font-size:11px}.piano-start text,.piano-end text,.piano-selected text{font-weight:650}
+.piano-white.piano-start text,.piano-white.piano-end text,.piano-white.piano-selected text{fill:#253f91}

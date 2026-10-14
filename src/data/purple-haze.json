@@ -1,0 +1,695 @@
+{
+  "sourceFile": "midi/Jimi_Hendrix_-_Purple_Haze.mid",
+  "sourceUrl": "https://www.midiworld.com/files/1056/",
+  "trackIndex": 1,
+  "ppq": 480,
+  "bpm": 112.00005973336519,
+  "title": "Purple Haze",
+  "blocks": [
+    {
+      "id": "intro-a",
+      "title": "Si♭ em duas oitavas",
+      "startBeat": 0,
+      "endBeat": 4,
+      "startFret": 5,
+      "endFret": 8,
+      "fingeringReview": {
+        "status": "reference-reviewed-midi-adaptation",
+        "sourceId": "intro",
+        "sourceUrl": "https://guitarcontrol.com/page/Guitarcontrol-com/guitarcontrol.com/chords-rhythm-guitar/how-to-play-purple-haze-by-jimi-hendrix/index.html",
+        "notes": "Opening octaves agree with the reference."
+      },
+      "notes": [
+        {
+          "stringId": "e_low",
+          "fret": 6,
+          "midi": 46,
+          "beat": 0,
+          "duration": 0.6,
+          "sourceTicks": 0
+        },
+        {
+          "stringId": "d",
+          "fret": 8,
+          "midi": 58,
+          "beat": 1,
+          "duration": 0.6000000000000001,
+          "sourceTicks": 480
+        },
+        {
+          "stringId": "e_low",
+          "fret": 6,
+          "midi": 46,
+          "beat": 2,
+          "duration": 0.6000000000000001,
+          "sourceTicks": 960
+        },
+        {
+          "stringId": "d",
+          "fret": 8,
+          "midi": 58,
+          "beat": 3,
+          "duration": 0.6000000000000001,
+          "sourceTicks": 1440
+        }
+      ]
+    },
+    {
+      "id": "intro-b",
+      "title": "A resposta da abertura",
+      "startBeat": 4,
+      "endBeat": 8,
+      "startFret": 5,
+      "endFret": 8,
+      "sourceEdits": [
+        {
+          "action": "omit",
+          "midi": 63,
+          "sourceTicks": 3360,
+          "reason": "The opening references show only alternating Bb octaves; the simultaneous Eb4 is omitted from the study arrangement.",
+          "reviewedAt": "2026-10-14",
+          "sourceUrls": [
+            "https://www.guitarlessonworld.com/tablature/purple.htm",
+            "https://www.guitarclub.io/blog/purple-haze-jimi-hendrix-guitar-lesson-chords-solo"
+          ]
+        }
+      ],
+      "fingeringReview": {
+        "status": "reference-reviewed-midi-adaptation",
+        "sourceId": "intro",
+        "sourceUrl": "https://guitarcontrol.com/page/Guitarcontrol-com/guitarcontrol.com/chords-rhythm-guitar/how-to-play-purple-haze-by-jimi-hendrix/index.html",
+        "notes": "Opening corrected against the tablature: only alternating Bb octaves. The simultaneous source MIDI Eb4 at ticks 3360 is omitted; all Bb attacks and durations are retained."
+      },
+      "notes": [
+        {
+          "stringId": "e_low",
+          "fret": 6,
+          "midi": 46,
+          "beat": 0,
+          "duration": 0.5999999999999996,
+          "sourceTicks": 1920
+        },
+        {
+          "stringId": "d",
+          "fret": 8,
+          "midi": 58,
+          "beat": 1,
+          "duration": 0.5999999999999996,
+          "sourceTicks": 2400
+        },
+        {
+          "stringId": "e_low",
+          "fret": 6,
+          "midi": 46,
+          "beat": 2,
+          "duration": 0.5999999999999996,
+          "sourceTicks": 2880
+        },
+        {
+          "stringId": "d",
+          "fret": 8,
+          "midi": 58,
+          "beat": 3,
+          "duration": 0.5999999999999996,
+          "sourceTicks": 3360
+        }
+      ]
+    },
+    {
+      "id": "riff-a",
+      "title": "Subir e repousar",
+      "startBeat": 8,
+      "endBeat": 12,
+      "startFret": 5,
+      "endFret": 9,
+      "sourceEdits": [
+        {
+          "action": "replace-block",
+          "reviewedAt": "2026-10-14",
+          "reason": "Reference phrase B-D-G-A, with slide into B and a quarter-tone bend on G. Note values follow the reference score.",
+          "sourceUrls": [
+            "https://www.guitarlessonworld.com/tablature/purple.htm",
+            "https://musescore.org/sites/musescore.org/files/2019-02/Purple%20Haze.pdf"
+          ],
+          "timingBasis": "reference-score"
+        }
+      ],
+      "fingeringReview": {
+        "status": "reference-curated-study-arrangement",
+        "sourceId": "riff",
+        "sourceUrl": "https://www.guitarlessonworld.com/tablature/purple.htm",
+        "notes": "Reference phrase B-D-G-A, with slide into B and a quarter-tone bend on G. Note values follow the reference score."
+      },
+      "notes": [
+        {
+          "stringId": "d",
+          "fret": 9,
+          "midi": 59,
+          "beat": 0,
+          "duration": 0.5,
+          "sourceTicks": -1,
+          "technique": {
+            "kind": "slide"
+          },
+          "pitchCurve": [
+            {
+              "beat": 0,
+              "midi": 57
+            },
+            {
+              "beat": 0.125,
+              "midi": 59
+            }
+          ]
+        },
+        {
+          "stringId": "g",
+          "fret": 7,
+          "midi": 62,
+          "beat": 0.5,
+          "duration": 0.5,
+          "sourceTicks": -1
+        },
+        {
+          "stringId": "b",
+          "fret": 8,
+          "midi": 67,
+          "beat": 1,
+          "duration": 0.5,
+          "sourceTicks": -1,
+          "technique": {
+            "kind": "bend",
+            "semitones": 0.5
+          },
+          "pitchCurve": [
+            {
+              "beat": 0,
+              "midi": 67
+            },
+            {
+              "beat": 0.2,
+              "midi": 67.5
+            }
+          ]
+        },
+        {
+          "stringId": "d",
+          "fret": 7,
+          "midi": 57,
+          "beat": 1.5,
+          "duration": 2.5,
+          "sourceTicks": -1
+        }
+      ]
+    },
+    {
+      "id": "riff-b",
+      "title": "Voltar ao Mi",
+      "startBeat": 12,
+      "endBeat": 16,
+      "startFret": 0,
+      "endFret": 7,
+      "sourceEdits": [
+        {
+          "action": "replace-block",
+          "reviewedAt": "2026-10-14",
+          "reason": "Reference response G-D-E-E: open D and low E, then slide D to E on the A string. The slide is one continuous event, not an extra D attack.",
+          "sourceUrls": [
+            "https://www.guitarlessonworld.com/tablature/purple.htm",
+            "https://musescore.org/sites/musescore.org/files/2019-02/Purple%20Haze.pdf"
+          ],
+          "timingBasis": "reference-score"
+        }
+      ],
+      "fingeringReview": {
+        "status": "reference-curated-study-arrangement",
+        "sourceId": "riff",
+        "sourceUrl": "https://www.guitarlessonworld.com/tablature/purple.htm",
+        "notes": "Reference response G-D-E-E: open D and low E, then slide D to E on the A string. The slide is one continuous event, not an extra D attack."
+      },
+      "notes": [
+        {
+          "stringId": "d",
+          "fret": 5,
+          "midi": 55,
+          "beat": 0,
+          "duration": 0.5,
+          "sourceTicks": -1
+        },
+        {
+          "stringId": "d",
+          "fret": 0,
+          "midi": 50,
+          "beat": 0.5,
+          "duration": 0.5,
+          "sourceTicks": -1
+        },
+        {
+          "stringId": "e_low",
+          "fret": 0,
+          "midi": 40,
+          "beat": 1,
+          "duration": 0.5,
+          "sourceTicks": -1
+        },
+        {
+          "stringId": "a",
+          "fret": 7,
+          "midi": 52,
+          "beat": 1.5,
+          "duration": 2.5,
+          "sourceTicks": -1,
+          "technique": {
+            "kind": "slide"
+          },
+          "pitchCurve": [
+            {
+              "beat": 0,
+              "midi": 50
+            },
+            {
+              "beat": 0.125,
+              "midi": 52
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "solo-a",
+      "title": "Um motivo em outra região",
+      "startBeat": 128,
+      "endBeat": 132,
+      "startFret": 9,
+      "endFret": 12,
+      "sourceEdits": [
+        {
+          "action": "replace-block",
+          "reviewedAt": "2026-10-14",
+          "reason": "Reference approach C#-E-B repeated, with a slide into C# and a quarter-tone bend on B as notated in the reference score.",
+          "sourceUrls": [
+            "https://www.guitarclub.io/blog/purple-haze-jimi-hendrix-guitar-lesson-chords-solo",
+            "https://musescore.org/sites/musescore.org/files/2019-02/Purple%20Haze.pdf"
+          ],
+          "timingBasis": "reference-score"
+        }
+      ],
+      "fingeringReview": {
+        "status": "reference-curated-study-arrangement",
+        "sourceId": "soloEntry",
+        "sourceUrl": "https://www.guitarclub.io/blog/purple-haze-jimi-hendrix-guitar-lesson-chords-solo",
+        "notes": "Reference approach C#-E-B repeated, with a slide into C# and a quarter-tone bend on B as notated in the reference score."
+      },
+      "notes": [
+        {
+          "stringId": "d",
+          "fret": 11,
+          "midi": 61,
+          "beat": 0,
+          "duration": 0.5,
+          "sourceTicks": -1,
+          "technique": {
+            "kind": "slide"
+          },
+          "pitchCurve": [
+            {
+              "beat": 0,
+              "midi": 59
+            },
+            {
+              "beat": 0.125,
+              "midi": 61
+            }
+          ]
+        },
+        {
+          "stringId": "g",
+          "fret": 9,
+          "midi": 64,
+          "beat": 0.5,
+          "duration": 0.5,
+          "sourceTicks": -1
+        },
+        {
+          "stringId": "b",
+          "fret": 12,
+          "midi": 71,
+          "beat": 1,
+          "duration": 1,
+          "sourceTicks": -1,
+          "technique": {
+            "kind": "bend",
+            "semitones": 0.5
+          },
+          "pitchCurve": [
+            {
+              "beat": 0,
+              "midi": 71
+            },
+            {
+              "beat": 0.2,
+              "midi": 71.5
+            }
+          ]
+        },
+        {
+          "stringId": "d",
+          "fret": 11,
+          "midi": 61,
+          "beat": 2,
+          "duration": 0.5,
+          "sourceTicks": -1,
+          "technique": {
+            "kind": "slide"
+          },
+          "pitchCurve": [
+            {
+              "beat": 0,
+              "midi": 59
+            },
+            {
+              "beat": 0.125,
+              "midi": 61
+            }
+          ]
+        },
+        {
+          "stringId": "g",
+          "fret": 9,
+          "midi": 64,
+          "beat": 2.5,
+          "duration": 0.5,
+          "sourceTicks": -1
+        },
+        {
+          "stringId": "b",
+          "fret": 12,
+          "midi": 71,
+          "beat": 3,
+          "duration": 1,
+          "sourceTicks": -1,
+          "technique": {
+            "kind": "bend",
+            "semitones": 0.5
+          },
+          "pitchCurve": [
+            {
+              "beat": 0,
+              "midi": 71
+            },
+            {
+              "beat": 0.2,
+              "midi": 71.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "solo-b",
+      "title": "Subir uma oitava",
+      "startBeat": 132,
+      "endBeat": 136,
+      "startFret": 12,
+      "endFret": 15,
+      "sourceEdits": [
+        {
+          "action": "replace-block",
+          "reviewedAt": "2026-10-14",
+          "reason": "Reference higher approach E-G-G repeated, with a quarter-tone bend and release on high G. The isolated final high E from the MIDI belongs outside this selected phrase and is omitted.",
+          "sourceUrls": [
+            "https://www.guitarclub.io/blog/purple-haze-jimi-hendrix-guitar-lesson-chords-solo",
+            "https://musescore.org/sites/musescore.org/files/2019-02/Purple%20Haze.pdf"
+          ],
+          "timingBasis": "reference-score"
+        }
+      ],
+      "fingeringReview": {
+        "status": "reference-curated-study-arrangement",
+        "sourceId": "soloEntry",
+        "sourceUrl": "https://www.guitarclub.io/blog/purple-haze-jimi-hendrix-guitar-lesson-chords-solo",
+        "notes": "Reference higher approach E-G-G repeated, with a quarter-tone bend and release on high G. The isolated final high E from the MIDI belongs outside this selected phrase and is omitted."
+      },
+      "notes": [
+        {
+          "stringId": "d",
+          "fret": 14,
+          "midi": 64,
+          "beat": 0,
+          "duration": 0.5,
+          "sourceTicks": -1,
+          "technique": {
+            "kind": "slide"
+          },
+          "pitchCurve": [
+            {
+              "beat": 0,
+              "midi": 62
+            },
+            {
+              "beat": 0.125,
+              "midi": 64
+            }
+          ]
+        },
+        {
+          "stringId": "g",
+          "fret": 12,
+          "midi": 67,
+          "beat": 0.5,
+          "duration": 0.5,
+          "sourceTicks": -1
+        },
+        {
+          "stringId": "e_high",
+          "fret": 15,
+          "midi": 79,
+          "beat": 1,
+          "duration": 1,
+          "sourceTicks": -1,
+          "technique": {
+            "kind": "bend",
+            "semitones": 0.5
+          },
+          "pitchCurve": [
+            {
+              "beat": 0,
+              "midi": 79
+            },
+            {
+              "beat": 0.2,
+              "midi": 79.5
+            },
+            {
+              "beat": 0.8,
+              "midi": 79.5
+            },
+            {
+              "beat": 1,
+              "midi": 79
+            }
+          ]
+        },
+        {
+          "stringId": "d",
+          "fret": 14,
+          "midi": 64,
+          "beat": 2,
+          "duration": 0.5,
+          "sourceTicks": -1,
+          "technique": {
+            "kind": "slide"
+          },
+          "pitchCurve": [
+            {
+              "beat": 0,
+              "midi": 62
+            },
+            {
+              "beat": 0.125,
+              "midi": 64
+            }
+          ]
+        },
+        {
+          "stringId": "g",
+          "fret": 12,
+          "midi": 67,
+          "beat": 2.5,
+          "duration": 0.5,
+          "sourceTicks": -1
+        },
+        {
+          "stringId": "e_high",
+          "fret": 15,
+          "midi": 79,
+          "beat": 3,
+          "duration": 1,
+          "sourceTicks": -1,
+          "technique": {
+            "kind": "bend",
+            "semitones": 0.5
+          },
+          "pitchCurve": [
+            {
+              "beat": 0,
+              "midi": 79
+            },
+            {
+              "beat": 0.2,
+              "midi": 79.5
+            },
+            {
+              "beat": 0.8,
+              "midi": 79.5
+            },
+            {
+              "beat": 1,
+              "midi": 79
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "solo-c",
+      "title": "Sustentar e descer",
+      "startBeat": 148,
+      "endBeat": 150,
+      "startFret": 11,
+      "endFret": 14,
+      "sourceEdits": [
+        {
+          "action": "replace-block",
+          "reviewedAt": "2026-10-14",
+          "reason": "Reference descent restores F#-G-F# after the preceding sustained G. Timing is adapted for a four-beat study excerpt; the connecting slides are synthesized.",
+          "sourceUrls": [
+            "https://www.guitarlessonworld.com/tablature/purple.htm"
+          ],
+          "timingBasis": "study-adaptation"
+        }
+      ],
+      "fingeringReview": {
+        "status": "reference-curated-study-arrangement",
+        "sourceId": "soloDescent",
+        "sourceUrl": "https://www.guitarlessonworld.com/tablature/purple.htm",
+        "notes": "Reference descent restores F#-G-F# after the preceding sustained G. Timing is adapted for a four-beat study excerpt; the connecting slides are synthesized."
+      },
+      "notes": [
+        {
+          "stringId": "g",
+          "fret": 12,
+          "midi": 67,
+          "beat": 0,
+          "duration": 1.5,
+          "sourceTicks": -1
+        },
+        {
+          "stringId": "g",
+          "fret": 11,
+          "midi": 66,
+          "beat": 1.5,
+          "duration": 0.25,
+          "sourceTicks": -1
+        },
+        {
+          "stringId": "g",
+          "fret": 12,
+          "midi": 67,
+          "beat": 1.75,
+          "duration": 0.25,
+          "sourceTicks": -1,
+          "technique": {
+            "kind": "slide"
+          },
+          "pitchCurve": [
+            {
+              "beat": 0,
+              "midi": 66
+            },
+            {
+              "beat": 0.125,
+              "midi": 67
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "solo-d",
+      "title": "Continuar a descida",
+      "startBeat": 150,
+      "endBeat": 152,
+      "startFret": 11,
+      "endFret": 14,
+      "sourceEdits": [
+        {
+          "action": "replace-block",
+          "reviewedAt": "2026-10-14",
+          "reason": "Reference descent continues F#-E-D, with a slide back into F#. Timing is adapted for the study excerpt.",
+          "sourceUrls": [
+            "https://www.guitarlessonworld.com/tablature/purple.htm"
+          ],
+          "timingBasis": "study-adaptation"
+        }
+      ],
+      "fingeringReview": {
+        "status": "reference-curated-study-arrangement",
+        "sourceId": "soloDescent",
+        "sourceUrl": "https://www.guitarlessonworld.com/tablature/purple.htm",
+        "notes": "Reference descent continues F#-E-D, with a slide back into F#. Timing is adapted for the study excerpt."
+      },
+      "notes": [
+        {
+          "stringId": "g",
+          "fret": 11,
+          "midi": 66,
+          "beat": 0,
+          "duration": 0.5,
+          "sourceTicks": -1,
+          "technique": {
+            "kind": "slide"
+          },
+          "pitchCurve": [
+            {
+              "beat": 0,
+              "midi": 67
+            },
+            {
+              "beat": 0.125,
+              "midi": 66
+            }
+          ]
+        },
+        {
+          "stringId": "d",
+          "fret": 14,
+          "midi": 64,
+          "beat": 0.5,
+          "duration": 0.5,
+          "sourceTicks": -1
+        },
+        {
+          "stringId": "d",
+          "fret": 12,
+          "midi": 62,
+          "beat": 1,
+          "duration": 1,
+          "sourceTicks": -1
+        }
+      ]
+    }
+  ],
+  "introFingeringSource": "https://guitarcontrol.com/page/Guitarcontrol-com/guitarcontrol.com/chords-rhythm-guitar/how-to-play-purple-haze-by-jimi-hendrix/index.html",
+  "fingeringSources": {
+    "intro": "https://guitarcontrol.com/page/Guitarcontrol-com/guitarcontrol.com/chords-rhythm-guitar/how-to-play-purple-haze-by-jimi-hendrix/index.html",
+    "riff": "https://www.guitarlessonworld.com/tablature/purple.htm",
+    "soloEntry": "https://www.guitarclub.io/blog/purple-haze-jimi-hendrix-guitar-lesson-chords-solo",
+    "soloDescent": "https://www.guitarlessonworld.com/tablature/purple.htm"
+  },
+  "fingeringReviewedAt": "2026-10-09",
+  "openingReviewedAt": "2026-10-14",
+  "phrasesReviewedAt": "2026-10-14",
+  "scoreSource": "https://musescore.org/sites/musescore.org/files/2019-02/Purple%20Haze.pdf",
+  "transcriptionScope": "Reference-curated study excerpts. Opening retains corrected MIDI timing; riff and approach use reference score note values. Descent timing and expression curves are study adaptations. Source edits are documented per block; this is not an exact recording transcription."
+}

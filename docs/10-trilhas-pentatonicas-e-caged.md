@@ -2,6 +2,8 @@
 
 Data: 8 de outubro de 2026. Status: proposta de conteúdo para expansão do produto; ainda não implementada.
 
+Atualização de 14 de outubro: a leitura sobre como contar e nomear intervalos foi destinada à primeira lição da trilha de pentatônica menor com CAGED, conforme a seção abaixo. É conteúdo documentado para implementação futura, não uma lição já disponível.
+
 Esta proposta transforma a ideia registrada em [Pentatonica.docx.pdf](Pentatonica.docx.pdf) e nas legendas fornecidas dos vídeos de Daniel Bertamini, Rafa e John Mayer em uma direção editorial para o PentaShapes. Revisão de 8 de outubro: começar por uma região e pelas notas do acorde, criar frases desde o início e conectar recortes antes de exigir os cinco desenhos. A trilha maior abaixo é uma extensão proposta pelo produto.
 
 ## O que o vídeo do Bertamini ensina
@@ -86,6 +88,70 @@ Pausa, motivo, resolução e chamada/resposta aparecem em todas as etapas. Não 
 | PM09 | Repetir o treino de tons em outra região | Transfere a relação sem depender da primeira região |
 
 Esses IDs permanecem candidatos editoriais. A revisão altera o conteúdo de PM02–PM07 em relação à proposta inicial; não são lições publicadas nem progresso de usuário já existente.
+
+## Leitura de apoio: por que terça e quinta?
+
+Destino editorial definido em 14 de outubro de 2026: **PM01**, junto à exploração da tríade de Am, com retomada em **PM02** ao acrescentar as outras notas da pentatônica. A proposta CAGED é o melhor encaixe porque relaciona as notas de um acorde com suas posições no braço. O conteúdo explica essas relações antes de ampliar os desenhos. CAGED organiza formas e regiões; não é o procedimento que determina o nome dos intervalos.
+
+Fundamentos já apresenta graus e notas-alvo. Pode receber uma introdução breve a essa leitura no futuro, mas a explicação completa fica nesta trilha. Não acrescentar esse módulo básico ao caderno de Purple Haze nem exigir sua leitura antes de tocar uma frase.
+
+### Entrada na lição
+
+Orientação breve proposta: “Ouça Lá, Dó e Mi, as notas de Am. Encontre cada uma no braço e crie uma frase curta, deixando uma pausa.”
+
+Oferecer o aprofundamento pela chamada “Explorar notas e relações”. Usar a leitura contínua e os exemplos estáticos definidos em [15 — Leitura de estudo](15-leitura-de-estudo.md), com texto conversado e prática no instrumento. Apresentar os assuntos aos poucos; não colocar toda a teoria na orientação inicial.
+
+### Primeiro, reconheça os sons
+
+Texto proposto:
+
+> Toque Lá e depois Mi. Deixe os dois sons durarem. Mi é a quinta de Lá. Esse nome ajuda a reconhecer a relação, mesmo quando você encontra essas notas em outra região do braço.
+>
+> Por que quinta? Conte os nomes, incluindo a nota de partida: Lá (1), Si (2), Dó (3), Ré (4), Mi (5). Mi é o quinto nome desse caminho ascendente. Essa contagem explica o número do intervalo. Não é uma instrução para tocar todas essas notas antes de chegar a Mi.
+
+Ilustração estática: **Lá → Si → Dó → Ré → Mi**, com números 1–5 e destaque apenas nas duas pontas. Identificar explicitamente como contagem de nomes, não como fórmula da escala maior de Lá. Ao lado ou abaixo, mostrar Lá na 6ª corda/casa 5 e Mi na 5ª corda/casa 7, em afinação padrão. A distância entre casas de cordas diferentes não mede o intervalo.
+
+### O acidente muda a distância, não o número
+
+Texto proposto:
+
+> Agora toque Lá e Dó. Dó é o terceiro nome: Lá, Si, Dó. Essa relação é uma terça menor. Suba o Dó uma casa na mesma corda e você encontra Dó♯: a terça maior. Ouça as duas versões.
+>
+> As duas continuam sendo terças porque o destino continua tendo o nome Dó. O sustenido muda a altura e a qualidade do intervalo. Fazemos duas perguntas: qual é o número, contando os nomes, e qual é a qualidade, ouvindo e conferindo a distância?
+
+Exemplo no braço: Lá na 6ª corda/casa 5, Dó na casa 8 e Dó♯ na casa 9. Comparar Lá–Dó com Lá–Dó♯ e relacionar os sons a Am e A. Não usar a quantidade de semitons como primeira explicação; ela pode aparecer como medida complementar.
+
+| Par ascendente | Contagem dos nomes | Nome completo |
+| --- | --- | --- |
+| Lá–Dó | Lá, Si, Dó: três | Terça menor |
+| Lá–Dó♯ | Lá, Si, Dó: três | Terça maior |
+| Mi–Si | Mi, Fá, Sol, Lá, Si: cinco | Quinta justa |
+| Mi–Si♭ | Mi, Fá, Sol, Lá, Si: cinco | Quinta diminuta, também chamada de quinta abaixada neste contexto |
+
+### Graus precisam de uma referência
+
+Texto proposto:
+
+> Quando olhamos as notas de Am em relação a Lá, usamos 1–♭3–5: Lá, Dó e Mi. O ♭3 indica a terça menor, um passo abaixo da terça maior Dó♯. Lá é a referência; os números descrevem a relação de cada nota com ele.
+>
+> Um grau não equivale a um tom. Por exemplo, na escala maior de Mi, Mi–Fá♯ é um tom, Fá♯–Sol♯ é outro e Sol♯–Lá é meio tom. São os graus 1, 2, 3 e 4, com espaços diferentes entre eles.
+
+Em PM02, acrescentar: “A pentatônica de Lá menor tem cinco notas, mas seus graus são 1–♭3–4–5–♭7. Dó é a segunda nota da lista Lá–Dó–Ré–Mi–Sol e continua sendo a terça menor de Lá. Posição na lista da pentatônica e grau em relação à referência não são a mesma informação.”
+
+### Direção, oitava e escrita também importam
+
+Reservar estes esclarecimentos para o final da leitura, depois da aplicação na tríade:
+
+- Contar na direção do intervalo e incluir a nota de partida. Mi até um Ré acima é uma sétima; Mi até o Ré logo abaixo é uma segunda descendente. Ré pode ter o papel de ♭7 em relação ao centro Mi mesmo quando a frase chega a ele descendo um tom.
+- Não parar a contagem ao chegar à oitava: Mi–Fá–Sol–Lá–Si–Dó–Ré–Mi–Fá são nove nomes. O Fá♯ nessa altura é uma nona maior de Mi; o Fá♯ próximo, acima de Mi, é uma segunda maior.
+- Os acidentes das duas notas influenciam a qualidade. Fá♯–Dó♯ é uma quinta justa; Fá♯–Dó natural é uma quinta diminuta. Contar os nomes Fá–Sol–Lá–Si–Dó continua dando cinco.
+- A grafia participa do nome: Fá♯ e Sol♭ soam na mesma casa na guitarra, mas Mi–Fá♯ é uma segunda maior e Mi–Sol♭ é uma terça diminuta. A posição no braço não determina sozinha a grafia ou a função musical. Este é um esclarecimento posterior, sem exigir memorização de nomes pouco usados na primeira prática.
+
+### Prática e critério de compreensão
+
+Convidar a tocar Lá–Dó e Lá–Dó♯, explicar por que ambas são terças e ouvir o que muda. Depois encontrar Lá–Mi em outra região. Em PM02, procurar Dó na pentatônica e reconhecer seu papel de ♭3, sem confundir esse grau com a posição na lista de cinco notas.
+
+A evidência de compreensão é conseguir relacionar nome, som e posição em um exemplo novo. Recitar a contagem ou decorar semitons isoladamente não basta. Execução e escuta permanecem autoavaliadas; não acrescentar testes interativos ao caderno.
 
 ## Trilha: Pentatônica maior — do acorde à melodia
 
