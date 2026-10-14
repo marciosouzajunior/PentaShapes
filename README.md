@@ -25,6 +25,11 @@ Many guitar players know scale shapes — but struggle to use them musically. **
 
 ---
 
+
+🎸 **Purple Haze por dentro:** abra `/track/purple-haze-por-dentro/` para estudar Purple Haze no braço estático, com notas, graus e cartões fixos com destaque do trecho ativo. Cinco lições apresentam a abertura, o riff, partes do solo e os acordes da base do verso. O piloto foi aprovado pelo autor em 14 de outubro de 2026. [Formato de leitura](docs/15-leitura-de-estudo.md) e [detalhes do piloto](docs/12-piloto-rock-em-movimento.md).
+
+Ao criar ou revisar textos da interface, siga o [padrão de tom de voz e linguagem](docs/13-tom-de-voz-e-linguagem.md): orientação breve, conceitos explicados com clareza e aprofundamento opcional.
+
 ## ⚙️ Desenvolvimento
 
 - Nova interface: Vite, TypeScript, HTML e CSS.

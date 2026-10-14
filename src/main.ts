@@ -8,6 +8,10 @@ import { renderTrackPlaceholder } from './track-placeholder';
 import foundationsArt from './assets/track-foundations.svg';
 import phrasesArt from './assets/track-phrases.svg';
 import harmonyArt from './assets/track-harmony.svg';
+import rockArt from './assets/track-purple-haze.webp';
+import { playableLessons } from './content-catalog';
+import { songLessons } from './song-content';
+import { renderSongLesson } from './song';
 
 type BoardConfiguration = {
   tonic: number;
@@ -27,8 +31,13 @@ type FretboardElement = HTMLElement & {
 const app = document.querySelector<HTMLDivElement>('#app');
 if (!app) throw new Error('Elemento principal ausente.');
 
-const currentLesson = lessons.find(lesson => lesson.href.replace(/\/$/, '') === location.pathname.replace(/\/$/, ''));
-if (currentLesson) renderLesson(app, currentLesson.id);
+const songPath=location.pathname.replace(/^\/track\/rock-em-movimento(?=\/|$)/,'/track/purple-haze-por-dentro');
+if(songPath!==location.pathname)history.replaceState(history.state,'',songPath+location.search+location.hash);
+
+const currentLesson = playableLessons.find(item => item.href.replace(/\/$/, '') === location.pathname.replace(/\/$/, ''));
+if (currentLesson?.kind === 'song') renderSongLesson(app, currentLesson.lesson);
+else if (currentLesson?.kind === 'phrase') renderLesson(app, currentLesson.lesson.id);
+else if (location.pathname.replace(/\/$/, '') === '/track/purple-haze-por-dentro') renderSongLesson(app, songLessons[0]!);
 else if (location.pathname.startsWith('/lesson')) renderLesson(app);
 else if (location.pathname.startsWith('/track/')) renderTrackPlaceholder(app, location.pathname);
 else renderLanding(app);
@@ -37,9 +46,9 @@ function renderLanding(app: HTMLDivElement): void {
 const lessonRefs = lessons.map(lesson => lesson.ref);
 const readResume = () => {
   const activeKey = readActiveLessonKey();
-  const activeLesson = lessons.find(lesson => lessonKey(lesson.ref) === activeKey);
-  const nextKey = readNextIncompleteLessonKey(lessonRefs);
-  const nextLesson = lessons.find(lesson => lessonKey(lesson.ref) === nextKey);
+  const activeLesson = playableLessons.find(lesson => lessonKey(lesson.ref) === activeKey);
+  const nextKey = readNextIncompleteLessonKey(playableLessons.map(item => item.ref));
+  const nextLesson = playableLessons.find(lesson => lessonKey(lesson.ref) === nextKey);
   return {
     href: nextLesson?.href ?? activeLesson?.href ?? '/lesson/',
     label: nextLesson ? 'Continuar lição' : activeLesson ? 'Revisar lições' : 'Começar agora',
@@ -47,6 +56,7 @@ const readResume = () => {
 };
 const resume = readResume();
 const completion = readCompletion(lessonRefs);
+const rockCompletion = readCompletion(songLessons.map(lesson => lesson.ref));
 const melody = [
   { position: { stringId: 'g', fret: 7 }, atMs: 0 },
   { position: { stringId: 'b', fret: 5 }, atMs: 680 },
@@ -81,19 +91,19 @@ app.innerHTML = `
       <div class="track-grid">
         <article class="track-card">
           <img class="track-art" src="${foundationsArt}" alt="" loading="lazy">
-          <div class="track-content"><div class="track-meta"><span class="level">INICIANTE</span><span class="track-progress" id="foundations-progress" aria-label="${completion.completed} de ${completion.total} lições concluídas">${completion.percent}% concluído</span></div><h3>Primeiras frases</h3><p>Transforme poucas notas em frases que você consegue ouvir e repetir.</p><a class="track-link" href="/lesson/">Ir para a lição <span aria-hidden="true">→</span></a></div>
+          <div class="track-content"><div class="track-meta"><span class="level">INICIANTE</span><span class="track-progress" id="foundations-progress" aria-label="${completion.completed} de ${completion.total} lições concluídas">${completion.percent}% concluído</span></div><h3>Primeiras frases</h3><p>Transforme poucas notas em frases que você consegue ouvir e repetir.</p><a class="track-link" href="/lesson/">Ver lições <span aria-hidden="true">→</span></a></div>
         </article>
         <article class="track-card">
           <img class="track-art" src="${phrasesArt}" alt="" loading="lazy">
-          <div class="track-content"><span class="level">INTERMEDIÁRIO</span><h3>Frases com intenção</h3><p>Crie motivos, use pausas e leve suas ideias para novos contextos.</p><a class="track-link" href="/track/frases/">Ver lição <span aria-hidden="true">→</span></a></div>
+          <div class="track-content"><span class="level">INTERMEDIÁRIO</span><h3>Frases com intenção</h3><p>Crie motivos, use pausas e leve suas ideias para novos contextos.</p><a class="track-link" href="/track/frases/">Ver lições <span aria-hidden="true">→</span></a></div>
         </article>
         <article class="track-card">
           <img class="track-art" src="${harmonyArt}" alt="" loading="lazy">
-          <div class="track-content"><span class="level">AVANÇADO</span><h3>Harmonia jazzística</h3><p>Conecte acordes e dê direção às tensões em progressões de jazz.</p><a class="track-link" href="/track/harmonia/">Ver lição <span aria-hidden="true">→</span></a></div>
+          <div class="track-content"><span class="level">AVANÇADO</span><h3>Harmonia jazzística</h3><p>Conecte acordes e dê direção às tensões em progressões de jazz.</p><a class="track-link" href="/track/harmonia/">Ver lições <span aria-hidden="true">→</span></a></div>
         </article>
-        <article class="track-card track-card--future" aria-label="Novas trilhas, em breve">
-          <div class="future-art" aria-hidden="true"><span>+</span></div>
-          <div class="track-content"><span class="level">EM BREVE</span><h3>Novos caminhos</h3><p>Mais formas de explorar o improviso estão por vir.</p><span class="future-status">Mais trilhas no futuro</span></div>
+        <article class="track-card">
+          <img class="track-art track-art--photo" src="${rockArt}" alt="" loading="lazy">
+          <div class="track-content"><div class="track-meta"><span class="level">JIMI HENDRIX</span><span class="track-progress" id="rock-progress">${rockCompletion.percent}% concluído</span></div><h3>Purple Haze por dentro</h3><p>Explore riffs e partes do solo de Purple Haze e aprenda uma base simples com acordes.</p><a class="track-link" href="/track/purple-haze-por-dentro/">Ver lições <span aria-hidden="true">→</span></a></div>
         </article>
       </div>
     </section>
@@ -114,6 +124,9 @@ const refreshCompletion = (): void => {
     startLink.href = resume.href;
     startLabel.textContent = resume.label;
   }
+  const rockChip = app.querySelector<HTMLElement>('#rock-progress');
+  const rockProgress = readCompletion(songLessons.map(lesson => lesson.ref));
+  if (rockChip) { rockChip.textContent = `${rockProgress.percent}% concluído`; rockChip.setAttribute('aria-label', `${rockProgress.completed} de ${rockProgress.total} lições concluídas`); }
   const chip = app.querySelector<HTMLElement>('#foundations-progress');
   if (!chip) return;
   const progress = readCompletion(lessonRefs);
