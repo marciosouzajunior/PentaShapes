@@ -1,4 +1,4 @@
-import { assembleBlocks, type StudyBlock } from './song-content';
+import { assembleBlocks, type SongNote, type StudyBlock } from './song-content';
 
 export type BaseChord = 'e' | 'g' | 'a';
 const strings=['e_low','a','d','g','b','e_high'];
@@ -22,4 +22,21 @@ export function chordStringsHint(id:BaseChord):string{
 export function accompanimentPlan(){
   const blocks=(['e','g','a'] as const).map(id=>accompanimentChord(id));
   return assembleBlocks(blocks.map(block=>block.id),blocks);
+}
+
+/** A downstroke starts on the beat and reaches the higher strings a little later. */
+export function strumChordNotes(notes:SongNote[],secondsPerBeat:number):SongNote[]{
+  const attacks=new Map<number,SongNote[]>();
+  for(const note of notes){
+    const attack=attacks.get(note.beat);
+    if(attack)attack.push(note);
+    else attacks.set(note.beat,[note]);
+  }
+  const stringGap=.009/secondsPerBeat;
+  return [...attacks.values()].flatMap(attack=>
+    attack.sort((a,b)=>strings.indexOf(a.stringId)-strings.indexOf(b.stringId)).map((note,index)=>{
+      const delay=index*stringGap;
+      return {...note,beat:note.beat+delay,duration:note.duration-delay};
+    }),
+  );
 }

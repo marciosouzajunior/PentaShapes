@@ -6,7 +6,7 @@ import { createServer } from 'vite';
 const { Midi } = midiPackage;
 const vite = await createServer({ configFile:false,server:{middlewareMode:true,hmr:false},appType:'custom' });
 after(()=>vite.close());
-const { pilotSong,studyBlocks,songLessons,midiPitch,assembleBlocks,assembleLessonBlocks,blockIndexAt,noteLabel } = await vite.ssrLoadModule('/src/song-content.ts');
+const { pilotSong,studyBlocks,songLessons,midiPitch,assembleBlocks,assembleLessonBlocks,blockIndexAt,noteLabel,lessonMapPositions } = await vite.ssrLoadModule('/src/song-content.ts');
 const {accompanimentChord,accompanimentPlan,chordStringsHint}=await vite.ssrLoadModule('/src/song-chords.ts');
 const { playableLessons } = await vite.ssrLoadModule('/src/content-catalog.ts');
 const { lessonKey } = await vite.ssrLoadModule('/src/content-identity.ts');
@@ -85,8 +85,9 @@ test('pitch labels teach names and degrees relative to E rather than fret number
 });
 
 test('new content has independent progress and preserves the foundation catalog',()=>{
+  assert.deepEqual(songLessons.map(lesson=>lesson.id),['s01','s02','s02-variacao','s05','s03','s04']);
   assert.equal(playableLessons.filter(l=>l.kind==='phrase').length,12);
-  assert.equal(playableLessons.filter(l=>l.kind==='song').length,5);
+  assert.equal(playableLessons.filter(l=>l.kind==='song'&&l.ref.trackId==='hendrix-purple-haze').length,6);
   assert.equal(new Set(playableLessons.map(l=>l.href)).size,playableLessons.length);
   assert.equal(new Set(playableLessons.map(l=>lessonKey(l.ref))).size,playableLessons.length);
   assert.ok(songLessons.every(l=>l.ref.trackId==='hendrix-purple-haze'&&l.blocks.every(id=>studyBlocks.some(b=>b.id===id))));
@@ -113,12 +114,12 @@ test('reference fingering keeps the riff in its neck region and places E4 by phr
 test('single-card lessons preserve reviewed phrases and timing, including the corrected opening',()=>{
   const midi=new Midi(readFileSync(pilotSong.sourceFile));
   const original=JSON.stringify(studyBlocks);
-  for(const [id,start,end] of [['s01',0,8],['s04',148,152]]){
+  for(const [id,start,end] of [['s01',0,8],['s04',146.5,149.5]]){
     const plan=assembleLessonBlocks(songLessons.find(lesson=>lesson.id===id));
     assert.equal(plan.entries.length,1);
     assert.equal(plan.beats,end-start);
     if(id==='s04'){
-      assert.deepEqual(plan.notes.map(note=>[note.beat,note.midi]),[[0,67],[1.5,66],[1.75,67],[2,66],[2.5,64],[3,62]]);
+      assert.deepEqual(plan.notes.map(note=>[note.beat,note.midi]),[[0,64],[.5,67],[.75,69],[1,67],[1.25,64],[1.5,67]]);
       continue;
     }
     const source=midi.tracks[pilotSong.trackIndex].notes.filter(n=>n.ticks/midi.header.ppq<end&&(n.ticks+n.durationTicks)/midi.header.ppq>start).filter(n=>!omittedOpeningNote(n));
@@ -134,8 +135,8 @@ test('single-card lessons preserve reviewed phrases and timing, including the co
   }
   const opening=assembleLessonBlocks(songLessons.find(lesson=>lesson.id==='s01'));
   assert.deepEqual(opening.notes.map(note=>[note.beat,note.midi]),Array.from({length:8},(_,beat)=>[beat,beat%2===0?46:58]));
-  const descent=assembleLessonBlocks(songLessons.find(lesson=>lesson.id==='s04'));
-  assert.deepEqual(descent.notes.filter(note=>note.midi===66).map(note=>[note.beat,note.duration]),[[1.5,.25],[2,.5]]);
+  const exploration=assembleLessonBlocks(songLessons.find(lesson=>lesson.id==='s04'));
+  assert.ok(exploration.notes.every(note=>[64,67,69].includes(note.midi)));
   assert.equal(JSON.stringify(studyBlocks),original);
   for(const [id,count] of [['s02',2],['s03',2]]){
     assert.equal(assembleLessonBlocks(songLessons.find(lesson=>lesson.id===id)).entries.length,count);
@@ -170,6 +171,44 @@ test('pitch automation resumes bends and slides at the current pitch and clips a
  assert.equal(pitchAt(slide,.0625),51);
  assert.equal(pitchAt(slide,1),52);
  assert.deepEqual(pitchAutomation({midi:52},0,1,.75),[]);
+});
+
+test('the intro variation separates the fretted A from its bend destination B',()=>{
+  const variation=studyBlocks.find(block=>block.id==='riff-variation');
+  assert.deepEqual(variation.notes.map(note=>note.midi),[55,57,57,55]);
+  const midi=new Midi(readFileSync(pilotSong.sourceFile));
+  const source=midi.tracks[pilotSong.trackIndex].notes.filter(note=>note.ticks/midi.header.ppq>=24&&note.ticks/midi.header.ppq<28);
+  assert.deepEqual(variation.notes.map(note=>[note.midi,note.beat,note.duration]),source.map(note=>[note.midi,note.ticks/midi.header.ppq-24,note.durationTicks/midi.header.ppq]));
+  const bent=variation.notes[2];
+  assert.equal(bent.technique.semitones,2);
+  assert.equal(pitchAt(bent,.25),59);
+  assert.equal(midiPitch(bent),57);
+  const ids=songLessons.map(lesson=>lesson.id);
+  assert.ok(ids.indexOf('s02-variacao')>ids.indexOf('s02'));
+  assert.ok(ids.indexOf('s02-variacao')<ids.indexOf('s03'));
+});
+
+test('exploration expands the map without adding audio notes or inheriting descent completion',()=>{
+  const lesson=songLessons.find(lesson=>lesson.id==='s04');
+  const plan=assembleLessonBlocks(lesson),before=JSON.stringify(plan.notes);
+  const {phrase,possibilities,additional}=lessonMapPositions(lesson,plan.entries[0].block);
+  assert.equal(lesson.ref.lessonId,'s04-exploracao');
+  assert.deepEqual(phrase.map(note=>note.midi),[64,67,69]);
+  const map=[...phrase,...possibilities];
+  assert.equal(map.length,12);
+  assert.equal(new Set(map.map(note=>note.stringId)).size,6);
+  assert.deepEqual([...new Set(map.map(note=>note.midi%12))].sort((a,b)=>a-b),[2,4,7,9,11]);
+  for(const stringId of ['e_low','a','d','g','b','e_high'])assert.equal(map.filter(note=>note.stringId===stringId).length,2);
+  assert.deepEqual(additional.map(note=>note.midi),[78,73]);
+  for(const note of additional){assert.equal(midiPitch(note),note.midi);assert.ok(note.fret>=12&&note.fret<=15);assert.ok(!map.some(position=>position.stringId===note.stringId&&position.fret===note.fret));}
+  const keys=new Set(phrase.map(note=>`${note.stringId}:${note.fret}`));
+  for(const note of possibilities){
+    assert.equal(midiPitch(note),note.midi);
+    assert.ok(note.fret>=12&&note.fret<=15);
+    assert.ok(!keys.has(`${note.stringId}:${note.fret}`));
+  }
+  assert.equal(JSON.stringify(plan.notes),before);
+  assert.deepEqual(lessonMapPositions(songLessons[0],studyBlocks[0]).possibilities,[]);
 });
 
 

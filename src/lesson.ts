@@ -4,6 +4,7 @@ import { DEFAULT_LESSON_BARS, MAX_LESSON_BARS, planHarmony, planPhrase } from '.
 import { buildFretboard } from '../public/components/music.mjs';
 import { bindLessonSelector, renderLessonPager, renderLessonSelector } from './lesson-navigation';
 import './lesson.css';
+import { renderBrand } from './brand';
 
 type FretboardElement = HTMLElement & {
   configuration: object;
@@ -18,7 +19,7 @@ export function renderLesson(app: HTMLDivElement, id: LessonContent['id'] = 'l01
 
   app.innerHTML = `
     <a class="skip-link" href="#lesson-main">Ir para a lição</a>
-    <header class="header lesson-header"><a class="brand" href="/" aria-label="PentaShapes, início"><span class="brand-mark" aria-hidden="true">p</span><span>PentaShapes</span></a>${renderLessonSelector(id)}</header>
+    <header class="header lesson-header">${renderBrand()}${renderLessonSelector(id)}</header>
     <main id="lesson-main" class="lesson-layout">
       <div class="lesson-intro"><p class="eyebrow">FUNDAMENTOS · ${lesson.number}</p><h1>${lesson.title}</h1><p>${lesson.instruction}</p><details class="lesson-degrees"><summary>Entenda os graus</summary><p>${lesson.degreeExplanation}</p></details></div>
       <div class="lesson-board board-panel">

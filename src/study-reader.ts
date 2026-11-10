@@ -1,5 +1,5 @@
 import type { StudyGuide, StudyPage, StudyVisual } from './study-model';
-import { intervalName, referenceRelation, studyNote } from './study-model';
+import { intervalName, referenceRelation, studyNote, studyDegree } from './study-model';
 import {pianoDiagram} from './piano-diagram';
 import './study-reader.css';
 
@@ -11,11 +11,17 @@ function positionsFigure(visual:Extract<StudyVisual,{kind:'positions'|'scale'}>)
   const strings=['e_high','b','g','d','a','e_low'];
   const count=visual.endFret-visual.startFret+1,cell=76;
   const right=50+count*cell,width=right+30;
+  const bends=visual.kind==='positions'?(visual.bends??(visual.bend?[visual.bend]:[])):[];
+  const displacement=(bend:typeof bends[number])=>Math.min(20,Math.max(5,(bend.targetMidi-visual.positions.find(position=>position.stringId===bend.stringId&&position.fret===bend.fret)!.midi)*10));
   const labels=['e','B','G','D','A','E'];
   const grid=Array.from({length:count+1},(_,i)=>`<line x1="${50+i*cell}" y1="20" x2="${50+i*cell}" y2="212"/>`).join('');
-  const rows=strings.map((_,i)=>`<text x="20" y="${44+i*31}" class="string-name">${labels[i]}</text><line x1="50" y1="${40+i*31}" x2="${right}" y2="${40+i*31}" class="string-line"/>`).join('');
+  const rows=strings.map((stringId,i)=>`<text x="20" y="${44+i*31}" class="string-name">${labels[i]}</text>${bends.some(bend=>bend.stringId===stringId)?'':`<line x1="50" y1="${40+i*31}" x2="${right}" y2="${40+i*31}" class="string-line"/>`}`).join('');
   const frets=Array.from({length:count},(_,i)=>`<text x="${50+(i+.5)*cell}" y="235" class="fret-number">${visual.startFret+i}</text>`).join('');
   const point=(position:{stringId:string;fret:number})=>({x:50+(position.fret-visual.startFret+.5)*cell,y:40+strings.indexOf(position.stringId)*31});
+  const gesture=bends.map((bend,index)=>{
+    const {x,y}=point(bend),left=50-x,end=right-x;
+    return `<g class="reading-bend" transform="translate(${x} ${y})" style="--bend-delay:${index*2}s" aria-hidden="true"><path class="bend-string" d="M${left} 0L0 0L${end} 0" style="--bend-rest:path('M${left} 0L0 0L${end} 0');--bend-raised:path('M${left} 0L0 ${displacement(bend)}L${end} 0')"/></g>`;
+  }).join('');
   let arrow='';
   if(visual.kind==='positions'&&visual.showDirection&&visual.positions.length===2){
     const start=point(visual.positions[0]!),end=point(visual.positions[1]!);
@@ -26,16 +32,29 @@ function positionsFigure(visual:Extract<StudyVisual,{kind:'positions'|'scale'}>)
       arrow=`<g class="fretboard-direction" aria-hidden="true"><path class="direction-line" d="M${x1} ${y1}L${x2} ${y2}"/><path d="M${x2-dx*8-dy*4} ${y2-dy*8+dx*4}L${x2} ${y2}L${x2-dx*8+dy*4} ${y2-dy*8-dx*4}"/></g>`;
     }
   }
-  const notes=visual.positions.map(position=>{
+  const positions=[...visual.positions,...visual.additionalPositions??[]];
+  const notes=positions.map(position=>{
     const x=50+(position.fret-visual.startFret+.5)*cell,y=40+strings.indexOf(position.stringId)*31;
     const name=(visual.kind==='positions'&&visual.spelling==='flat'?flats:letters)[position.midi%12]!;
     const root=visual.kind==='scale'?position.midi%12===visual.root%12:position.midi===visual.rootMidi;
-    return `<circle cx="${x}" cy="${y}" r="14"${root?' class="position-root"':''}/><text x="${x}" y="${y+5}" class="position-note">${name}</text>`;
+    const phrasePositions=visual.kind==='scale'?visual.phrasePositions:undefined;
+    const inPhrase=phrasePositions?.some(note=>note.stringId===position.stringId&&note.fret===position.fret);
+    const context=visual.additionalPositions?.some(note=>note.stringId===position.stringId&&note.fret===position.fret)||(phrasePositions&&!inPhrase);
+    const chord=visual.kind==='scale'&&visual.chordPositions?.some(p=>p.stringId===position.stringId&&p.fret===position.fret);
+    const target=visual.kind==='scale'&&!chord&&visual.chordTones?.includes(position.midi%12);
+    const classes=[root?'position-root':'',context?'position-context':'',chord?'position-chord':'',inPhrase?'position-phrase':''].filter(Boolean).join(' ');
+    const annotation=visual.kind==='positions'?visual.annotations?.find(mark=>mark.stringId===position.stringId&&mark.fret===position.fret):visual.degreeAnnotations?{label:studyDegree(position.midi,visual.root)}:undefined;
+    const note=`<circle cx="${x}" cy="${y}" r="14"${classes?` class="${classes}"`:''}/>${target&&!root?`<circle cx="${x}" cy="${y+21}" r="2" class="position-target"/>`:''}<text x="${x}" y="${y+5}" class="position-note${inPhrase?' position-phrase':''}">${name}</text>${annotation?`<text x="${x+23}" y="${y-13}" class="position-annotation">${escape(annotation.label)}</text>`:''}`;
+    const bendIndex=bends.findIndex(bend=>bend.stringId===position.stringId&&bend.fret===position.fret);
+    return bendIndex>=0?`<g class="bend-note" style="--bend-distance:${displacement(bends[bendIndex]!)}px;--bend-delay:${bendIndex*2}s">${note}</g>`:note;
   }).join('');
-  return `<figure><div class="reading-fretboard-scroll"><svg class="reading-fretboard" viewBox="0 0 ${width} 250" style="--reading-fretboard-width:${width}px" role="img" aria-label="${escape(visual.caption)}">${grid}${rows}${frets}${arrow}${notes}</svg></div><figcaption>${escape(visual.caption)}</figcaption></figure>`;
+  const description=(visual.caption||`Notas no braço, casas ${visual.startFret} a ${visual.endFret}.`)+bends.map(bend=>` Ilustração da corda se deslocando lateralmente, na mesma casa, ${Number.isInteger(bend.targetMidi)?`até o som de ${studyNote(bend.targetMidi)}`:'elevando o som um quarto de tom'}.`).join('');
+  return `<figure><div class="reading-fretboard-scroll"><svg class="reading-fretboard${visual.kind==='scale'&&visual.degreeAnnotations?' reading-fretboard--degrees':''}" viewBox="0 0 ${width} 250" style="--reading-fretboard-width:${width}px" role="img" aria-label="${escape(description)}">${grid}${rows}${frets}${arrow}${gesture}${notes}</svg></div>${visual.caption?`<figcaption>${escape(visual.caption)}</figcaption>`:''}</figure>`;
 }
 
 function visualMarkup(visual:StudyVisual):string{
+  if(visual.kind==='table')return `<figure><div class="reading-table-scroll"><table class="reading-table"><thead><tr>${visual.columns.map(column=>`<th scope="col">${escape(column)}</th>`).join('')}</tr></thead><tbody>${visual.rows.map(row=>`<tr>${row.map(cell=>`<td>${escape(cell)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>${visual.caption?`<figcaption>${escape(visual.caption)}</figcaption>`:''}</figure>`;
+  if(visual.kind==='image')return `<figure class="reading-image"><img src="${escape(visual.src)}" alt="${escape(visual.alt)}"/>${visual.caption?`<figcaption>${escape(visual.caption)}</figcaption>`:''}</figure>`;
   if(visual.kind==='positions'||visual.kind==='scale')return positionsFigure(visual);
   if(visual.kind==='fretboard-intervals'){
     return `<div class="reading-fretboard-intervals">${visual.targets.map(target=>{
@@ -68,6 +87,31 @@ function visualMarkup(visual:StudyVisual):string{
   return `<figure><div class="reading-notes">${visual.notes.map((midi,i)=>`<div><strong>${studyNote(midi)}</strong><small>${escape(roles[i]!)}</small></div>`).join('')}</div><figcaption>${escape(visual.caption)}</figcaption></figure>`;
 }
 
+export function studyTopicMarkup(page:StudyPage,id:string):string{
+  const figure=`<div class="reader-visual">${visualMarkup(page.visual)}</div>`;
+  const inlineVisual=page.visualAfterParagraph!==undefined&&page.visualAfterParagraph>=1&&page.visualAfterParagraph<=page.paragraphs.length;
+  const prose=page.paragraphs.map((paragraph,i)=>{
+    const position=i+1;
+    const extraFigures=(page.additionalVisuals??[]).filter(item=>item.afterParagraph===position)
+      .map(item=>`<div class="reader-visual">${visualMarkup(item.visual)}</div>`).join('');
+    const insight=page.insight?.afterParagraph===position
+      ?`<aside class="reader-insight" aria-labelledby="${id}-insight"><strong id="${id}-insight">${escape(page.insight.title)}</strong><p>${escape(page.insight.text)}</p></aside>`
+      :'';
+    return `<div class="reader-prose"><p>${escape(paragraph)}</p></div>${inlineVisual&&position===page.visualAfterParagraph?figure:''}${extraFigures}${insight}`;
+  }).join('');
+  let practice='';
+  if(page.practice){
+    practice=page.highlightPractice
+      ?`<div class="reader-insight"><strong>Experimente na guitarra</strong><p>${escape(page.practice)}</p></div>`
+      :`<p class="reader-practice"><span class="reader-practice-icon" aria-hidden="true">♪</span><span><span class="sr-only">No instrumento: </span>${escape(page.practice)}</span></p>`;
+  }
+  return `<section class="reader-topic" aria-labelledby="${id}">
+    <h2 id="${id}" tabindex="-1"${page.hideTitle?' hidden':''}>${escape(page.title)}</h2>
+    ${prose}${inlineVisual?'':figure}
+    ${practice}
+  </section>`;
+}
+
 /** A continuous reading view. Diagrams are static; practice happens on the instrument. */
 export function mountStudyReader(trigger:HTMLButtonElement,guide:StudyGuide,lessonId:string,onOpen:()=>void):()=>void{
   const dialog=document.createElement('dialog');
@@ -76,11 +120,10 @@ export function mountStudyReader(trigger:HTMLButtonElement,guide:StudyGuide,less
   dialog.setAttribute('aria-labelledby',`${dialog.id}-title`);
   trigger.setAttribute('aria-haspopup','dialog');
   trigger.setAttribute('aria-controls',dialog.id);
-  const topic=(page:StudyPage,id:string)=>`<section class="reader-topic" aria-labelledby="${id}"><h2 id="${id}" tabindex="-1">${escape(page.title)}</h2><div class="reader-prose">${page.paragraphs.map(paragraph=>`<p>${escape(paragraph)}</p>`).join('')}</div><div class="reader-visual">${visualMarkup(page.visual)}</div><p class="reader-practice"><span class="reader-practice-icon" aria-hidden="true">♪</span><span><span class="sr-only">No instrumento: </span>${escape(page.practice)}</span></p></section>`;
   dialog.innerHTML=`
-    <header class="reader-header"><div><p>Caderno de estudo · Purple Haze</p><strong id="${dialog.id}-title">${escape((guide.lessons.find(book=>book.lessonId===lessonId)??guide.lessons[0])?.title??guide.title)}</strong></div><button type="button" class="reader-close" aria-label="Fechar leitura" autofocus>×</button></header>
+    <header class="reader-header"><div><p>Caderno de estudo · ${escape(guide.title)}</p><strong id="${dialog.id}-title">${escape((guide.lessons.find(book=>book.lessonId===lessonId)??guide.lessons[0])?.title??guide.title)}</strong></div><button type="button" class="reader-close" aria-label="Fechar leitura" autofocus>×</button></header>
     <div class="reader-scroll" tabindex="0" aria-label="Conteúdo da leitura"><article class="reader-page">
-      ${guide.lessons.map(book=>`<div class="reader-lesson" id="reading-${book.lessonId}">${book.pages.map((page,i)=>topic(page,`reading-${book.lessonId}-topic-${i}`)).join('')}</div>`).join('')}
+      ${guide.lessons.map(book=>`<div class="reader-lesson" id="reading-${book.lessonId}">${book.pages.map((page,i)=>studyTopicMarkup(page,`reading-${book.lessonId}-topic-${i}`)).join('')}</div>`).join('')}
     </article></div>
     <footer class="reader-footer"><button type="button" class="reader-return">Voltar à prática →</button></footer>`;
   document.body.append(dialog);

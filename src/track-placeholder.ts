@@ -1,3 +1,5 @@
+import { renderBrand } from './brand';
+
 const tracks: Record<string, { level: string; title: string; description: string }> = {
   '/track/frases': {
     level: 'INTERMEDIÁRIO',
@@ -15,7 +17,7 @@ export function renderTrackPlaceholder(app: HTMLDivElement, pathname: string): v
   const track = tracks[pathname.replace(/\/+$/, '')];
   app.innerHTML = `
     <a class="skip-link" href="#main">Ir para o conteúdo</a>
-    <header class="header"><a class="brand" href="/" aria-label="PentaShapes, início"><span class="brand-mark" aria-hidden="true">p</span><span>PentaShapes</span></a></header>
+    <header class="header">${renderBrand()}</header>
     <main id="main" class="placeholder-page">
       <p class="eyebrow">${track?.level ?? 'TRILHAS'}</p>
       <h1>${track?.title ?? 'Trilha não encontrada'}</h1>

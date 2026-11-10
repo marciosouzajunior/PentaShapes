@@ -1,5 +1,6 @@
 import { bindLessonSelector, foundationLessons, renderLessonPager, renderLessonSelector, type FoundationLessonId } from './lesson-navigation';
 import './lesson.css';
+import { renderBrand } from './brand';
 
 export function renderLessonPreview(app: HTMLDivElement, lessonId: FoundationLessonId): void {
   const lesson = foundationLessons.find(item => item.id === lessonId);
@@ -7,7 +8,7 @@ export function renderLessonPreview(app: HTMLDivElement, lessonId: FoundationLes
 
   app.innerHTML = `
     <a class="skip-link" href="#lesson-main">Ir para a lição</a>
-    <header class="header lesson-header"><a class="brand" href="/" aria-label="PentaShapes, início"><span class="brand-mark" aria-hidden="true">p</span><span>PentaShapes</span></a>${renderLessonSelector(lessonId)}</header>
+    <header class="header lesson-header">${renderBrand()}${renderLessonSelector(lessonId)}</header>
     <main id="lesson-main" class="lesson-layout">
       <div class="lesson-intro">
         <p class="eyebrow">FUNDAMENTOS · ${lesson.number}</p>

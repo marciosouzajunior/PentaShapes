@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="232" viewBox="0 0 480 232" role="img" aria-labelledby="title desc">
+  <title id="title">De Mi menor aberto a Lá menor</title>
+  <desc id="desc">Os acordes aparecem com a sexta corda à esquerda. Mi menor: 0, 2, 2, 0, 0, 0. Ao avançar cinco casas, Lá menor: 5, 7, 7, 5, 5, 5, com pestana na casa 5.</desc>
+  <style>
+    text{font-family:Arial,sans-serif;text-anchor:middle;fill:#384259}
+    .title{font-size:18px;font-weight:600}
+    .grid{fill:none;stroke:#b7c1d2;stroke-width:1.2}
+    .note{fill:#fff;stroke:#9ca9c4;stroke-width:1.5}
+    .root{fill:#e7edff}.letter{font-size:12px}.fret{font-size:11px;fill:#758096}
+  </style>
+  <g transform="translate(28 -16)">
+    <text class="title" x="75" y="40">Em</text>
+    <path class="grid" d="M15 88H135M15 124H135M15 160H135M15 196H135M15 232H135M15 88V232M39 88V232M63 88V232M87 88V232M111 88V232M135 88V232"/>
+    <path d="M15 88H135" stroke="#69758b" stroke-width="4"/>
+    <g class="fret"><text x="0" y="110">1</text><text x="0" y="146">2</text><text x="0" y="182">3</text><text x="0" y="218">4</text></g>
+    <circle class="note root" cx="15" cy="70" r="10"/>
+    <circle class="note" cx="39" cy="142" r="10"/>
+    <circle class="note root" cx="63" cy="142" r="10"/>
+    <circle class="note" cx="87" cy="70" r="10"/>
+    <circle class="note" cx="111" cy="70" r="10"/>
+    <circle class="note root" cx="135" cy="70" r="10"/>
+    <g class="letter"><text x="15" y="74">E</text><text x="39" y="146">B</text><text x="63" y="146">E</text><text x="87" y="74">G</text><text x="111" y="74">B</text><text x="135" y="74">E</text></g>
+  </g>
+  <g transform="translate(0 -16)">
+    <path d="M203 145H277M269 137L277 145L269 153" fill="none" stroke="#8fa4d5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <g transform="translate(312 -16)">
+    <text class="title" x="75" y="40">Am</text>
+    <path class="grid" d="M15 88H135M15 124H135M15 160H135M15 196H135M15 232H135M15 88V232M39 88V232M63 88V232M87 88V232M111 88V232M135 88V232"/>
+    <g class="fret"><text x="0" y="110">5</text><text x="0" y="146">6</text><text x="0" y="182">7</text><text x="0" y="218">8</text></g>
+    <path d="M15 106H135" stroke="#d4def7" stroke-width="20" stroke-linecap="round"/>
+    <circle class="note root" cx="15" cy="106" r="10"/>
+    <circle class="note" cx="39" cy="178" r="10"/>
+    <circle class="note root" cx="63" cy="178" r="10"/>
+    <circle class="note" cx="87" cy="106" r="10"/>
+    <circle class="note" cx="111" cy="106" r="10"/>
+    <circle class="note root" cx="135" cy="106" r="10"/>
+    <g class="letter"><text x="15" y="110">A</text><text x="39" y="182">E</text><text x="63" y="182">A</text><text x="87" y="110">C</text><text x="111" y="110">E</text><text x="135" y="110">A</text></g>
+  </g>
+</svg>

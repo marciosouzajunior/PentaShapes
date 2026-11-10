@@ -1,8 +1,8 @@
 import { lessons } from './lesson-content';
-import { songLessons } from './song-content';
+import { tracks } from './tracks';
 
 // Routing and resume share one catalog; each content type keeps its own player.
 export const playableLessons = [
   ...lessons.map(lesson => ({ kind: 'phrase' as const, lesson, ref: lesson.ref, href: lesson.href })),
-  ...songLessons.map(lesson => ({ kind: 'song' as const, lesson, ref: lesson.ref, href: lesson.href })),
+  ...tracks.flatMap(track=>track.lessons.map(lesson => ({ kind: 'song' as const, track, lesson, ref: lesson.ref, href: lesson.href }))),
 ];

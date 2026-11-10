@@ -38,7 +38,7 @@ test('every pilot lesson has a complete book with playable, valid examples',()=>
       assert.ok(sound.every(midi=>Number.isInteger(midi)&&midi>=40&&midi<=79));
       if(visual.kind==='interval')assert.ok(visual.distances.includes(visual.initial));
       if(visual.kind==='positions'||visual.kind==='scale'||visual.kind==='fretboard-intervals'){
-        const positions=visual.kind==='fretboard-intervals'?[visual.root,...visual.targets]:visual.positions;
+        const positions=visual.kind==='fretboard-intervals'?[visual.root,...visual.targets]:[...visual.positions,...visual.additionalPositions??[]];
         for(const position of positions){
           assert.equal(midiPitch(position),position.midi);
           assert.ok(position.fret>=visual.startFret&&position.fret<=visual.endFret);
@@ -48,20 +48,19 @@ test('every pilot lesson has a complete book with playable, valid examples',()=>
     }
   }
   const book=studyBooks.find(book=>book.lessonId==='s03');
-  assert.deepEqual(soundOfVisual(book.pages[1].visual),[64,64]);
-  assert.deepEqual(soundOfVisual(book.pages[2].visual),[67,79]);
+  assert.deepEqual(soundOfVisual(book.pages[0].visual),[61,64,71,64,67,79]);
   const chord=studyBooks.find(book=>book.lessonId==='s05').pages[0].visual;
-  assert.deepEqual(soundOfVisual(chord),[52,56,62,67]);
+  assert.deepEqual(soundOfVisual(chord),[52,56,62,67,64,66]);
   assert.equal(chord.kind,'positions');
   assert.deepEqual(chord.positions,accompanimentChord('e').notes.filter(note=>note.beat===0).map(({stringId,fret,midi})=>({stringId,fret,midi})));
 });
 
-test('the riff interval examples keep one E reference and correctly placed minor third, fifth and minor seventh',()=>{
- const visual=studyBooks.find(book=>book.lessonId==='s02').pages[2].visual;
- assert.equal(visual.kind,'fretboard-intervals');
- assert.deepEqual(visual.root,{stringId:'a',fret:7,midi:52});
- assert.deepEqual(visual.targets.map(target=>midiPitch(target)-midiPitch(visual.root)),[3,7,10]);
- assert.deepEqual(soundOfVisual(visual),[52,55,59,62]);
+test('the riff shape keeps playable minor third, fifth and minor seventh relative to E',()=>{
+ const visual=studyBooks.find(book=>book.lessonId==='s02').pages[0].visual;
+ const root=visual.positions.find(position=>position.midi===52);
+ assert.deepEqual(root,{stringId:'a',fret:7,midi:52});
+ const targets=[55,59,62].map(midi=>visual.positions.find(position=>position.midi===midi));
+ assert.deepEqual(targets.map(target=>midiPitch(target)-midiPitch(root)),[3,7,10]);
 });
 
 test('the E minor pentatonic fretboard contains the complete collection in the riff region',()=>{
@@ -71,29 +70,36 @@ test('the E minor pentatonic fretboard contains the complete collection in the r
   assert.deepEqual([...new Set(visual.positions.map(note=>note.midi%12))].sort((a,b)=>a-b),[2,4,7,9,11]);
   const open={e_low:40,a:45,d:50,g:55,b:59,e_high:64};
   const expected=[];
-  for(const [stringId,midi] of Object.entries(open))for(let fret=5;fret<=9;fret++){
+  for(const [stringId,midi] of Object.entries(open))for(let fret=7;fret<=10;fret++){
     if([2,4,7,9,11].includes((midi+fret)%12))expected.push(`${stringId}:${fret}`);
   }
   assert.deepEqual(visual.positions.map(note=>`${note.stringId}:${note.fret}`).sort(),expected.sort());
+  assert.equal(visual.positions.length,12);
+  const riff=studyBlocks.find(block=>block.id==='riff-a');
+  assert.ok(riff.notes.every(note=>visual.positions.some(position=>position.stringId===note.stringId&&position.fret===note.fret)));
 });
 
-test('motif comparisons use the musical positions and ascend from C or C sharp to the same E',()=>{
+test('the combined motif diagram preserves actual positions, the same E and octave-separated Gs',()=>{
  const visual=studyBooks.find(book=>book.lessonId==='s03').pages[0].visual;
- assert.equal(visual.kind,'fretboard-intervals');
- assert.deepEqual(visual.root,{stringId:'g',fret:9,midi:64});
- assert.deepEqual(visual.targets.map(target=>midiPitch(visual.root)-midiPitch(target)),[4,3]);
- assert.deepEqual(visual.targets.map(target=>[target.stringId,target.fret]),[['d',10],['d',11]]);
- assert.equal(visual.towardRoot,true);
- const motif=studyBlocks.find(block=>block.id==='solo-a');
- assert.ok(motif.notes.some(note=>note.stringId===visual.root.stringId&&note.fret===visual.root.fret));
- assert.ok(motif.notes.some(note=>note.stringId===visual.targets[1].stringId&&note.fret===visual.targets[1].fret));
- assert.equal(visual.context,'comparison');
+ assert.equal(visual.kind,'positions');
+ assert.equal(visual.rootMidi,64);
+ assert.deepEqual(visual.positions.filter(note=>note.midi===64).map(note=>[note.stringId,note.fret]),[['g',9],['d',14]]);
+ assert.equal(visual.positions[1].midi-visual.positions[0].midi,3);
+ assert.equal(visual.positions[5].midi-visual.positions[4].midi,12);
+ const motifs=studyBlocks.filter(block=>['solo-a','solo-b'].includes(block.id)).flatMap(block=>block.notes);
+ assert.ok(visual.positions.every(position=>motifs.some(note=>note.stringId===position.stringId&&note.fret===position.fret&&note.midi===position.midi)));
+ assert.equal(visual.annotations.length,2);
+ for(const mark of visual.annotations){
+  const note=motifs.find(note=>note.stringId===mark.stringId&&note.fret===mark.fret&&note.technique?.kind==='bend');
+  assert.equal(note.technique.semitones,.5);
+  assert.equal(mark.label,'↗¼');
+ }
 });
 
 test('the ninth example shows the second above the octave and its raised neighbor on one string',()=>{
- const visual=studyBooks.find(book=>book.lessonId==='s05').pages[1].visual;
+ const visual=studyBooks.find(book=>book.lessonId==='s05').pages[0].visual;
  assert.equal(visual.kind,'positions');
- assert.deepEqual(soundOfVisual(visual),[52,64,66,67]);
- assert.deepEqual(visual.positions.slice(1).map(note=>[note.stringId,note.fret]),[['b',5],['b',7],['b',8]]);
- assert.deepEqual(visual.positions.slice(1).map(note=>midiPitch(note)-52),[12,14,15]);
+ const path=[...visual.additionalPositions,visual.positions.find(note=>note.stringId==='b')];
+ assert.deepEqual(path.map(note=>[note.stringId,note.fret]),[['b',5],['b',7],['b',8]]);
+ assert.deepEqual(path.map(note=>midiPitch(note)-52),[12,14,15]);
 });

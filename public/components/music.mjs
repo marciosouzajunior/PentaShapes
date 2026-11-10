@@ -13,6 +13,7 @@ export const SCALES = Object.freeze({
   majorPentatonic: Object.freeze({ name: 'Pentatônica maior', intervals: Object.freeze([0, 2, 4, 7, 9]) }),
   naturalMinor: Object.freeze({ name: 'Menor natural', intervals: Object.freeze([0, 2, 3, 5, 7, 8, 10]) }),
   roots: Object.freeze({ name: 'Tônicas', intervals: Object.freeze([0]) }),
+  chromatic: Object.freeze({ name: 'Cromática', intervals: Object.freeze([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]) }),
 });
 
 const NAMES = ['Dó', 'Dó♯', 'Ré', 'Ré♯', 'Mi', 'Fá', 'Fá♯', 'Sol', 'Sol♯', 'Lá', 'Lá♯', 'Si'];
@@ -48,12 +49,13 @@ export function noteAt(string, fret, tonic = 9) {
  * tuning?: Array<{id: string, number: number, midi: number, name: string}>,
  * positions?: Array<{stringId: string, fret: number}> | null,
  * handedness?: string, labelMode?: string, spelling?: string, viewMode?: string, focusStrings?: string[],
- * showSemitoneLinks?: boolean, roles?: Array<{stringId: string, fret: number, roles: string[]}>}} [config]
+ * showSemitoneLinks?: boolean, roles?: Array<{stringId: string, fret: number, roles: string[]}>,
+ * degreeLabels?: Partial<Record<number, string>>}} [config]
  */
 export function buildFretboard({
   tonic = 9, scaleId = 'minorPentatonic', startFret = 5, endFret = 8,
   tuning = STANDARD_TUNING, positions = null, handedness = 'right', labelMode = 'name',
-  viewMode = 'scale', focusStrings = [], showSemitoneLinks = false, roles = [], spelling = 'sharp',
+  viewMode = 'scale', focusStrings = [], showSemitoneLinks = false, roles = [], spelling = 'sharp', degreeLabels = {},
 } = {}) {
   integer(tonic, 0, 11, 'Tônica');
   integer(startFret, 0, 24, 'Casa inicial');
@@ -115,7 +117,7 @@ export function buildFretboard({
         name: spelling === 'flat' ? FLAT_NAMES[note.pitchClass] : note.name,
         letter: spelling === 'flat' ? FLAT_LETTERS[note.pitchClass] : note.letter,
         isRoot: viewMode === 'scale' && note.isRoot,
-        degree: viewMode === 'scale' ? note.degree : null,
+        degree: viewMode === 'scale' ? degreeLabels[note.interval] ?? note.degree : null,
         emphasized: focusStrings.includes(string.id),
         roles: roleMap.get(positionKey(note)) ?? [],
         visible: Boolean((isIncluded(note) || roleMap.get(positionKey(note))?.includes('context')) && (allowed === null || allowed.has(positionKey(note)) || roleMap.get(positionKey(note))?.includes('context'))),

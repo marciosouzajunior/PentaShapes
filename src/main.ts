@@ -1,5 +1,6 @@
 import '../public/components/fretboard.mjs';
 import './styles.css';
+import { renderBrand } from './brand';
 import { readActiveLessonKey, readCompletion, readNextIncompleteLessonKey } from './progress';
 import { lessonKey } from './content-identity';
 import { lessons } from './lesson-content';
@@ -10,7 +11,7 @@ import phrasesArt from './assets/track-phrases.svg';
 import harmonyArt from './assets/track-harmony.svg';
 import rockArt from './assets/track-purple-haze.webp';
 import { playableLessons } from './content-catalog';
-import { songLessons } from './song-content';
+import { tracks } from './tracks';
 import { renderSongLesson } from './song';
 
 type BoardConfiguration = {
@@ -35,9 +36,9 @@ const songPath=location.pathname.replace(/^\/track\/rock-em-movimento(?=\/|$)/,'
 if(songPath!==location.pathname)history.replaceState(history.state,'',songPath+location.search+location.hash);
 
 const currentLesson = playableLessons.find(item => item.href.replace(/\/$/, '') === location.pathname.replace(/\/$/, ''));
-if (currentLesson?.kind === 'song') renderSongLesson(app, currentLesson.lesson);
+if (currentLesson?.kind === 'song') renderSongLesson(app, currentLesson.lesson,currentLesson.track);
 else if (currentLesson?.kind === 'phrase') renderLesson(app, currentLesson.lesson.id);
-else if (location.pathname.replace(/\/$/, '') === '/track/purple-haze-por-dentro') renderSongLesson(app, songLessons[0]!);
+else if (tracks.some(track=>location.pathname.replace(/\/$/,'')===`/track/${track.manifest.slug}`)) { const track=tracks.find(track=>location.pathname.replace(/\/$/,'')===`/track/${track.manifest.slug}`)!; renderSongLesson(app,track.lessons[0]!,track); }
 else if (location.pathname.startsWith('/lesson')) renderLesson(app);
 else if (location.pathname.startsWith('/track/')) renderTrackPlaceholder(app, location.pathname);
 else renderLanding(app);
@@ -56,7 +57,7 @@ const readResume = () => {
 };
 const resume = readResume();
 const completion = readCompletion(lessonRefs);
-const rockCompletion = readCompletion(songLessons.map(lesson => lesson.ref));
+
 const melody = [
   { position: { stringId: 'g', fret: 7 }, atMs: 0 },
   { position: { stringId: 'b', fret: 5 }, atMs: 680 },
@@ -71,23 +72,23 @@ const noteDurationMs = 1100;
 app.innerHTML = `
   <a class="skip-link" href="#main">Ir para o conteúdo</a>
   <header class="header">
-    <a class="brand" href="/" aria-label="PentaShapes, início"><span class="brand-mark" aria-hidden="true">p</span><span>PentaShapes</span></a>
+    ${renderBrand()}
   </header>
   <main id="main">
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-copy">
-        <p class="eyebrow">PARA IR ALÉM DOS ACORDES</p>
-        <h1 id="hero-title">Sua próxima frase começa aqui.</h1>
-        <p class="lead">Aprenda a improvisar no violão ou na guitarra. Comece com poucas notas, ouça como elas se encaixam e crie suas próprias frases.</p>
-        <a class="start-link" href="${resume.href}"><span class="start-label">${resume.label}</span> <span aria-hidden="true">→</span></a>
+        <h1 id="hero-title">Aprenda a improvisar.<span>Um passo de cada vez.</span></h1>
+        <p class="lead">O PentaShapes divide o aprendizado em pequenas partes, fáceis de explorar. Combine teoria e prática na medida certa para você.</p>
+        <div class="hero-actions">
+          <a class="start-link" href="${resume.href}"><span class="start-label">${resume.label}</span> <span aria-hidden="true">→</span></a>
+        </div>
       </div>
       <div class="board-panel hero-board">
-        <h2 class="demo-heading">Uma ideia em <span>Ré menor</span></h2>
         <penta-fretboard id="preview-board"></penta-fretboard>
       </div>
     </section>
     <section class="tracks" id="tracks" aria-labelledby="tracks-title">
-      <div class="section-heading"><p class="eyebrow">TRILHAS</p><h2 id="tracks-title">Explore novos caminhos</h2></div>
+      <div class="section-heading"><p class="eyebrow">TRILHAS</p><h2 id="tracks-title">Escolha seu caminho</h2><p class="section-intro">Uma trilha de aprendizado para praticar no seu ritmo.</p></div>
       <div class="track-grid">
         <article class="track-card">
           <img class="track-art" src="${foundationsArt}" alt="" loading="lazy">
@@ -101,16 +102,19 @@ app.innerHTML = `
           <img class="track-art" src="${harmonyArt}" alt="" loading="lazy">
           <div class="track-content"><span class="level">AVANÇADO</span><h3>Harmonia jazzística</h3><p>Conecte acordes e dê direção às tensões em progressões de jazz.</p><a class="track-link" href="/track/harmonia/">Ver lições <span aria-hidden="true">→</span></a></div>
         </article>
-        <article class="track-card">
-          <img class="track-art track-art--photo" src="${rockArt}" alt="" loading="lazy">
-          <div class="track-content"><div class="track-meta"><span class="level">JIMI HENDRIX</span><span class="track-progress" id="rock-progress">${rockCompletion.percent}% concluído</span></div><h3>Purple Haze por dentro</h3><p>Explore riffs e partes do solo de Purple Haze e aprenda uma base simples com acordes.</p><a class="track-link" href="/track/purple-haze-por-dentro/">Ver lições <span aria-hidden="true">→</span></a></div>
-        </article>
+        ${tracks.map(track=>{
+          const progress=readCompletion(track.lessons.map(l=>l.ref));
+          const missions=track.lessons.some(lesson=>lesson.mission);
+          const category=track.manifest.publication.status==='draft'?'EXPERIMENTAL':track.manifest.purposeIds.includes('repertoire')?'REPERTÓRIO':'FUNDAMENTOS';
+          return `<article class="track-card"><img class="track-art" src="${track.manifest.musicalWork?rockArt:phrasesArt}" alt="" loading="lazy"><div class="track-content"><div class="track-meta"><span class="level">${category}</span><span class="track-progress" data-track-progress="${track.manifest.id}">${progress.percent}% concluído</span></div><h3>${track.manifest.title}</h3><p>${track.manifest.summary}</p><a class="track-link" href="/track/${track.manifest.slug}/">${missions?'Ver missões':'Ver lições'} <span aria-hidden="true">→</span></a></div></article>`;
+        }).join('')}
+
       </div>
     </section>
   </main>
   <footer class="footer">
     <strong>PentaShapes</strong>
-    <p>O PentaShapes foi criado para quem quer ir além dos acordes. Aprenda a improvisar ouvindo, tocando e criando suas próprias frases.</p>
+    <p>Uma nova forma de aprender e improvisar na guitarra ou no violão. Pequenas práticas, caminhos para explorar e teoria na medida certa para você.</p>
     <a href="https://github.com/marciosouzajunior/pentashapes" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
   </footer>
 `;
@@ -124,9 +128,10 @@ const refreshCompletion = (): void => {
     startLink.href = resume.href;
     startLabel.textContent = resume.label;
   }
-  const rockChip = app.querySelector<HTMLElement>('#rock-progress');
-  const rockProgress = readCompletion(songLessons.map(lesson => lesson.ref));
-  if (rockChip) { rockChip.textContent = `${rockProgress.percent}% concluído`; rockChip.setAttribute('aria-label', `${rockProgress.completed} de ${rockProgress.total} lições concluídas`); }
+  for(const track of tracks){
+    const chip=app.querySelector<HTMLElement>(`[data-track-progress="${track.manifest.id}"]`),progress=readCompletion(track.lessons.map(l=>l.ref));
+    if(chip){chip.textContent=`${progress.percent}% concluído`;chip.setAttribute('aria-label',`${progress.completed} de ${progress.total} lições concluídas`);}
+  }
   const chip = app.querySelector<HTMLElement>('#foundations-progress');
   if (!chip) return;
   const progress = readCompletion(lessonRefs);

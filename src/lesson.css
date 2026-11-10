@@ -165,7 +165,7 @@
   .lesson-header .lesson-picker select { font-size: 12px; }
 }
 @media (max-width: 390px) {
-  .lesson-header .brand span:last-child { display: none; }
+  .lesson-header .brand-name { display: none; }
 }
 
 

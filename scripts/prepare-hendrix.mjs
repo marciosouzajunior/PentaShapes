@@ -17,10 +17,12 @@ const definitions = [
   ['intro-b', 'A resposta da abertura', 4, 8, 5, 8, 'intro'],
   ['riff-a', 'Subir e repousar', 8, 12, 5, 9, 'riff'],
   ['riff-b', 'Voltar ao Mi', 12, 16, 0, 7, 'riff'],
+  ['riff-variation', 'Sol, Lá e a chegada do bend', 24, 28, 5, 8, 'riff'],
   ['solo-a', 'Um motivo em outra região', 128, 132, 9, 12, 'soloEntry'],
   ['solo-b', 'Subir uma oitava', 132, 136, 12, 15, 'soloEntry'],
   ['solo-c', 'Sustentar e descer', 148, 150, 11, 14, 'soloDescent'],
   ['solo-d', 'Continuar a descida', 150, 152, 11, 14, 'soloDescent'],
+  ['solo-explore', 'Uma frase para transformar', 146.5, 149.5, 12, 16, 'soloDescent'],
 ];
 const intro = { 46:['e_low',6], 58:['d',8] };
 const sourceEdits = {
@@ -44,6 +46,8 @@ const reviewNotes = {
   'intro-b': 'Opening corrected against the tablature: only alternating Bb octaves. The simultaneous source MIDI Eb4 at ticks 3360 is omitted; all Bb attacks and durations are retained.',
   'riff-a': 'Reference phrase B-D-G-A, with slide into B and a quarter-tone bend on G. Note values follow the reference score.',
   'riff-b': 'Reference response G-D-E-E: open D and low E, then slide D to E on the A string. The slide is one continuous event, not an extra D attack.',
+  'riff-variation': 'Intro variation G-A-A(bend)-G. Attacks and durations follow MIDI beats 24–28. A whole-tone bend toward B is a study approximation, supported by the MIDI pitch-bend gesture; the ASCII tab does not specify its exact amplitude.',
+  'solo-explore': 'E-G-A-G-E-G immediately before the former descent. Notes, attacks and durations are retained from MIDI beats 146.5–149.5; positions agree with the reference tab. Extra map notes are not playback events.',
   'solo-a': 'Reference approach C#-E-B repeated, with a slide into C# and a quarter-tone bend on B as notated in the reference score.',
   'solo-b': 'Reference higher approach E-G-G repeated, with a quarter-tone bend and release on high G. The isolated final high E from the MIDI belongs outside this selected phrase and is omitted.',
   'solo-c': 'Reference descent restores F#-G-F# after the preceding sustained G. Timing is adapted for a four-beat study excerpt; the connecting slides are synthesized.',
@@ -55,6 +59,11 @@ const note=(stringId,fret,beat,duration,expression={})=>({stringId,fret,midi:tun
 const slide=(from,to,duration=.125)=>({technique:{kind:'slide'},pitchCurve:[{beat:0,midi:from},{beat:duration,midi:to}]});
 const bend=(midi,duration,release=false)=>({technique:{kind:'bend',semitones:.5},pitchCurve:[{beat:0,midi},{beat:.2,midi:midi+.5},...(release?[{beat:duration-.2,midi:midi+.5},{beat:duration,midi}]:[])]});
 const curatedNotes={
+  'riff-variation':[
+    note('d',5,0,.5),note('d',7,.5,.5),
+    note('d',7,1,272/480,{technique:{kind:'bend',semitones:2},pitchCurve:[{beat:0,midi:57},{beat:.25,midi:59}]}),
+    note('d',5,1.75,2.25),
+  ],
   'riff-a':[
     note('d',9,0,.5,slide(57,59)),note('g',7,.5,.5),note('b',8,1,.5,bend(67,.5)),note('d',7,1.5,2.5),
   ],
@@ -73,6 +82,8 @@ const curatedNotes={
   'solo-d':[note('g',11,0,.5,slide(67,66)),note('d',14,.5,.5),note('d',12,1,1)],
 };
 for(const id of Object.keys(curatedNotes))sourceEdits[id]=[{action:'replace-block',reviewedAt:'2026-10-14',reason:reviewNotes[id],sourceUrls:[fingeringSources[id.startsWith('riff')?'riff':id==='solo-a'||id==='solo-b'?'soloEntry':'soloDescent'],...(id==='solo-c'||id==='solo-d'?[]:[scoreSource])],timingBasis:id==='solo-c'||id==='solo-d'?'study-adaptation':'reference-score'}];
+sourceEdits['riff-variation']=[{action:'replace-block',reviewedAt:'2026-10-15',reason:reviewNotes['riff-variation'],sourceUrls:[fingeringSources.riff,fingeringSources.soloEntry],timingBasis:'midi-attacks-and-durations-with-study-bend'}];
+fingerings['solo-explore']={64:['d',14],67:['g',12],69:['g',14]};
 const blocks = definitions.map(([id,title,start,end,startFret,endFret,sourceId]) => ({
   id,title,startBeat:start,endBeat:end,startFret,endFret,
   ...(sourceEdits[id]?{sourceEdits:sourceEdits[id]}:{}),
@@ -105,7 +116,7 @@ writeFileSync('src/data/purple-haze.json',JSON.stringify({
   fingeringSources,
   fingeringReviewedAt:'2026-10-09',
   openingReviewedAt:'2026-10-14',
-  phrasesReviewedAt:'2026-10-14',scoreSource,
-  transcriptionScope:'Reference-curated study excerpts. Opening retains corrected MIDI timing; riff and approach use reference score note values. Descent timing and expression curves are study adaptations. Source edits are documented per block; this is not an exact recording transcription.',
+  phrasesReviewedAt:'2026-10-15',scoreSource,
+  transcriptionScope:'Reference-curated study excerpts. Opening retains corrected MIDI timing; riff and approach use reference score note values. Intro variation retains MIDI attacks/durations with a study bend. Exploration retains MIDI events, with extra map notes stored separately from playback. Historical descent timing and expression curves are study adaptations. Source edits are documented per block; this is not an exact recording transcription.',
 },null,2)+'\n');
 console.log('Prepared '+blocks.length+' reference-reviewed MIDI study blocks from Purple Haze.');

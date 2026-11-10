@@ -1,22 +1,34 @@
 export type StudyPosition = { stringId:string; fret:number; midi:number };
+export type StudyBend = {stringId:string;fret:number;targetMidi:number};
 export type StudyVisual =
+  | { kind:'table'; columns:string[]; rows:string[][]; caption:string }
+  | { kind:'image'; src:string; alt:string; caption:string }
   | { kind:'interval'; root:number; distances:number[]; initial:number; spelling?:'sharp'|'flat'; showName?:boolean; caption?:string }
   | { kind:'degrees' }
   | { kind:'collection'; notes:number[]; degrees:string[]; caption:string }
   | { kind:'path'; notes:number[]; caption:string; spelling?:'sharp'|'flat'; compact?:boolean;showCaption?:boolean }
   | { kind:'alternation'; notes:[number,number]; caption:string; spelling?:'sharp'|'flat';intervalLabel?:string;showCaption?:boolean }
-  | { kind:'positions'; positions:StudyPosition[]; startFret:number; endFret:number; spelling?:'sharp'|'flat'; caption:string;rootMidi?:number;showDirection?:boolean;context?:'chord'|'comparison' }
+  | { kind:'positions'; positions:StudyPosition[]; startFret:number; endFret:number; spelling?:'sharp'|'flat'; caption:string;rootMidi?:number;showDirection?:boolean;context?:'chord'|'comparison';bend?:StudyBend;bends?:StudyBend[];annotations?:{stringId:string;fret:number;label:string}[];additionalPositions?:StudyPosition[] }
   | { kind:'fretboard-intervals'; root:StudyPosition;targets:StudyPosition[];startFret:number;endFret:number;context?:'comparison';towardRoot?:boolean }
-  | { kind:'scale'; positions:StudyPosition[]; startFret:number; endFret:number; root:number; caption:string }
+  | { kind:'scale'; positions:StudyPosition[]; startFret:number; endFret:number; root:number; caption:string; phrasePositions?:StudyPosition[];additionalPositions?:StudyPosition[];chordPositions?:StudyPosition[];chordTones?:number[];degreeAnnotations?:boolean }
   | { kind:'chord'; notes:number[]; roles:string[]; caption:string };
 export type StudyPage = {
   title:string; paragraphs:string[]; visual:StudyVisual;
+  hideTitle?:boolean;
+  /** Insert the visual after this many paragraphs; otherwise it follows the prose. */
+  visualAfterParagraph?:number;
+  additionalVisuals?:{afterParagraph:number;visual:StudyVisual}[];
+  insight?:{afterParagraph:number;title:string;text:string};
+  highlightPractice?:boolean;
   practice:string; question:string; answer:string;
 };
 export type StudyBook = { lessonId:string; title:string; introduction:string; pages:StudyPage[] };
 export type StudyGuide = { id?:string;title:string; lessons:StudyBook[] };
 const names=['Dó','Dó♯','Ré','Ré♯','Mi','Fá','Fá♯','Sol','Sol♯','Lá','Lá♯','Si'];
 const flats=['Dó','Ré♭','Ré','Mi♭','Mi','Fá','Sol♭','Sol','Lá♭','Lá','Si♭','Si'];
+export function studyDegree(midi:number,root:number):string{
+  return ['1','♭2','2','♭3','3','4','♭5','5','♭6','6','♭7','7'][((midi-root)%12+12)%12]!;
+}
 export function studyNote(midi:number,spelling:'sharp'|'flat'='sharp'):string{
   return (spelling==='flat'?flats:names)[((midi%12)+12)%12]!;
 }
@@ -30,9 +42,10 @@ export function referenceRelation(reference:'e'|'a'){
     : {root:45,target:47,degree:'2',name:'segunda',distance:2};
 }
 export function soundOfVisual(visual:StudyVisual):number[]{
+  if(visual.kind==='image'||visual.kind==='table')return [];
   if(visual.kind==='interval')return [visual.root,visual.root+visual.initial];
   if(visual.kind==='degrees')return [40,47];
-  if(visual.kind==='positions'||visual.kind==='scale')return visual.positions.map(position=>position.midi);
+  if(visual.kind==='scale'||visual.kind==='positions')return [...visual.positions,...visual.additionalPositions??[]].map(position=>position.midi);
   if(visual.kind==='fretboard-intervals')return [visual.root.midi,...visual.targets.map(position=>position.midi)];
   return visual.notes;
 }

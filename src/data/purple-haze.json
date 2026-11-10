@@ -276,6 +276,80 @@
       ]
     },
     {
+      "id": "riff-variation",
+      "title": "Sol, Lá e a chegada do bend",
+      "startBeat": 24,
+      "endBeat": 28,
+      "startFret": 5,
+      "endFret": 8,
+      "sourceEdits": [
+        {
+          "action": "replace-block",
+          "reviewedAt": "2026-10-15",
+          "reason": "Intro variation G-A-A(bend)-G. Attacks and durations follow MIDI beats 24–28. A whole-tone bend toward B is a study approximation, supported by the MIDI pitch-bend gesture; the ASCII tab does not specify its exact amplitude.",
+          "sourceUrls": [
+            "https://www.guitarlessonworld.com/tablature/purple.htm",
+            "https://www.guitarclub.io/blog/purple-haze-jimi-hendrix-guitar-lesson-chords-solo"
+          ],
+          "timingBasis": "midi-attacks-and-durations-with-study-bend"
+        }
+      ],
+      "fingeringReview": {
+        "status": "reference-curated-study-arrangement",
+        "sourceId": "riff",
+        "sourceUrl": "https://www.guitarlessonworld.com/tablature/purple.htm",
+        "notes": "Intro variation G-A-A(bend)-G. Attacks and durations follow MIDI beats 24–28. A whole-tone bend toward B is a study approximation, supported by the MIDI pitch-bend gesture; the ASCII tab does not specify its exact amplitude."
+      },
+      "notes": [
+        {
+          "stringId": "d",
+          "fret": 5,
+          "midi": 55,
+          "beat": 0,
+          "duration": 0.5,
+          "sourceTicks": -1
+        },
+        {
+          "stringId": "d",
+          "fret": 7,
+          "midi": 57,
+          "beat": 0.5,
+          "duration": 0.5,
+          "sourceTicks": -1
+        },
+        {
+          "stringId": "d",
+          "fret": 7,
+          "midi": 57,
+          "beat": 1,
+          "duration": 0.5666666666666667,
+          "sourceTicks": -1,
+          "technique": {
+            "kind": "bend",
+            "semitones": 2
+          },
+          "pitchCurve": [
+            {
+              "beat": 0,
+              "midi": 57
+            },
+            {
+              "beat": 0.25,
+              "midi": 59
+            }
+          ]
+        },
+        {
+          "stringId": "d",
+          "fret": 5,
+          "midi": 55,
+          "beat": 1.75,
+          "duration": 2.25,
+          "sourceTicks": -1
+        }
+      ]
+    },
+    {
       "id": "solo-a",
       "title": "Um motivo em outra região",
       "startBeat": 128,
@@ -678,6 +752,70 @@
           "sourceTicks": -1
         }
       ]
+    },
+    {
+      "id": "solo-explore",
+      "title": "Uma frase para transformar",
+      "startBeat": 146.5,
+      "endBeat": 149.5,
+      "startFret": 12,
+      "endFret": 16,
+      "fingeringReview": {
+        "status": "reference-reviewed-midi-adaptation",
+        "sourceId": "soloDescent",
+        "sourceUrl": "https://www.guitarlessonworld.com/tablature/purple.htm",
+        "notes": "E-G-A-G-E-G immediately before the former descent. Notes, attacks and durations are retained from MIDI beats 146.5–149.5; positions agree with the reference tab. Extra map notes are not playback events."
+      },
+      "notes": [
+        {
+          "stringId": "d",
+          "fret": 14,
+          "midi": 64,
+          "beat": 0,
+          "duration": 0.5,
+          "sourceTicks": 70320
+        },
+        {
+          "stringId": "g",
+          "fret": 12,
+          "midi": 67,
+          "beat": 0.5,
+          "duration": 0.25,
+          "sourceTicks": 70560
+        },
+        {
+          "stringId": "g",
+          "fret": 14,
+          "midi": 69,
+          "beat": 0.75,
+          "duration": 0.25,
+          "sourceTicks": 70680
+        },
+        {
+          "stringId": "g",
+          "fret": 12,
+          "midi": 67,
+          "beat": 1,
+          "duration": 0.25,
+          "sourceTicks": 70800
+        },
+        {
+          "stringId": "d",
+          "fret": 14,
+          "midi": 64,
+          "beat": 1.25,
+          "duration": 0.25,
+          "sourceTicks": 70920
+        },
+        {
+          "stringId": "g",
+          "fret": 12,
+          "midi": 67,
+          "beat": 1.5,
+          "duration": 1.5,
+          "sourceTicks": 71040
+        }
+      ]
     }
   ],
   "introFingeringSource": "https://guitarcontrol.com/page/Guitarcontrol-com/guitarcontrol.com/chords-rhythm-guitar/how-to-play-purple-haze-by-jimi-hendrix/index.html",
@@ -689,7 +827,7 @@
   },
   "fingeringReviewedAt": "2026-10-09",
   "openingReviewedAt": "2026-10-14",
-  "phrasesReviewedAt": "2026-10-14",
+  "phrasesReviewedAt": "2026-10-15",
   "scoreSource": "https://musescore.org/sites/musescore.org/files/2019-02/Purple%20Haze.pdf",
-  "transcriptionScope": "Reference-curated study excerpts. Opening retains corrected MIDI timing; riff and approach use reference score note values. Descent timing and expression curves are study adaptations. Source edits are documented per block; this is not an exact recording transcription."
+  "transcriptionScope": "Reference-curated study excerpts. Opening retains corrected MIDI timing; riff and approach use reference score note values. Intro variation retains MIDI attacks/durations with a study bend. Exploration retains MIDI events, with extra map notes stored separately from playback. Historical descent timing and expression curves are study adaptations. Source edits are documented per block; this is not an exact recording transcription."
 }

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 84" fill="none">
+  <g stroke="#644b6c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M54 53c26 3 46-27 92-26" stroke-dasharray="3 5"/>
+    <path d="M146 27l-9-6m9 6-9 5"/>
+    <path d="M31 55V38l12-4m121-7V10l12-4"/>
+    <path d="M17 53l-4-2m8-3-3-4M170 25l5-2m-7-2 3-5" opacity=".65"/>
+  </g>
+  <g fill="#644b6c">
+    <ellipse cx="27" cy="56" rx="5" ry="3.5" transform="rotate(-16 27 56)"/>
+    <ellipse cx="160" cy="28" rx="5" ry="3.5" transform="rotate(-16 160 28)"/>
+  </g>
+  <g fill="#413146" font-family="Georgia, serif" font-size="13" font-style="italic">
+    <text x="13" y="77">grave</text>
+    <text x="149" y="49">agudo</text>
+  </g>
+</svg>
