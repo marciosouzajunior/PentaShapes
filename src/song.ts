@@ -49,6 +49,17 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
     <label class="lesson-complete"><input id="song-complete" type="checkbox" ${prior?.step==='complete'?'checked':''}><span>${mission?'Missão concluída':'Lição concluída'}</span></label>
     <p id="song-storage" class="song-storage" role="status">${saved?'':'Não foi possível salvar o progresso.'}</p>
   </div>`;
+  const celebrationMarkup=mission&&!nextLesson?`
+    <dialog id="mission-celebration" class="mission-celebration" aria-labelledby="mission-celebration-title" aria-describedby="mission-celebration-description">
+      <div class="mission-celebration-body">
+      <button class="mission-celebration-close" type="button" aria-label="Fechar comemoração">×</button>
+      <div class="mission-confetti" aria-hidden="true">${Array.from({length:14},(_,i)=>`<i style="--piece:${i};--drift:${i%2===0?-1:1};--delay:${i%4*60}ms"></i>`).join('')}</div>
+      <svg class="mission-celebration-icon" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="19"/><path d="m15 24 6 6 12-13"/></svg>
+      <h2 id="mission-celebration-title">Parabéns pela prática!</h2>
+      <p id="mission-celebration-description">Você concluiu a última missão. Que tal explorar outra música ou uma nova ideia no instrumento?</p>
+      <a class="mission-celebration-link" href="/#tracks">Escolher outra trilha <span aria-hidden="true">→</span></a>
+      </div>
+    </dialog>`:'';
   app.innerHTML=`
     <a class="skip-link" href="#song-main">Ir para a prática</a>
     <header class="header">${renderBrand()}</header>
@@ -86,6 +97,7 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
               ${completionMarkup}
               <a class="mission-next" href="${nextLesson?.href??'/#tracks'}"${nextLesson?` rel="next" aria-label="Próxima missão. ${escape(nextLesson.title)}"`:''}>${nextLesson?'Próxima missão':'Todas as trilhas'}</a>
             </div>
+            ${celebrationMarkup}
           </section>
         </div>`:
         `<nav class="song-steps" aria-label="Lições de ${escape(track.manifest.title)}"><ol>${links}</ol></nav>`}
@@ -484,7 +496,21 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
   }
 
   get('song-boards').addEventListener('fret-activate',event=>void auditionNote((event as CustomEvent<{midi:number}>).detail.midi));
-  complete.addEventListener('change',savePracticeProgress);
+  const celebration=app.querySelector<HTMLDialogElement>('#mission-celebration');
+  celebration?.addEventListener('click',event=>{
+    if(event.target===celebration)celebration.close();
+  });
+  celebration?.querySelector('button')?.addEventListener('click',()=>celebration.close());
+  celebration?.addEventListener('close',()=>celebration.classList.remove('is-celebrating'));
+  complete.addEventListener('change',()=>{
+    savePracticeProgress();
+    if(!celebration)return;
+    if(complete.checked){
+      pause();
+      celebration.classList.add('is-celebrating');
+      celebration.showModal();
+    }else celebration.close();
+  });
   document.addEventListener('visibilitychange',()=>{if(document.hidden&&(running||starting)){pause();}});
   const readMore=app.querySelector<HTMLButtonElement>('#song-read-more');
   const disposeReader=readMore&&studyBook?mountStudyReader(readMore,studyGuide,lesson.id,()=>{

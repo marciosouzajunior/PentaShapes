@@ -1,57 +1,36 @@
-# 🎸 PentaShapes
-[https://pentashapes.web.app](https://pentashapes.web.app)  
+# PentaShapes
 
-📚 **Diagnóstico e planejamento do redesign (PT-BR):** [documentação do projeto e proposta de MVP](docs/README.md).
+Aplicativo web para praticar improvisação na guitarra e no violão. Reúne exemplos sonoros, diagramas do braço e trilhas guiadas para relacionar acordes, escalas e frases musicais.
 
-🧪 **Nova experiência em construção:** `npm ci` e `npm run dev` abrem a landing, a prévia interativa do braço e a primeira prática em `/lesson/`. A entrada alterna entre “Começar agora” e “Continuar lição” conforme o progresso local. O [laboratório do braço](docs/06-braco-reutilizavel.md) continua disponível com `node scripts/serve.mjs` em `/lab/`; o app anterior foi arquivado em [`legacy/`](legacy/). O Firebase ainda publica o legado, até a primeira trilha estar pronta.
+O projeto está em desenvolvimento. A proposta é permitir que a comunidade contribua com o aplicativo e crie novas trilhas usando a mesma estrutura de conteúdo.
 
-**PentaShapes** is an interactive web tool that helps guitarists visualize and understand scales across the fretboard.
+## Executar localmente
 
-You choose the root note, scale type (like pentatonic), and which shapes to display — and the app shows the intervals on the neck, making it easier to connect patterns and create solos.
+Com Node.js e npm instalados:
 
----
+```sh
+npm ci
+npm run dev
+```
 
-## 💭 Why this project?
+Abra o endereço exibido no terminal. A trilha de referência está em `/track/purple-haze/`.
 
-Many guitar players know scale shapes — but struggle to use them musically. **PentaShapes** was created to bridge that gap, by showing intervals clearly and helping players think beyond shapes.
+```sh
+npm run check    # Verificação de tipos e testes
+npm run build    # Verificação e build de produção
+npm run preview  # Prévia do build local
+```
 
----
+A aplicação usa TypeScript e Vite. O build inclui o código anterior em `dist/legacy/`, acessível por `/legacy/`. Pushes na `main` publicam `dist/` no [Firebase Hosting](https://pentashapes.web.app).
 
-## 🤝 Want to contribute?
+## Contribuir
 
-- If you're a dev who loves music: **let’s build it together!**
-- If you're a guitarist: open issues with feedback, ideas or requests.
-- Contributions in UX or new scale systems are more than welcome!
+Sugestões, relatos de uso, correções e propostas de trilhas são bem-vindos por issues e pull requests.
 
----
+Antes de criar conteúdo, consulte a [documentação do projeto](docs/README.md), o [modelo de missões](docs/missoes.md) e o [tom de voz](docs/tom-de-voz.md). Informe a autoria, as fontes e as permissões dos materiais enviados.
 
+## Licença
 
-🎸 **Purple Haze por dentro:** abra `/track/purple-haze-por-dentro/` para estudar Purple Haze no braço estático, com notas, graus e cartões fixos com destaque do trecho ativo. Seis lições apresentam a abertura, o riff e sua variação, a preparação do solo, uma exploração guiada e os acordes da base do verso. O piloto foi aprovado pelo autor em 14 de outubro de 2026 e ampliado após a prática. [Formato de leitura](docs/15-leitura-de-estudo.md) e [detalhes do piloto](docs/12-piloto-rock-em-movimento.md).
+O código autoral, incluindo o legado, usa [AGPL-3.0-only](LICENSE). Uso comercial é permitido; versões derivadas devem cumprir as obrigações de compartilhamento de código previstas na licença, inclusive quando oferecidas pela rede.
 
-Ao criar ou revisar textos da interface, siga o [padrão de tom de voz e linguagem](docs/13-tom-de-voz-e-linguagem.md): orientação breve, conceitos explicados com clareza e aprofundamento opcional.
-
-## ⚙️ Desenvolvimento
-
-- Nova interface: Vite, TypeScript, HTML e CSS.
-- Braço e teoria musical compartilhados: módulos JavaScript em `public/components/`.
-- Legado: HTML, CSS, JavaScript e jQuery em `legacy/`.
-- Verificação: `npm run check`; build local da nova interface: `npm run build`.
-
----
-
-## ⭐ Support the Project
-
-If you like the idea and want to support it:
-
-- Give it a ⭐ on GitHub!
-- Share it with other guitarists
-
----
-
-## License
-
-This project is licensed under the [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/).  
-Feel free to use, modify, and share the code, even commercially, as long as you give credit to [Márcio Souza Junior](https://github.com/marciosouzajunior).
-
-
----
+Documentação e materiais de terceiros têm termos próprios, descritos em [créditos e escopo das licenças](THIRD_PARTY_NOTICES.md).

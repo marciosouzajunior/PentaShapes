@@ -2,7 +2,9 @@ import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import midiPackage from '@tonejs/midi';
 const { Midi } = midiPackage;
 
-const sourceFile = 'midi/Jimi_Hendrix_-_Purple_Haze.mid';
+// Source MIDI is a private authoring input, never a runtime dependency.
+const sourceFile = process.argv[2];
+if (!sourceFile) throw new Error('Usage: npm run prepare:hendrix -- <path-to-private-source.mid>');
 const midi = new Midi(readFileSync(sourceFile));
 const fingeringSources = {
   intro: 'https://guitarcontrol.com/page/Guitarcontrol-com/guitarcontrol.com/chords-rhythm-guitar/how-to-play-purple-haze-by-jimi-hendrix/index.html',
@@ -110,7 +112,7 @@ for(const block of blocks)for(const event of block.notes){
 }
 mkdirSync('src/data',{recursive:true});
 writeFileSync('src/data/purple-haze.json',JSON.stringify({
-  sourceFile,sourceUrl:'https://www.midiworld.com/files/1056/',trackIndex:1,ppq:midi.header.ppq,
+  sourceFile:'Jimi_Hendrix_-_Purple_Haze.mid',sourceUrl:'https://www.midiworld.com/files/1056/',trackIndex:1,ppq:midi.header.ppq,
   bpm:midi.header.tempos[0].bpm,title:'Purple Haze',blocks,
   introFingeringSource:fingeringSources.intro,
   fingeringSources,

@@ -10,12 +10,12 @@ import chordsSketch from './assets/mission-chords-sketch.svg';
 import soloSketch from './assets/mission-solo-sketch.svg';
 import answerSketch from './assets/mission-answer-sketch.svg';
 
-export const purpleTrack:TrackContent={
+const purpleSource:TrackContent={
   manifest:{schemaVersion:1,id:'hendrix-purple-haze',slug:'purple-haze-por-dentro',title:'Purple Haze por dentro',summary:'Aprenda riffs e motivos de Purple Haze, acompanhe a base com acordes e explore caminhos para criar seu próprio solo.',ownerId:'pentashapes',author:{id:'pentashapes',displayName:'PentaShapes'},origin:'official',purposeIds:['repertoire'],language:'pt-BR',instrumentIds:['guitar'],styleIds:['rock'],topicIds:['phrasing'],techniqueIds:['bend','slide'],prerequisites:[],musicalWork:{title:'Purple Haze',artistName:'Jimi Hendrix'},publication:{status:'published',visibility:'public',revision:1}},
   bpm:80,lessons:songLessons,blocks:studyBlocks,guide:studyGuide,sources:[pilotSong.sourceFile],
 };
 const missionTrackId='hendrix-purple-haze-missions';
-const missionSlug='purple-haze-missoes';
+const missionSlug='purple-haze';
 const missionCopy:Record<string,SongMission&{title:string}>={
   s01:{
     title:'Uma oitava distante',
@@ -99,13 +99,13 @@ const missionLessons=songLessons.map(lesson=>{
     mission,
   };
 });
-export const purpleMissionTrack:TrackContent={
-  ...purpleTrack,
+export const purpleTrack:TrackContent={
+  ...purpleSource,
   referenceInstruments:['clean-guitar','piano'],
-  manifest:{...purpleTrack.manifest,id:missionTrackId,slug:missionSlug,title:'Purple Haze · Missões',summary:'Da abertura em oitavas aos acordes e ao solo. Ouça os trechos, pratique com a base e crie sua própria resposta.',publication:{status:'draft',visibility:'unlisted',revision:1}},
+  manifest:{...purpleSource.manifest,id:missionTrackId,slug:missionSlug,title:'Purple Haze',summary:'Da abertura em oitavas aos acordes e ao solo. Ouça os trechos, pratique com a base e crie sua própria resposta.',publication:{status:'published',visibility:'public',revision:1}},
   lessons:missionLessons,
   blocks:[...studyBlocks.filter(block=>missionLessons.some(lesson=>lesson.blocks.includes(block.id))),...chordBlocks],
-  sources:[...purpleTrack.sources,chordSource.url],
+  sources:[...purpleSource.sources,chordSource.url],
   guide:{
     ...studyGuide,
     id:missionTrackId,
@@ -121,5 +121,5 @@ export const purpleMissionTrack:TrackContent={
     }),
   },
 };
-export const tracks=[minorTrack,purpleTrack,purpleMissionTrack];
+export const tracks=[minorTrack,purpleTrack];
 for(const track of tracks)validateTrack(track);

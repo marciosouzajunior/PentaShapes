@@ -5,23 +5,28 @@ import {buildFretboard} from '../public/components/music.mjs';
 
 const vite=await createServer({configFile:false,server:{middlewareMode:true,hmr:false,ws:false},appType:'custom'});
 after(()=>vite.close());
-const {purpleTrack,purpleMissionTrack}=await vite.ssrLoadModule('/src/tracks.ts');
-const {assembleLessonBlocks}=await vite.ssrLoadModule('/src/song-content.ts');
+const {purpleTrack,tracks}=await vite.ssrLoadModule('/src/tracks.ts');
+const {assembleLessonBlocks,songLessons,studyBlocks}=await vite.ssrLoadModule('/src/song-content.ts');
 const {accompanimentPlan,strumChordNotes}=await vite.ssrLoadModule('/src/song-chords.ts');
 const {beatInMission,missionRound}=await vite.ssrLoadModule('/src/song-missions.ts');
 const {lessonKey}=await vite.ssrLoadModule('/src/content-identity.ts');
 
 test('Purple Haze missions retain the reviewed examples and have independent progress',()=>{
   assert.equal(purpleTrack.lessons.length,6);
-  assert.deepEqual(purpleMissionTrack.lessons.map(lesson=>lesson.id),['s01','s02','s02-variacao','s05','s03','s04']);
-  for(const lesson of purpleMissionTrack.lessons){
-    const original=purpleTrack.lessons.find(item=>item.id===lesson.id);
-    const example=assembleLessonBlocks(lesson,purpleMissionTrack.blocks);
+  assert.deepEqual(tracks.filter(track=>track.manifest.musicalWork?.title==='Purple Haze'),[purpleTrack]);
+  assert.equal(purpleTrack.manifest.title,'Purple Haze');
+  assert.deepEqual(purpleTrack.manifest.publication,{status:'published',visibility:'public',revision:1});
+  assert.deepEqual(purpleTrack.lessons.map(lesson=>lesson.id),['s01','s02','s02-variacao','s05','s03','s04']);
+  for(const lesson of purpleTrack.lessons){
+    const original=songLessons.find(item=>item.id===lesson.id);
+    const example=assembleLessonBlocks(lesson,purpleTrack.blocks);
     assert.notEqual(lessonKey(lesson.ref),lessonKey(original.ref));
+    assert.equal(lesson.ref.trackId,'hendrix-purple-haze-missions');
+    assert.equal(lesson.href,`/track/purple-haze/${lesson.id}/`);
     assert.equal(lesson.ref.lessonId,original.ref.lessonId);
-    const book=purpleMissionTrack.guide.lessons.find(book=>book.lessonId===lesson.id);
+    const book=purpleTrack.guide.lessons.find(book=>book.lessonId===lesson.id);
     assert.ok(lesson.mission.scene.illustration.src&&book.pages[0].hideTitle);
-    assert.deepEqual(example.notes,(original.accompaniment?accompanimentPlan():assembleLessonBlocks(original,purpleTrack.blocks)).notes);
+    assert.deepEqual(example.notes,(original.accompaniment?accompanimentPlan():assembleLessonBlocks(original,studyBlocks)).notes);
     if(lesson.mission.practiceMode==='along')continue;
     const round=missionRound(example.beats);
     const measureCount=Math.ceil(example.beats/4);
@@ -34,8 +39,8 @@ test('Purple Haze missions retain the reviewed examples and have independent pro
 });
 
 test('the chord mission loops its original accompaniment with changes at beats 0, 4 and 6',()=>{
-  const lesson=purpleMissionTrack.lessons.find(lesson=>lesson.id==='s05');
-  const plan=assembleLessonBlocks(lesson,purpleMissionTrack.blocks);
+  const lesson=purpleTrack.lessons.find(lesson=>lesson.id==='s05');
+  const plan=assembleLessonBlocks(lesson,purpleTrack.blocks);
   const cues=plan.entries.flatMap(({block,offset})=>block.cues.map(cue=>({...cue,beat:offset+cue.beat})));
   const round=missionRound(plan.beats,cues);
   assert.equal(round.beats,8);

@@ -1,9 +1,6 @@
 import test, { after } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
-import midiPackage from '@tonejs/midi';
 import { createServer } from 'vite';
-const { Midi } = midiPackage;
 const vite = await createServer({ configFile:false,server:{middlewareMode:true,hmr:false},appType:'custom' });
 after(()=>vite.close());
 const { pilotSong,studyBlocks,songLessons,midiPitch,assembleBlocks,assembleLessonBlocks,blockIndexAt,noteLabel,lessonMapPositions } = await vite.ssrLoadModule('/src/song-content.ts');
@@ -12,12 +9,9 @@ const { playableLessons } = await vite.ssrLoadModule('/src/content-catalog.ts');
 const { lessonKey } = await vite.ssrLoadModule('/src/content-identity.ts');
 const {pitchAt,pitchAutomation}=await vite.ssrLoadModule('/src/song-expression.ts');
 
-const omittedOpeningNote=n=>n.midi===63&&n.ticks===3360;
-
-test('MIDI-preserved blocks retain timing and reference replacements are explicitly identified',()=>{
-  const midi=new Midi(readFileSync(pilotSong.sourceFile));
-  assert.equal(pilotSong.ppq,midi.header.ppq);
-  assert.equal(pilotSong.bpm,midi.header.tempos[0].bpm);
+test('curated blocks retain valid timing and reference replacements are explicitly identified',()=>{
+  assert.equal(pilotSong.ppq,480);
+  assert.ok(pilotSong.bpm>111&&pilotSong.bpm<113);
   for(const block of studyBlocks){
     const curated=pilotSong.blocks.find(item=>item.id===block.id).sourceEdits?.some(edit=>edit.action==='replace-block');
     if(curated){
@@ -33,15 +27,10 @@ test('MIDI-preserved blocks retain timing and reference replacements are explici
       }
       continue;
     }
-    const source=midi.tracks[pilotSong.trackIndex].notes.filter(n=>n.ticks/midi.header.ppq<block.endBeat&&(n.ticks+n.durationTicks)/midi.header.ppq>block.startBeat).filter(n=>block.id!=='intro-b'||!omittedOpeningNote(n));
-    assert.equal(block.notes.length,source.length);
-    for(const [i,n] of source.entries()){
-      const actual=block.notes[i], onset=Math.max(block.startBeat,n.ticks/midi.header.ppq);
-      assert.equal(actual.midi,n.midi);
-      assert.equal(midiPitch(actual),n.midi);
-      assert.equal(actual.sourceTicks,n.ticks);
-      assert.equal(actual.beat,onset-block.startBeat);
-      assert.equal(actual.duration,Math.min(block.endBeat,(n.ticks+n.durationTicks)/midi.header.ppq)-onset);
+    for(const actual of block.notes){
+      assert.equal(midiPitch(actual),actual.midi);
+      assert.equal(actual.beat,Math.max(block.startBeat,actual.sourceTicks/pilotSong.ppq)-block.startBeat);
+      assert.ok(actual.duration>0&&actual.beat+actual.duration<=block.endBeat-block.startBeat);
       assert.ok(actual.fret>=block.startFret&&actual.fret<=block.endFret);
     }
   }
@@ -53,7 +42,6 @@ test('MIDI-preserved blocks retain timing and reference replacements are explici
   const edits=pilotSong.blocks.find(block=>block.id==='intro-b').sourceEdits;
   assert.equal(edits.length,1);
   assert.deepEqual([edits[0].action,edits[0].midi,edits[0].sourceTicks],['omit',63,3360]);
-  assert.ok(midi.tracks[pilotSong.trackIndex].notes.some(omittedOpeningNote),'the original MIDI remains unchanged');
 });
 
 test('assembled timeline advances the preview at boundaries and removes only the gaps between selected blocks',()=>{
@@ -87,7 +75,8 @@ test('pitch labels teach names and degrees relative to E rather than fret number
 test('new content has independent progress and preserves the foundation catalog',()=>{
   assert.deepEqual(songLessons.map(lesson=>lesson.id),['s01','s02','s02-variacao','s05','s03','s04']);
   assert.equal(playableLessons.filter(l=>l.kind==='phrase').length,12);
-  assert.equal(playableLessons.filter(l=>l.kind==='song'&&l.ref.trackId==='hendrix-purple-haze').length,6);
+  assert.equal(playableLessons.filter(l=>l.kind==='song'&&l.ref.trackId==='hendrix-purple-haze-missions').length,6);
+  assert.equal(playableLessons.filter(l=>l.kind==='song'&&l.ref.trackId==='hendrix-purple-haze').length,0);
   assert.equal(new Set(playableLessons.map(l=>l.href)).size,playableLessons.length);
   assert.equal(new Set(playableLessons.map(l=>lessonKey(l.ref))).size,playableLessons.length);
   assert.ok(songLessons.every(l=>l.ref.trackId==='hendrix-purple-haze'&&l.blocks.every(id=>studyBlocks.some(b=>b.id===id))));
@@ -112,7 +101,6 @@ test('reference fingering keeps the riff in its neck region and places E4 by phr
 });
 
 test('single-card lessons preserve reviewed phrases and timing, including the corrected opening',()=>{
-  const midi=new Midi(readFileSync(pilotSong.sourceFile));
   const original=JSON.stringify(studyBlocks);
   for(const [id,start,end] of [['s01',0,8],['s04',146.5,149.5]]){
     const plan=assembleLessonBlocks(songLessons.find(lesson=>lesson.id===id));
@@ -122,15 +110,15 @@ test('single-card lessons preserve reviewed phrases and timing, including the co
       assert.deepEqual(plan.notes.map(note=>[note.beat,note.midi]),[[0,64],[.5,67],[.75,69],[1,67],[1.25,64],[1.5,67]]);
       continue;
     }
-    const source=midi.tracks[pilotSong.trackIndex].notes.filter(n=>n.ticks/midi.header.ppq<end&&(n.ticks+n.durationTicks)/midi.header.ppq>start).filter(n=>!omittedOpeningNote(n));
+    const source=studyBlocks.filter(block=>block.startBeat>=start&&block.endBeat<=end).flatMap(block=>block.notes.map(note=>({...note,beat:note.beat+block.startBeat-start})));
     assert.equal(plan.notes.length,source.length);
     for(const [i,n] of source.entries()){
-      const actual=plan.notes[i],onset=Math.max(start,n.ticks/midi.header.ppq);
+      const actual=plan.notes[i];
       assert.equal(actual.midi,n.midi);
       assert.equal(midiPitch(actual),n.midi);
-      assert.equal(actual.sourceTicks,n.ticks);
-      assert.equal(actual.beat,onset-start);
-      assert.equal(actual.duration,Math.min(end,(n.ticks+n.durationTicks)/midi.header.ppq)-onset);
+      assert.equal(actual.sourceTicks,n.sourceTicks);
+      assert.equal(actual.beat,n.beat);
+      assert.equal(actual.duration,n.duration);
     }
   }
   const opening=assembleLessonBlocks(songLessons.find(lesson=>lesson.id==='s01'));
@@ -176,9 +164,8 @@ test('pitch automation resumes bends and slides at the current pitch and clips a
 test('the intro variation separates the fretted A from its bend destination B',()=>{
   const variation=studyBlocks.find(block=>block.id==='riff-variation');
   assert.deepEqual(variation.notes.map(note=>note.midi),[55,57,57,55]);
-  const midi=new Midi(readFileSync(pilotSong.sourceFile));
-  const source=midi.tracks[pilotSong.trackIndex].notes.filter(note=>note.ticks/midi.header.ppq>=24&&note.ticks/midi.header.ppq<28);
-  assert.deepEqual(variation.notes.map(note=>[note.midi,note.beat,note.duration]),source.map(note=>[note.midi,note.ticks/midi.header.ppq-24,note.durationTicks/midi.header.ppq]));
+  // Reviewed timing retained after removal of the private authoring input.
+  assert.deepEqual(variation.notes.map(note=>[note.midi,note.beat,note.duration]),[[55,0,.5],[57,.5,.5],[57,1,272/480],[55,1.75,2.25]]);
   const bent=variation.notes[2];
   assert.equal(bent.technique.semitones,2);
   assert.equal(pitchAt(bent,.25),59);

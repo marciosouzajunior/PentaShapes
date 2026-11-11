@@ -48,6 +48,10 @@ build/Release
 node_modules/
 dist/
 tmp/
+.publication-backup/
+
+# Local planning, personal notes and historical research
+/.local-docs/
 
 # Optional npm cache directory
 .npm
@@ -66,3 +70,11 @@ tmp/
 
 # dotenv environment variables file
 .env
+.env.*
+!.env.example
+
+# Private authoring inputs (runtime uses curated content)
+midi/
+*.mid
+*.midi
+docs/*[[]DownSub.com[]].txt

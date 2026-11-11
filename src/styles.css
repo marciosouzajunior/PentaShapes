@@ -68,6 +68,35 @@ a { color: inherit; }
 .brand-name { white-space: nowrap; }
 .brand-name-light { font-weight: 400; color: #53627e; }
 
+body:has(:is(.landing-page,.mission-page)){
+  --app-background:#24253d;
+  --app-header:#171a2c;
+  --app-surface:#2c2d46;
+  --app-raised:#36354f;
+  --app-hover:#43405f;
+  --app-border:#5c5975;
+  --app-text:#f4f1fa;
+  --app-muted:#cec9dd;
+  --app-accent:#d4b4fb;
+  --app-accent-hover:#e3ccff;
+  --app-on-accent:#241631;
+  --app-gutter:20px;
+  min-width:0;
+  color:var(--app-text);
+  background:radial-gradient(ellipse at top left,#3b3656,transparent 55rem),var(--app-background);
+}
+.header:has(+ :is(.landing-page,.mission-page)){
+  width:100%;padding-inline:max(var(--app-gutter),calc((100% - 1120px)/2));
+  border:0;background:var(--app-header);
+}
+.header:has(+ :is(.landing-page,.mission-page)) .brand-name-light{color:var(--app-muted)}
+.header:has(+ :is(.landing-page,.mission-page)) .brand-mark{
+  border-radius:7px;background:linear-gradient(145deg,#fff,#e1d4f3);color:var(--app-on-accent);
+}
+@media(max-width:760px){
+  body:has(:is(.landing-page,.mission-page)){--app-gutter:16px}
+}
+
 .hero {
   padding: 72px 0;
   display: grid;

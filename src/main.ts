@@ -1,8 +1,8 @@
 import '../public/components/fretboard.mjs';
 import './styles.css';
+import './landing.css';
 import { renderBrand } from './brand';
-import { readActiveLessonKey, readCompletion, readNextIncompleteLessonKey } from './progress';
-import { lessonKey } from './content-identity';
+import { readCompletion } from './progress';
 import { lessons } from './lesson-content';
 import { renderLesson } from './lesson';
 import { renderTrackPlaceholder } from './track-placeholder';
@@ -11,7 +11,7 @@ import phrasesArt from './assets/track-phrases.svg';
 import harmonyArt from './assets/track-harmony.svg';
 import rockArt from './assets/track-purple-haze.webp';
 import { playableLessons } from './content-catalog';
-import { tracks } from './tracks';
+import { purpleTrack, tracks } from './tracks';
 import { renderSongLesson } from './song';
 
 type BoardConfiguration = {
@@ -32,7 +32,7 @@ type FretboardElement = HTMLElement & {
 const app = document.querySelector<HTMLDivElement>('#app');
 if (!app) throw new Error('Elemento principal ausente.');
 
-const songPath=location.pathname.replace(/^\/track\/rock-em-movimento(?=\/|$)/,'/track/purple-haze-por-dentro');
+const songPath=location.pathname.replace(/^\/track\/(?:rock-em-movimento|purple-haze-por-dentro|purple-haze-missoes)(?=\/|$)/,'/track/purple-haze');
 if(songPath!==location.pathname)history.replaceState(history.state,'',songPath+location.search+location.hash);
 
 const currentLesson = playableLessons.find(item => item.href.replace(/\/$/, '') === location.pathname.replace(/\/$/, ''));
@@ -45,17 +45,6 @@ else renderLanding(app);
 
 function renderLanding(app: HTMLDivElement): void {
 const lessonRefs = lessons.map(lesson => lesson.ref);
-const readResume = () => {
-  const activeKey = readActiveLessonKey();
-  const activeLesson = playableLessons.find(lesson => lessonKey(lesson.ref) === activeKey);
-  const nextKey = readNextIncompleteLessonKey(playableLessons.map(item => item.ref));
-  const nextLesson = playableLessons.find(lesson => lessonKey(lesson.ref) === nextKey);
-  return {
-    href: nextLesson?.href ?? activeLesson?.href ?? '/lesson/',
-    label: nextLesson ? 'Continuar lição' : activeLesson ? 'Revisar lições' : 'Começar agora',
-  };
-};
-const resume = readResume();
 const completion = readCompletion(lessonRefs);
 
 const melody = [
@@ -74,63 +63,56 @@ app.innerHTML = `
   <header class="header">
     ${renderBrand()}
   </header>
-  <main id="main">
+  <main id="main" class="landing-page">
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-copy">
-        <h1 id="hero-title">Aprenda a improvisar.<span>Um passo de cada vez.</span></h1>
-        <p class="lead">O PentaShapes divide o aprendizado em pequenas partes, fáceis de explorar. Combine teoria e prática na medida certa para você.</p>
-        <div class="hero-actions">
-          <a class="start-link" href="${resume.href}"><span class="start-label">${resume.label}</span> <span aria-hidden="true">→</span></a>
-        </div>
+        <h1 id="hero-title">Aprenda a improvisar.<span>Uma frase de cada vez.</span></h1>
+        <p class="lead">Explore frases e músicas na guitarra ou no violão. Ouça os exemplos, encontre as notas no braço e experimente suas próprias ideias.</p>
       </div>
       <div class="board-panel hero-board">
         <penta-fretboard id="preview-board"></penta-fretboard>
       </div>
     </section>
     <section class="tracks" id="tracks" aria-labelledby="tracks-title">
-      <div class="section-heading"><p class="eyebrow">TRILHAS</p><h2 id="tracks-title">Escolha seu caminho</h2><p class="section-intro">Uma trilha de aprendizado para praticar no seu ritmo.</p></div>
+      <div class="section-heading"><h2 id="tracks-title">Escolha uma trilha</h2><p class="section-intro">Explore uma música ou pratique uma ideia para criar suas próprias frases.</p></div>
       <div class="track-grid">
+        ${[purpleTrack,...tracks.filter(track=>track!==purpleTrack)].map(track=>{
+          const progress=readCompletion(track.lessons.map(l=>l.ref));
+          const missions=track.lessons.some(lesson=>lesson.mission);
+          const category=track.manifest.publication.status==='draft'?'EXPERIMENTAL':track.manifest.purposeIds.includes('repertoire')?'REPERTÓRIO':'FUNDAMENTOS';
+          return `<article class="track-card"><img class="track-art${track.manifest.musicalWork?' track-art--photo':''}" src="${track.manifest.musicalWork?rockArt:phrasesArt}" alt="" loading="lazy"><div class="track-content"><div class="track-meta"><span class="level">${category}</span><span class="track-progress" data-track-progress="${track.manifest.id}" aria-label="${progress.completed} de ${progress.total} ${missions?'missões':'lições'} concluídas">${progress.percent}% concluído</span></div><h3>${track.manifest.title}</h3><p>${track.manifest.summary}</p><a class="track-link" href="/track/${track.manifest.slug}/">${missions?'Ver missões':'Ver lições'} <span aria-hidden="true">→</span></a></div></article>`;
+        }).join('')}
         <article class="track-card">
           <img class="track-art" src="${foundationsArt}" alt="" loading="lazy">
           <div class="track-content"><div class="track-meta"><span class="level">INICIANTE</span><span class="track-progress" id="foundations-progress" aria-label="${completion.completed} de ${completion.total} lições concluídas">${completion.percent}% concluído</span></div><h3>Primeiras frases</h3><p>Transforme poucas notas em frases que você consegue ouvir e repetir.</p><a class="track-link" href="/lesson/">Ver lições <span aria-hidden="true">→</span></a></div>
         </article>
         <article class="track-card">
           <img class="track-art" src="${phrasesArt}" alt="" loading="lazy">
-          <div class="track-content"><span class="level">INTERMEDIÁRIO</span><h3>Frases com intenção</h3><p>Crie motivos, use pausas e leve suas ideias para novos contextos.</p><a class="track-link" href="/track/frases/">Ver lições <span aria-hidden="true">→</span></a></div>
+          <div class="track-content"><span class="level">EM PREPARAÇÃO</span><h3>Frases com intenção</h3><p>Crie motivos, use pausas e leve suas ideias para novos contextos.</p><a class="track-link" href="/track/frases/">Conhecer a trilha <span aria-hidden="true">→</span></a></div>
         </article>
         <article class="track-card">
           <img class="track-art" src="${harmonyArt}" alt="" loading="lazy">
-          <div class="track-content"><span class="level">AVANÇADO</span><h3>Harmonia jazzística</h3><p>Conecte acordes e dê direção às tensões em progressões de jazz.</p><a class="track-link" href="/track/harmonia/">Ver lições <span aria-hidden="true">→</span></a></div>
+          <div class="track-content"><span class="level">EM PREPARAÇÃO</span><h3>Harmonia jazzística</h3><p>Conecte acordes e dê direção às tensões em progressões de jazz.</p><a class="track-link" href="/track/harmonia/">Conhecer a trilha <span aria-hidden="true">→</span></a></div>
         </article>
-        ${tracks.map(track=>{
-          const progress=readCompletion(track.lessons.map(l=>l.ref));
-          const missions=track.lessons.some(lesson=>lesson.mission);
-          const category=track.manifest.publication.status==='draft'?'EXPERIMENTAL':track.manifest.purposeIds.includes('repertoire')?'REPERTÓRIO':'FUNDAMENTOS';
-          return `<article class="track-card"><img class="track-art" src="${track.manifest.musicalWork?rockArt:phrasesArt}" alt="" loading="lazy"><div class="track-content"><div class="track-meta"><span class="level">${category}</span><span class="track-progress" data-track-progress="${track.manifest.id}">${progress.percent}% concluído</span></div><h3>${track.manifest.title}</h3><p>${track.manifest.summary}</p><a class="track-link" href="/track/${track.manifest.slug}/">${missions?'Ver missões':'Ver lições'} <span aria-hidden="true">→</span></a></div></article>`;
-        }).join('')}
 
       </div>
     </section>
   </main>
   <footer class="footer">
     <strong>PentaShapes</strong>
-    <p>Uma nova forma de aprender e improvisar na guitarra ou no violão. Pequenas práticas, caminhos para explorar e teoria na medida certa para você.</p>
-    <a href="https://github.com/marciosouzajunior/pentashapes" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+    <p>Um espaço para ouvir, tocar e experimentar.</p>
+    <nav class="footer-links" aria-label="Links do projeto">
+      <a href="https://github.com/marciosouzajunior/pentashapes" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+      <a href="/legacy/">Legacy</a>
+    </nav>
   </footer>
 `;
 
 const board = app.querySelector<FretboardElement>('#preview-board');
 const refreshCompletion = (): void => {
-  const resume = readResume();
-  const startLink = app.querySelector<HTMLAnchorElement>('.start-link');
-  const startLabel = startLink?.querySelector('.start-label');
-  if (startLink && startLabel) {
-    startLink.href = resume.href;
-    startLabel.textContent = resume.label;
-  }
   for(const track of tracks){
     const chip=app.querySelector<HTMLElement>(`[data-track-progress="${track.manifest.id}"]`),progress=readCompletion(track.lessons.map(l=>l.ref));
-    if(chip){chip.textContent=`${progress.percent}% concluído`;chip.setAttribute('aria-label',`${progress.completed} de ${progress.total} lições concluídas`);}
+    if(chip){chip.textContent=`${progress.percent}% concluído`;chip.setAttribute('aria-label',`${progress.completed} de ${progress.total} ${track.lessons.some(lesson=>lesson.mission)?'missões':'lições'} concluídas`);}
   }
   const chip = app.querySelector<HTMLElement>('#foundations-progress');
   if (!chip) return;

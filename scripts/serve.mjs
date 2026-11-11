@@ -6,14 +6,15 @@ import path from 'node:path';
 
 const root = fileURLToPath(new URL('../public/', import.meta.url));
 const legacyRoot = fileURLToPath(new URL('../legacy/', import.meta.url));
+const staticRoot = fileURLToPath(new URL('../src/static/', import.meta.url));
 const port = Number(process.argv[2] || 4173);
-const types = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.mjs': 'text/javascript; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.ico': 'image/x-icon', '.jpg': 'image/jpeg' };
+const types = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.mjs': 'text/javascript; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.ico': 'image/x-icon', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml' };
 const server = createServer(async (req, res) => {
   if (!['GET', 'HEAD'].includes(req.method)) { res.writeHead(405).end(); return; }
   try {
     const pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
     const archived = pathname === '/legacy' || pathname.startsWith('/legacy/');
-    const targetRoot = archived ? legacyRoot : root;
+    const targetRoot = pathname === '/favicon.svg' ? staticRoot : archived ? legacyRoot : root;
     const targetPath = archived ? pathname.replace(/^\/legacy\/?/, '/') : pathname;
     let file = path.resolve(targetRoot, `.${targetPath}`);
     const relative = path.relative(targetRoot, file);
