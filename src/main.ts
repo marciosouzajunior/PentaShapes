@@ -11,7 +11,7 @@ import phrasesArt from './assets/track-phrases.svg';
 import harmonyArt from './assets/track-harmony.svg';
 import rockArt from './assets/track-purple-haze.webp';
 import { playableLessons } from './content-catalog';
-import { purpleTrack, tracks } from './tracks';
+import { purpleTrack, tracks, routeTracks } from './tracks';
 import { renderSongLesson } from './song';
 
 type BoardConfiguration = {
@@ -38,7 +38,7 @@ if(songPath!==location.pathname)history.replaceState(history.state,'',songPath+l
 const currentLesson = playableLessons.find(item => item.href.replace(/\/$/, '') === location.pathname.replace(/\/$/, ''));
 if (currentLesson?.kind === 'song') renderSongLesson(app, currentLesson.lesson,currentLesson.track);
 else if (currentLesson?.kind === 'phrase') renderLesson(app, currentLesson.lesson.id);
-else if (tracks.some(track=>location.pathname.replace(/\/$/,'')===`/track/${track.manifest.slug}`)) { const track=tracks.find(track=>location.pathname.replace(/\/$/,'')===`/track/${track.manifest.slug}`)!; renderSongLesson(app,track.lessons[0]!,track); }
+else if (routeTracks.some(track=>location.pathname.replace(/\/$/,'')===`/track/${track.manifest.slug}`)) { const track=routeTracks.find(track=>location.pathname.replace(/\/$/,'')===`/track/${track.manifest.slug}`)!; renderSongLesson(app,track.lessons[0]!,track); }
 else if (location.pathname.startsWith('/lesson')) renderLesson(app);
 else if (location.pathname.startsWith('/track/')) renderTrackPlaceholder(app, location.pathname);
 else renderLanding(app);

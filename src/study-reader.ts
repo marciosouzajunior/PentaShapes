@@ -35,7 +35,7 @@ function positionsFigure(visual:Extract<StudyVisual,{kind:'positions'|'scale'}>)
   const positions=[...visual.positions,...visual.additionalPositions??[]];
   const notes=positions.map(position=>{
     const x=50+(position.fret-visual.startFret+.5)*cell,y=40+strings.indexOf(position.stringId)*31;
-    const name=(visual.kind==='positions'&&visual.spelling==='flat'?flats:letters)[position.midi%12]!;
+    const name=(visual.spelling==='flat'?flats:letters)[position.midi%12]!;
     const root=visual.kind==='scale'?position.midi%12===visual.root%12:position.midi===visual.rootMidi;
     const phrasePositions=visual.kind==='scale'?visual.phrasePositions:undefined;
     const inPhrase=phrasePositions?.some(note=>note.stringId===position.stringId&&note.fret===position.fret);

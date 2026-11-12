@@ -10,7 +10,7 @@ export type StudyVisual =
   | { kind:'alternation'; notes:[number,number]; caption:string; spelling?:'sharp'|'flat';intervalLabel?:string;showCaption?:boolean }
   | { kind:'positions'; positions:StudyPosition[]; startFret:number; endFret:number; spelling?:'sharp'|'flat'; caption:string;rootMidi?:number;showDirection?:boolean;context?:'chord'|'comparison';bend?:StudyBend;bends?:StudyBend[];annotations?:{stringId:string;fret:number;label:string}[];additionalPositions?:StudyPosition[] }
   | { kind:'fretboard-intervals'; root:StudyPosition;targets:StudyPosition[];startFret:number;endFret:number;context?:'comparison';towardRoot?:boolean }
-  | { kind:'scale'; positions:StudyPosition[]; startFret:number; endFret:number; root:number; caption:string; phrasePositions?:StudyPosition[];additionalPositions?:StudyPosition[];chordPositions?:StudyPosition[];chordTones?:number[];degreeAnnotations?:boolean }
+  | { kind:'scale'; positions:StudyPosition[]; startFret:number; endFret:number; root:number; caption:string; spelling?:'sharp'|'flat'; phrasePositions?:StudyPosition[];additionalPositions?:StudyPosition[];chordPositions?:StudyPosition[];chordTones?:number[];degreeAnnotations?:boolean }
   | { kind:'chord'; notes:number[]; roles:string[]; caption:string };
 export type StudyPage = {
   title:string; paragraphs:string[]; visual:StudyVisual;

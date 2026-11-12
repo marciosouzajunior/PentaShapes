@@ -28,6 +28,10 @@ export function validateTrack(track:TrackContent):void {
     for(const note of [...block.notes,...block.backing??[]]){
       if(!Number.isFinite(note.beat)||!Number.isFinite(note.duration)||note.beat<0||note.duration<=0||note.beat+note.duration>duration||!Number.isInteger(note.midi)||note.midi<0||note.midi>127)fail(`Evento inválido em ${block.id}.`);
     }
+    if(block.backing?.some(note=>note.instrument!==undefined&&!['clean-guitar','piano','finger-bass','drum-kit','electric-piano'].includes(note.instrument)))fail('Timbre de acompanhamento inválido.');
+    if(block.backing?.some(note=>note.velocity!==undefined&&(!Number.isFinite(note.velocity)||note.velocity<0||note.velocity>1)))fail('Dinâmica de acompanhamento inválida.');
+    if(block.backingGain!==undefined&&(!Number.isFinite(block.backingGain)||block.backingGain<0||block.backingGain>1))fail('Volume de acompanhamento inválido.');
+    if(block.responseBeat!==undefined&&(!Number.isFinite(block.responseBeat)||block.responseBeat<0||block.responseBeat>=duration||block.notes.some(note=>note.beat+note.duration>block.responseBeat!)))fail('Janela de resposta inválida.');
     if(block.map&&(!Number.isInteger(block.map.tonic)||block.map.tonic<0||block.map.tonic>11))fail('Tônica inválida.');
     if(block.map){
       const map=block.map,key=(p:{stringId:string;fret:number})=>`${p.stringId}:${p.fret}`;
@@ -39,6 +43,7 @@ export function validateTrack(track:TrackContent):void {
   for(const lesson of track.lessons){
     if([...lesson.blocks,...lesson.referenceBlocks??[]].some(id=>!track.blocks.some(b=>b.id===id)))fail('Trecho ausente.');
     if(lesson.referenceBlocks?.some(id=>lesson.blocks.includes(id)))fail('Referência visual não deve participar da reprodução.');
+    if(lesson.mission?.exampleBeats!==undefined&&(!Number.isFinite(lesson.mission.exampleBeats)||lesson.mission.exampleBeats<=0))fail('Duração do exemplo inválida.');
     if(!track.guide.lessons.some(book=>book.lessonId===lesson.id))fail('Leitura ausente.');
     if(lesson.ref.source==='system'&&lesson.ref.trackId!==track.manifest.id)fail('Progresso aponta para outra trilha.');
     const cards=new Map<string,StudyBlock>();

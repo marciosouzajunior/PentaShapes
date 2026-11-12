@@ -15,6 +15,7 @@ import {readPracticeSettings,savePracticeSettings} from './practice-settings';
 import {preserveBreadcrumbScroll} from './breadcrumb-scroll';
 import {studyDegree} from './study-model';
 import {beatInMission,missionRound} from './song-missions';
+import {createStudyRoom} from './study-room';
 
 type Board = HTMLElement & { configuration: object; highlightedPositions: {stringId:string;fret:number}[] };
 export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:TrackContent=purpleTrack): void {
@@ -29,7 +30,7 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
     ? '<label class="lesson-complete"><input id="song-piano" type="checkbox"> Timbre de piano</label>'
     : '';
   const melodyControl=`<label class="lesson-complete"><input id="song-melody" type="checkbox" checked> ${sampledInstruments?'Ouvir exemplo':'Ouvir guitarra'}</label>`;
-  const metronomeControl='<label class="lesson-complete"><input id="song-click" type="checkbox" checked> Metrônomo</label>';
+  const metronomeControl=`<label class="lesson-complete"><input id="song-click" type="checkbox"${mission?.metronomeByDefault===false?'':' checked'}> Metrônomo</label>`;
   const degreesControl='<label class="lesson-complete"><input id="song-labels" type="checkbox"> Mostrar graus</label>';
   const speedControl='<label class="song-speed">Velocidade <input id="song-bpm" type="range" min="40" max="160" step="1" value="80"><output id="song-bpm-value">80 BPM</output></label>';
   const plan=lesson.accompaniment&&!lesson.blocks.length?accompanimentPlan():assembleLessonBlocks(lesson,track.blocks);
@@ -74,13 +75,13 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
           <article class="mission-notebook reader-page">
             <div class="mission-scene">
               <h2 class="mission-scene-title">${escape(mission.scene.title)}</h2>
-              <figure class="mission-listening">
+              ${mission.scene.illustration?`<figure class="mission-listening">
                 <img src="${escape(mission.scene.illustration.src)}" alt="${escape(mission.scene.illustration.alt)}" width="${mission.scene.illustration.size?.width??210}" height="${mission.scene.illustration.size?.height??84}">
                 ${mission.scene.prompt?`<figcaption class="mission-scene-prompt">${escape(mission.scene.prompt)}</figcaption>`:''}
-              </figure>
+              </figure>`:''}
               <p class="mission-scene-intro">${escape(mission.scene.text)}</p>
-              <button id="mission-example" class="mission-example" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><span>Ouvir o trecho</span></button>
-              <p class="mission-example-status" id="mission-example-status" role="status"></p>
+              ${mission.hidePreparationExample?'':`<button id="mission-example" class="mission-example" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><span>Ouvir o trecho</span></button>
+              <p class="mission-example-status" id="mission-example-status" role="status"></p>`}
             </div>
             ${studyBook?.pages.map((page,i)=>studyTopicMarkup(page,`mission-topic-${i}`)).join('')??''}
             <div class="mission-prepare-actions">
@@ -92,6 +93,7 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
           <section id="mission-play" role="tabpanel" aria-labelledby="mission-tab-play" class="mission-panel" hidden>
             ${mission.playInstruction?`<p class="mission-cue">${escape(mission.playInstruction)}</p>`:''}
             <ol class="mission-grid" aria-label="${practiceCues?'Sequência da prática':'Compassos da rodada'}"${practiceCues?' data-mode="along"':''}>${round.measures.map(item=>`<li class="mission-cell" data-phase="${item.phase}"><span>${escape(item.label)}</span></li>`).join('')}</ol>
+            ${plan.entries.some(entry=>entry.block.responseBeat!==undefined)?'<p class="mission-turn" id="mission-turn" role="status"></p>':''}
             <div id="mission-player-play"></div>
             <div class="mission-play-actions">
               ${completionMarkup}
@@ -147,7 +149,8 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
   const play=get<HTMLButtonElement>('song-play'), bpmInput=get<HTMLInputElement>('song-bpm');
   const labels=get<HTMLInputElement>('song-labels'),melody=get<HTMLInputElement>('song-melody'),click=get<HTMLInputElement>('song-click');
   const loop=app.querySelector<HTMLInputElement>('#song-loop');
-  const settings=readPracticeSettings();
+  const settingDefaults={metronome:mission?.metronomeByDefault??true};
+  const settings=readPracticeSettings(settingDefaults);
   const pianoToggle=app.querySelector<HTMLInputElement>('#song-piano');
   const countIn=app.querySelector<HTMLInputElement>('#song-count-in');
   const volumeInput=app.querySelector<HTMLInputElement>('#song-volume');
@@ -162,7 +165,7 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
   }
   if(loop)loop.checked=lesson.repeatByDefault??settings.repeat;
   melody.checked=settings.guitar;click.checked=settings.metronome;
-  const persistSettings=(changes:Partial<typeof settings>)=>savePracticeSettings({...readPracticeSettings(),...changes});
+  const persistSettings=(changes:Partial<typeof settings>)=>savePracticeSettings({...readPracticeSettings(settingDefaults),...changes});
   loop?.addEventListener('change',()=>persistSettings({repeat:loop.checked}));
   melody.addEventListener('change',()=>persistSettings({guitar:melody.checked}));
   click.addEventListener('change',()=>persistSettings({metronome:click.checked}));
@@ -209,7 +212,7 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
   let beat=preparingMission()?0:-4,bpm=initialBpm,anchorBeat=beat,anchorTime=0;
   let singleIndex:number|null=null,stopped=true;
   const rangeStart=()=>singleIndex===null?0:plan.entries[singleIndex]!.offset;
-  const rangeEnd=()=>mode==='play'&&round?round.beats:singleIndex===null?plan.beats:plan.entries[singleIndex]!.offset+(plan.entries[singleIndex]!.block.endBeat-plan.entries[singleIndex]!.block.startBeat);
+  const rangeEnd=()=>preparingMission()&&mission?.exampleBeats?Math.min(plan.beats,mission.exampleBeats):mode==='play'&&round?round.beats:singleIndex===null?plan.beats:plan.entries[singleIndex]!.offset+(plan.entries[singleIndex]!.block.endBeat-plan.entries[singleIndex]!.block.startBeat);
   const updateTransport=()=>{
     const active=running||starting;
     const label=active?'Pausa':'Play';
@@ -223,6 +226,7 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
   };
   let audio:AudioContext|null=null,audition:AudioContext|null=null;
   const volumeBuses=new WeakMap<AudioContext,GainNode>();
+  const roomBuses=new WeakMap<AudioContext,AudioNode>();
   const outputFor=(context:AudioContext):AudioNode=>{
     if(!volumeInput)return context.destination;
     const existing=volumeBuses.get(context);
@@ -233,7 +237,16 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
     volumeBuses.set(context,output);
     return output;
   };
+  const melodicOutputFor=(context:AudioContext):AudioNode=>{
+    const existing=roomBuses.get(context);
+    if(existing)return existing;
+    const room=createStudyRoom(context,outputFor(context));
+    roomBuses.set(context,room);
+    return room;
+  };
   let sampledVoice:StudySampleVoice|undefined,auditionRequest=0;
+  const backingVoices=new Map<SampledInstrument,StudySampleVoice>();
+  let backingOutput:GainNode|null=null;
   let chordOutput:GainNode|null=null;
   let running=false,starting=false,disposed=false,token=0,frame=0,rendered=-1,shownMeasure=-1;
   let repeatingMission=false,nextRoundBeat=0;
@@ -252,6 +265,7 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
     beat=Math.min(currentBeat(),rangeEnd());running=false;starting=false;token++;
     repeatingMission=false;
     chordOutput=null;
+    backingOutput=null;
     const old=audio;audio=null;if(old)void old.close().catch(()=>{});
     updateTransport();
   };
@@ -263,7 +277,7 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
       const context=audition??=new AudioContext();
       await context.resume();
       const voice=timbre?await loadStudySampleVoice(timbre):playStudyGuitar;
-      if(!disposed&&audition===context&&request===auditionRequest)voice(context,midi,context.currentTime+.01,.6,undefined,outputFor(context));
+      if(!disposed&&audition===context&&request===auditionRequest)voice(context,midi,context.currentTime+.01,.6,undefined,melodicOutputFor(context));
     }catch{
       if(!disposed&&request===auditionRequest)status.textContent='Não foi possível ouvir a nota neste navegador.';
     }
@@ -273,8 +287,8 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
     const endBeat=rangeEnd(),spb=60/bpm;
     const output=outputFor(context);
     const when=(onset:number)=>anchorTime+(offset+onset-anchorBeat)*spb;
-    if(!preparingMission())for(let b=Math.ceil(from);b<endBeat;b++)if(b<0||click.checked)tone(context,output,b%4===0?84:76,when(b),.04,.018);
-    const noteOutput=chordOutput??output;
+    if(!preparingMission())for(let b=Math.ceil(from);b<endBeat;b++)if(b<0||click.checked)tone(context,output,b%4===0?84:76,when(b),.04,.04);
+    const noteOutput=chordOutput??melodicOutputFor(context);
     const notes=lesson.accompaniment&&referenceTimbre==='clean-guitar'?strumChordNotes(plan.notes,spb):plan.notes;
     if(preparingMission()||melody.checked)for(const note of notes){
       const end=Math.min(note.beat+note.duration,endBeat);if(end<=from||note.beat>=endBeat||(singleIndex!==null&&note.beat<rangeStart()))continue;
@@ -284,11 +298,18 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
       const pitch=referenceTimbre==='piano'?[]:pitchAutomation(note,onset-note.beat,end-onset,spb);
       voice(context,note.midi,when(onset),duration,pitch,noteOutput);
     }
-    for(const entry of plan.entries)for(const note of entry.block.backing??[]){
-      const onsetBeat=entry.offset+note.beat,end=Math.min(onsetBeat+note.duration,endBeat);
-      if(end<=from||onsetBeat>=endBeat||(singleIndex!==null&&onsetBeat<rangeStart()))continue;
-      const onset=Math.max(from,onsetBeat);
-      tone(context,output,note.midi,when(onset),(end-onset)*spb,.025);
+    for(const entry of plan.entries){
+      const backingLevel=context.createGain();
+      backingLevel.gain.value=entry.block.backingGain??1;
+      backingLevel.connect(backingOutput??output);
+      for(const note of entry.block.backing??[]){
+        const onsetBeat=entry.offset+note.beat,end=Math.min(onsetBeat+note.duration,endBeat);
+        if(end<=from||onsetBeat>=endBeat||(singleIndex!==null&&onsetBeat<rangeStart()))continue;
+        const onset=Math.max(from,onsetBeat);
+        const backingVoice=note.instrument?backingVoices.get(note.instrument):undefined;
+        if(backingVoice)backingVoice(context,note.midi,when(onset),(end-onset)*spb,undefined,backingLevel,note.velocity);
+        else tone(context,output,note.midi,when(onset),(end-onset)*spb,.025*(entry.block.backingGain??1));
+      }
     }
   };
   const start=async()=>{
@@ -299,12 +320,15 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
     try{
       const context=new AudioContext();audio=context;await context.resume();
       const voice=referenceTimbre&&(preparingMission()||melody.checked)?await loadStudySampleVoice(referenceTimbre):undefined;
+      const backingInstruments=[...new Set(plan.entries.flatMap(entry=>(entry.block.backing??[]).flatMap(note=>note.instrument?[note.instrument]:[])))];
+      await Promise.all(backingInstruments.map(async instrument=>backingVoices.set(instrument,await loadStudySampleVoice(instrument))));
       if(attempt!==token||disposed){void context.close().catch(()=>{});return;}
       sampledVoice=voice;
+      if(backingInstruments.length){backingOutput=context.createGain();backingOutput.gain.value=.3;backingOutput.connect(outputFor(context));}
       if(voice&&lesson.accompaniment){
         chordOutput=context.createGain();
         chordOutput.gain.value=.55;
-        chordOutput.connect(outputFor(context));
+        chordOutput.connect(melodicOutputFor(context));
       }
       stopped=false;anchorBeat=beat;anchorTime=context.currentTime+.08;
       repeatingMission=mode==='play'&&!!round;
@@ -325,7 +349,7 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
       const plain=lesson.mapStyle==='plain-degrees';
       board.classList.toggle('plain-degree-map',plain);
       const annotations=plain&&!labels.checked?map.positions.map(p=>({stringId:p.stringId,fret:p.fret,label:studyDegree(p.midi,map.tonic),description:`Grau ${studyDegree(p.midi,map.tonic)} em relação à tônica.`})):[];
-      board.configuration={tonic:map.tonic,scaleId:map.scaleId,startFret:block.startFret,endFret:block.endFret,labelMode:labels.checked?'degree':'letter',positions:map.positions,degreeLabels:map.degreeLabels,roles:plain?[]:studyMapRoles(map),annotations};
+      board.configuration={tonic:map.tonic,scaleId:map.scaleId,spelling:map.spelling,startFret:block.startFret,endFret:block.endFret,labelMode:labels.checked?'degree':'letter',positions:map.positions,degreeLabels:map.degreeLabels,roles:plain?[]:studyMapRoles(map),annotations};
       board.highlightedPositions=[];return;
     }
     const {phrase,possibilities,additional}=lessonMapPositions(lesson,block);
@@ -337,6 +361,7 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
     board.highlightedPositions=[];
   };
   const renderCards=()=>{
+    get('song-boards').classList.toggle('song-boards--current',mission?.boardDisplay==='current');
     get('song-boards').innerHTML=cardPlan.entries.map(({block,entryIndex},i)=>{
       const reference=entryIndex===null,title=escape(lesson.mapTitle??block.title);
       const boardLabel=mission?.hideBoardTitle?`Braço ${i+1}`:escape(lesson.mapTitle??`Mapa de ${block.title}`);
@@ -360,6 +385,7 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
     rendered=index;
     cards.forEach((card,i)=>{
       const current=i===cardPlan.indices[index];
+      card.hidden=mission?.boardDisplay==='current'&&!current;
       card.classList.toggle('is-current',current);
       if(current)card.setAttribute('aria-current','step');else card.removeAttribute('aria-current');
     });
@@ -387,9 +413,20 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
       measures[measure]?.setAttribute('aria-current','step');
       shownMeasure=measure;
     }
+    if(playingMission&&measure>=0){
+      const start=playingMission.measures[measure]!.beat;
+      const end=playingMission.measures[measure+1]?.beat??playingMission.beats;
+      const elapsed=reducedMotion.matches?Math.floor(now-start):now-start;
+      measures[measure]?.style.setProperty('--cue-progress',String(Math.max(0,Math.min(1,elapsed/(end-start)))));
+    }
     const index=singleIndex??blockIndexAt(plan,phraseBeat);
     if(index!==rendered)showBlock(index);
     const entry=plan.entries[index]!,local=phraseBeat-entry.offset;
+    const turn=app.querySelector<HTMLElement>('#mission-turn');
+    if(turn){
+      const label=stopped||now<0?'':!melody.checked||(entry.block.responseBeat!==undefined&&local>=entry.block.responseBeat)?'Toque':'Ouça';
+      if(turn.textContent!==label)turn.textContent=label;
+    }
     const active=entry.block.notes.filter(note=>!responding&&!stopped&&local>=note.beat&&local<note.beat+note.duration&&now<rangeEnd());
     boards.forEach((board,i)=>{board.highlightedPositions=i===cardPlan.indices[index]?active:[];});
     if(now>=rangeEnd())cards.forEach(card=>{card.classList.remove('is-current');card.removeAttribute('aria-current');});

@@ -14,6 +14,12 @@ test('old preferences retain their toggles and leave tempo to the track default'
   storage({repeat:false,guitar:true,metronome:false});
   assert.deepEqual(readPracticeSettings(),{repeat:false,guitar:true,metronome:false,bpm:null});
 });
+test('a band mission may default to no metronome while honoring a saved choice',()=>{
+  storage();
+  assert.equal(readPracticeSettings({metronome:false}).metronome,false);
+  storage({metronome:true});
+  assert.equal(readPracticeSettings({metronome:false}).metronome,true);
+});
 test('tempo survives subsequent preference changes and fresh reads',()=>{
   storage();
   savePracticeSettings({repeat:true,guitar:true,metronome:true,bpm:96});

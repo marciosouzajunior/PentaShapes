@@ -204,10 +204,17 @@ body:has(.mission-celebration[open]){overflow:hidden}
 }
 .mission-cell{--cue:var(--app-accent);position:relative;flex:0 0 calc((100% - 18px) / 4);aspect-ratio:1;display:grid;place-items:center;color:var(--app-text);font-size:clamp(13px,3vw,18px)}
 .mission-grid[data-mode=along] .mission-cell{flex-basis:clamp(56px,22vw,77px)}
+@media(min-width:601px){.mission-grid[data-mode=along]{width:min(100%,600px)}}
 .mission-cell[data-phase=answer]{--cue:#8ee9c7}
+.mission-turn{min-height:24px;margin:-4px auto 12px;text-align:center;color:#8ee9c7;font-size:14px}
 .mission-cell::before{content:'';position:absolute;inset-inline-start:0;top:18%;height:64%;width:3px;background:#8b86a4}
 .mission-cell[aria-current=step]{color:var(--cue);font-weight:650}
 .mission-cell[aria-current=step]::before{width:7px;background:var(--cue)}
+.mission-grid[data-mode=along] .mission-cell[aria-current=step]::before{background:#8b86a450}
+.mission-grid[data-mode=along] .mission-cell[aria-current=step]::after{
+  content:'';position:absolute;inset-inline-start:0;top:18%;height:64%;width:7px;
+  background:var(--cue);transform:scaleY(var(--cue-progress,0));transform-origin:bottom;
+}
 .mission-cell[aria-current=step] span{transform-origin:50% 85%;animation:mission-sway 1.18s ease-in-out both}
 @keyframes mission-sway{0%,100%{transform:translateX(0) rotate(0)}23%{transform:translateX(-1.5px) rotate(-3deg)}50%{transform:translateX(1.5px) rotate(2.5deg)}75%{transform:translateX(-.5px) rotate(-1deg)}}
 @media(prefers-reduced-motion:reduce){.mission-cell[aria-current=step] span{animation:none}}
@@ -224,6 +231,8 @@ body:has(.mission-celebration[open]){overflow:hidden}
   --fretboard-root-background:#e8d9f2;
 }
 #mission-play .study-progress{display:none}
+#mission-play .song-boards--current{grid-template-columns:minmax(0,1fr);width:100%;max-width:540px;margin-inline:auto}
+#mission-play .study-card[hidden]{display:none}
 #mission-play .song-transport{padding:0 0 14px}
 #mission-play .song-transport button{border-color:var(--app-border);color:var(--play-text);background:var(--app-raised)}
 #mission-play .song-transport button:hover{background:var(--app-hover)}

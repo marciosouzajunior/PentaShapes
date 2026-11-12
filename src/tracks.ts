@@ -2,6 +2,7 @@ import { pilotSong, songLessons, studyBlocks, type SongMission } from './song-co
 import { accompanimentChord, chordSource } from './song-chords';
 import { missionBookCopy, studyGuide } from './study-books';
 import { minorTrack } from './minor-pentatonic';
+import { minorPartOneTrack } from './pentatonic-part-one';
 import { validateTrack, type TrackContent } from './track-model';
 import octaveSketch from './assets/mission-octave-sketch.svg';
 import riffSketch from './assets/mission-riff-sketch.svg';
@@ -121,5 +122,8 @@ export const purpleTrack:TrackContent={
     }),
   },
 };
-export const tracks=[minorTrack,purpleTrack];
-for(const track of tracks)validateTrack(track);
+export const tracks=[minorPartOneTrack,purpleTrack];
+/** Previous exercises remain addressable without competing with the new catalog entry. */
+export const archivedTracks=[minorTrack];
+export const routeTracks=[...tracks,...archivedTracks];
+for(const track of routeTracks)validateTrack(track);

@@ -19,6 +19,8 @@ The source and redistribution permission for `legacy/images/guitar.jpg` still ne
 | Material | Terms and notices |
 | --- | --- |
 | FreePats clean guitar samples | CC0 1.0; source and modifications in `src/static/audio/clean-guitar/ATTRIBUTION.txt`. |
+| FreePats Finger Bass YR, Andrea Biasior | CC0 1.0; source and selected pitch centers in `src/static/audio/finger-bass/ATTRIBUTION.txt`. |
+| MuldjordKit / FreePats, Lars Muldjord | CC BY 4.0. Drum samples provided by DrumGizmo.org. Source and adaptation in `src/static/audio/drum-kit/ATTRIBUTION.txt`. |
 | Salamander piano samples, Alexander Holm | CC BY 3.0; source and usage in `src/static/audio/piano/ATTRIBUTION.txt`. |
 | Source Serif 4 | SIL Open Font License 1.1; `src/static/fonts/OFL-Source-Serif-4.txt`. |
 | Manrope 600 glyph outline in the favicon | Copyright 2018 The Manrope Project Authors; SIL Open Font License 1.1, included in `src/static/fonts/OFL-Manrope.txt`. The outline and placement match the header's font weight, size and spacing. |

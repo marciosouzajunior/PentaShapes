@@ -41,6 +41,16 @@ Tocar concentra prática repetida no painel escuro, com diagramas e controles co
 
 As rodadas se repetem no mesmo pulso. Contagem inicial é opcional, desmarcada por padrão e aplicada no começo da prática. Na exploração, propor mudar uma chegada, variar o ritmo ou criar uma resposta; não exigir mais notas para demonstrar avanço.
 
+Uma sequência pode reservar janelas de resposta nos próprios blocos, mantendo o acompanhamento e omitindo a melodia nesses momentos. Isso permite alternar contextos sem exigir a duplicação da rodada inteira. Em práticas longas, `mission.exampleBeats` limita a escuta em Preparar ao começo do material e `mission.boardDisplay: 'current'` mantém somente o braço do contexto ativo em Tocar. São opções de autoria, não etapas obrigatórias de uma missão. As indicações da pista mostram a ordem dos contextos antes das trocas.
+
+Nesses blocos, `responseBeat` declara o início da resposta em tempos locais (zero permite um bloco inteiro de resposta). A interface indica “Ouça” ou “Toque” sem duplicar os acordes na pista; a validação exige que a melodia termine antes da resposta. O acompanhamento pode continuar durante toda a janela.
+
+Notas de acompanhamento podem declarar `instrument: 'clean-guitar'`, `'piano'`, `'finger-bass'` ou `'drum-kit'` para usar amostras em vez do timbre sintetizado padrão. `velocity` (0–1) define a dinâmica de cada evento; `backingGain` (0–1) ajusta o conjunto do bloco. Na bateria, os números MIDI selecionam peças gravadas, sem transposição: 36 bumbo, 37 caixa suave, 42/44 variações de chimbal e 51 prato de condução. São as peças disponíveis no banco atual, não uma implementação completa de General MIDI.
+
+O acompanhamento continua durante as respostas e quando “Ouvir exemplo” é desligado; esse controle atua na melodia demonstrada. Uma missão pode declarar `metronomeByDefault: false` quando a base já oferece o pulso, mantendo o metrônomo disponível nos ajustes. `hidePreparationExample` permite omitir o botão de escuta na preparação quando não acrescenta uma experiência útil.
+
+`electric-piano` oferece um teclado elétrico sintetizado para acompanhamentos, sem exigir novas amostras. Os exemplos melódicos e as notas acionadas no braço passam por uma ambiência compartilhada; acompanhamento e metrônomo usam saídas separadas para preservar o pulso e o equilíbrio de volume.
+
 Guitarra clean gravada é o timbre padrão e reproduz as curvas de slides e bends. O piano toca as alturas de partida; demonstrações de bend devem ser ouvidas na guitarra. Os ajustes agrupam exemplo e timbre, metrônomo e contagem, velocidade e volume, e “Mostrar graus”. As duas abas compartilham as preferências persistidas.
 
 ## Navegação e conclusão

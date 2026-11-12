@@ -7,21 +7,22 @@ const validBpm=(value:unknown):value is number=>typeof value==='number'&&Number.
 const validTimbre=(value:unknown):value is SampledInstrument=>value==='piano'||value==='clean-guitar';
 const validVolume=(value:unknown):value is number=>typeof value==='number'&&Number.isInteger(value)&&value>=0&&value<=100;
 
-export function readPracticeSettings():PracticeSettings{
+export function readPracticeSettings(fallbacks:Partial<Pick<PracticeSettings,'metronome'>>={}):PracticeSettings{
+  const initial={...defaults,...fallbacks};
   try{
     const value:unknown=JSON.parse(localStorage.getItem(key)??'null');
-    if(!value||typeof value!=='object'||Array.isArray(value))return {...defaults};
+    if(!value||typeof value!=='object'||Array.isArray(value))return {...initial};
     const stored=value as Record<string,unknown>;
     return {
       repeat:typeof stored.repeat==='boolean'?stored.repeat:defaults.repeat,
       guitar:typeof stored.guitar==='boolean'?stored.guitar:defaults.guitar,
-      metronome:typeof stored.metronome==='boolean'?stored.metronome:defaults.metronome,
+      metronome:typeof stored.metronome==='boolean'?stored.metronome:initial.metronome,
       bpm:validBpm(stored.bpm)?stored.bpm:defaults.bpm,
       ...(validTimbre(stored.referenceTimbre)?{referenceTimbre:stored.referenceTimbre}:{}),
       ...(validVolume(stored.volume)?{volume:stored.volume}:{}),
       ...(typeof stored.skipCountIn==='boolean'?{skipCountIn:stored.skipCountIn}:{}),
     };
-  }catch{return {...defaults};}
+  }catch{return {...initial};}
 }
 
 export function savePracticeSettings(settings:PracticeSettings):void{
