@@ -48,4 +48,8 @@ Em `viewMode: 'natural'`, o mapa independe de tônica e não aceita rótulos de 
 
 O Firebase Hosting publica `dist/`, com fallback para `index.html` nas rotas do app. O build copia `legacy/` para `dist/legacy/`; arquivos estáticos existentes são servidos diretamente. O novo app fica em `/` e o anterior em `/legacy/`.
 
-Pushes na `main` executam build e deploy de produção. Pull requests internos podem gerar prévias. Esses workflows dependem dos secrets configurados no GitHub. Não incluir credenciais, fontes privadas de autoria, caches ou backups no repositório.
+Pushes na `main` executam build e deploy de produção. A branch permite pushes normais de pessoas com permissão de escrita, mas bloqueia force push e exclusão. Contribuições externas chegam por fork e pull request, sem conceder escrita no repositório.
+
+Pull requests para `main`, inclusive os de forks, executam a validação de tipos, testes e build em um workflow com permissão apenas de leitura e sem secrets de deploy. Contribuições externas podem exigir aprovação de execução no GitHub antes de rodar. A validação informa o resultado para revisão; não é um check obrigatório que impeça o push direto do mantenedor.
+
+O preview Firebase continua separado e restrito a pull requests internos, pois usa secrets e permissões de escrita para publicar a prévia. Não use `pull_request_target` para executar código de contribuições externas com secrets. Não incluir credenciais, fontes privadas de autoria, caches ou backups no repositório.
