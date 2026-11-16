@@ -12,7 +12,7 @@ Project-authored documentation uses [CC BY 4.0](https://creativecommons.org/lice
 
 The AGPL grant covers application code, not rights in third-party compositions, transcriptions or recordings. References and study arrangements of Purple Haze in the application and `src/data/purple-haze.json` do not imply permission to redistribute the underlying musical work under AGPL. Provenance is recorded in the data and project documentation. Project-authored instructional prose retains the documentation terms above; these do not grant rights in the referenced music.
 
-Research PDFs are not included in the public documentation. Photographs retain their respective licenses, as listed below; they are not relicensed under AGPL.
+Photographs retain their respective licenses, as listed below; they are not relicensed under AGPL.
 
 ## Included assets and libraries
 
