@@ -1,3 +1,4 @@
+import { ui, localeHome, type Locale } from './locale';
 import { assembleLessonBlocks, blockIndexAt, lessonMapPositions, studyCards, studyMapRoles, type SongLesson, type StudyBlock } from './song-content';
 import { readProgress, saveProgress } from './progress';
 import './song.css';
@@ -14,11 +15,14 @@ import {loadStudySampleVoice,type SampledInstrument,type StudySampleVoice} from 
 import {readPracticeSettings,savePracticeSettings} from './practice-settings';
 import {preserveBreadcrumbScroll} from './breadcrumb-scroll';
 import {studyDegree} from './study-model';
-import {beatInMission,boardTransitionProgress,missionPracticeBeats,missionRound,phaseLabelAt} from './song-missions';
+import {beatInMission,boardTransitionProgress,missionPracticeBeats,missionRound,phaseCueAt,phaseText} from './song-missions';
 import {createStudyRoom} from './study-room';
 
 type Board = HTMLElement & { configuration: object; highlightedPositions: {stringId:string;fret:number}[] };
 export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:TrackContent=purpleTrack): void {
+  const locale:Locale=track.manifest.language==='en'?'en':'pt-BR';
+  const t=(text:Parameters<typeof ui>[1])=>ui(locale,text);
+  const home=localeHome(locale);
   const songLessons=track.lessons, studyGuide=track.guide;
   const revision=track.manifest.publication.revision;
   const prior=readProgress(lesson.ref), saved=prior||saveProgress(lesson.ref,'listen',revision);
@@ -27,16 +31,16 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
   const mission=lesson.mission;
   const sampledInstruments=track.referenceInstruments;
   const timbreMarkup=sampledInstruments?.includes('clean-guitar')&&sampledInstruments.includes('piano')
-    ? '<label class="lesson-complete"><input id="song-piano" type="checkbox"> Timbre de piano</label>'
+    ? `<label class="lesson-complete"><input id="song-piano" type="checkbox"> ${t('Piano sound')}</label>`
     : '';
-  const melodyControl=`<label class="lesson-complete"><input id="song-melody" type="checkbox" checked> ${sampledInstruments?'Ouvir exemplo':'Ouvir guitarra'}</label>`;
-  const metronomeControl=`<label class="lesson-complete"><input id="song-click" type="checkbox"${mission?.metronomeByDefault===false?'':' checked'}> Metrônomo</label>`;
-  const degreesControl='<label class="lesson-complete"><input id="song-labels" type="checkbox"> Mostrar graus</label>';
-  const speedControl='<label class="song-speed">Velocidade <input id="song-bpm" type="range" min="40" max="160" step="1" value="80"><output id="song-bpm-value">80 BPM</output></label>';
+  const melodyControl=`<label class="lesson-complete"><input id="song-melody" type="checkbox" checked> ${sampledInstruments?t('Hear example'):t('Hear guitar')}</label>`;
+  const metronomeControl=`<label class="lesson-complete"><input id="song-click" type="checkbox"${mission?.metronomeByDefault===false?'':' checked'}> ${t('Metronome')}</label>`;
+  const degreesControl=`<label class="lesson-complete"><input id="song-labels" type="checkbox"> ${t('Show scale degrees')}</label>`;
+  const speedControl=`<label class="song-speed">${t('Tempo')} <input id="song-bpm" type="range" min="40" max="160" step="1" value="80"><output id="song-bpm-value">80 BPM</output></label>`;
   const plan=lesson.accompaniment&&!lesson.blocks.length?accompanimentPlan():assembleLessonBlocks(lesson,track.blocks);
   const practiceCues=mission?.practiceMode==='along'?plan.entries.flatMap(({block,offset})=>
     (block.cues??[]).map(cue=>({...cue,beat:offset+cue.beat}))).sort((a,b)=>a.beat-b.beat):undefined;
-  const round=mission?missionRound(missionPracticeBeats(plan.beats,mission.practiceMode,mission.exampleBeats,mission.practiceBeats),practiceCues):null;
+  const round=mission?missionRound(missionPracticeBeats(plan.beats,mission.practiceMode,mission.exampleBeats,mission.practiceBeats),practiceCues,locale):null;
   type MissionMeasure=NonNullable<typeof round>['measures'][number];
   const cueGroups:{label:string;items:{cue:MissionMeasure;index:number}[]}[]=[];
   round?.measures.forEach((cue,index)=>{
@@ -45,46 +49,46 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
     if(!group||group.label!==label)cueGroups.push({label,items:[{cue,index}]});
     else group.items.push({cue,index});
   });
-  const gridLabel=practiceCues?'Sequência da prática':'Compassos da rodada';
-  const missionGridMarkup=`<div class="mission-grid" role="group" aria-label="${gridLabel}"${practiceCues?' data-mode="along"':''}>${cueGroups.map(group=>`<ol class="mission-grid-group"${group.label?` aria-label="${escape(group.label)}"`:''}>${group.items.map(({cue,index})=>`<li class="mission-cell" data-phase="${cue.phase}"><button class="mission-cell-jump" type="button" data-cue-index="${index}" aria-label="Tocar a partir de ${escape(cue.label)}, trecho ${index+1}" title="Tocar a partir daqui"><span>${escape(cue.label)}</span></button></li>`).join('')}</ol>`).join('')}</div>`;
+  const gridLabel=practiceCues?t('Practice sequence'):t('Bars in the round');
+  const missionGridMarkup=`<div class="mission-grid" role="group" aria-label="${gridLabel}"${practiceCues?' data-mode="along"':''}>${cueGroups.map(group=>`<ol class="mission-grid-group"${group.label?` aria-label="${escape(group.label)}"`:''}>${group.items.map(({cue,index})=>`<li class="mission-cell" data-phase="${cue.phase}"><button class="mission-cell-jump" type="button" data-cue-index="${index}" aria-label="${locale==='en'?`Play from ${escape(cue.label)}, passage ${index+1}`:`Tocar a partir de ${escape(cue.label)}, trecho ${index+1}`}" title="${t('Play from here')}"><span>${escape(cue.label)}</span></button></li>`).join('')}</ol>`).join('')}</div>`;
   const missionTurnMarkup=mission&&!mission.hideTurnLabel&&plan.entries.some(entry=>entry.block.responseBeat!==undefined||entry.block.phaseCues?.length)
-    ?'<p class="mission-turn" id="mission-turn" role="status"></p>':'';
+    ?`<p class="mission-turn" id="mission-turn" role="status"></p>`:'';
   let mode:'prepare'|'play'='prepare';
   const preparingMission=()=>!!mission&&mode==='prepare';
   const links=songLessons.map((item,i)=>{
     const current=item.id===lesson.id;
-    const marker=mission?`<span class="mission-done"${(current?prior:readProgress(item.ref))?.step==='complete'?'':' hidden'}><svg viewBox="0 0 16 16" role="img" aria-label="Concluída"><path d="m3.5 8 3 3 6-6"/></svg></span>`:'';
-    return `<li><a href="${escape(item.href)}" ${current?'aria-current="page"':''}>${mission?'':`<span class="song-step-number">${String(i+1).padStart(2,'0')}</span>`}${escape(item.navTitle)}${marker}</a>${!mission&&i<songLessons.length-1?'<span class="song-step-separator" aria-hidden="true">&gt;</span>':''}</li>`;
+    const marker=mission?`<span class="mission-done"${(current?prior:readProgress(item.ref))?.step==='complete'?'':' hidden'}><svg viewBox="0 0 16 16" role="img" aria-label="${t('Completed')}"><path d="m3.5 8 3 3 6-6"/></svg></span>`:'';
+    return `<li><a href="${escape(item.href)}" ${current?'aria-current="page"':''}>${mission?'':`<span class="song-step-number">${String(i+1).padStart(2,'0')}</span>`}${escape(item.navTitle)}${marker}</a>${!mission&&i<songLessons.length-1?`<span class="song-step-separator" aria-hidden="true">&gt;</span>`:''}</li>`;
   }).join('');
   const trackLabel=`<p class="eyebrow">${escape(track.manifest.title)}${track.manifest.musicalWork?' · '+escape(track.manifest.musicalWork.artistName):''}</p>`;
   const boardsMarkup=`<div id="song-boards" class="song-boards ${lesson.accompaniment?'chord-boards':''}"></div>`;
   const completionMarkup=`<div class="lesson-completion">
-    <label class="lesson-complete"><input id="song-complete" type="checkbox" ${prior?.step==='complete'?'checked':''}><span>${mission?'Missão concluída':'Lição concluída'}</span></label>
-    <p id="song-storage" class="song-storage" role="status">${saved?'':'Não foi possível salvar o progresso.'}</p>
+    <label class="lesson-complete"><input id="song-complete" type="checkbox" ${prior?.step==='complete'?'checked':''}><span>${mission?t('Mission completed'):t('Lesson completed')}</span></label>
+    <p id="song-storage" class="song-storage" role="status">${saved?'':t('Your progress could not be saved.')}</p>
   </div>`;
   const celebrationMarkup=mission&&!nextLesson?`
     <dialog id="mission-celebration" class="mission-celebration" aria-labelledby="mission-celebration-title" aria-describedby="mission-celebration-description">
       <div class="mission-celebration-body">
-      <button class="mission-celebration-close" type="button" aria-label="Fechar">×</button>
+      <button class="mission-celebration-close" type="button" aria-label="${t('Close')}">×</button>
       <div class="mission-confetti" aria-hidden="true">${Array.from({length:14},(_,i)=>`<i style="--piece:${i};--drift:${i%2===0?-1:1};--delay:${i%4*60}ms"></i>`).join('')}</div>
       <svg class="mission-celebration-icon" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="19"/><path d="m15 24 6 6 12-13"/></svg>
-      <h2 id="mission-celebration-title">Última missão concluída</h2>
-      <p id="mission-celebration-description">Você pode continuar tocando por aqui ou explorar outra trilha.</p>
+      <h2 id="mission-celebration-title">${t('Final mission completed')}</h2>
+      <p id="mission-celebration-description">${t('You can keep playing here or explore another track.')}</p>
       <div class="mission-celebration-actions">
-        <a class="mission-celebration-link" href="/#tracks" autofocus>Ver outras trilhas <span aria-hidden="true">→</span></a>
-        <button class="mission-celebration-stay" type="button">Continuar praticando</button>
+        <a class="mission-celebration-link" href="${home}#tracks" autofocus>Ver outras trilhas <span aria-hidden="true">→</span></a>
+        <button class="mission-celebration-stay" type="button">${t('Keep practising')}</button>
       </div>
       </div>
     </dialog>`:'';
   app.innerHTML=`
-    <a class="skip-link" href="#song-main">Ir para a prática</a>
-    <header class="header">${renderBrand()}</header>
+    <a class="skip-link" href="#song-main">${t('Skip to practice')}</a>
+    <header class="header">${renderBrand(locale)}</header>
     <main id="song-main" class="song-page${mission?' mission-page':''}"${mission?' data-mode="prepare"':''}>
-      <div class="song-intro">${mission?`<div class="mission-heading"><a class="mission-app-back" href="/#tracks">Voltar</a>${trackLabel}<details class="mission-route"><summary>Ver missões</summary><nav class="song-steps" aria-label="Missões"><ol>${links}</ol></nav></details></div>`:trackLabel}<h1>${escape(lesson.title)}</h1>${mission?'':`<p>${escape(lesson.instruction)}</p>${studyBook?'<button id="song-read-more" class="song-read-more" type="button">Explorar notas e relações</button>':''}`}
+      <div class="song-intro">${mission?`<div class="mission-heading"><a class="mission-app-back" href="${home}#tracks">${t('Back')}</a>${trackLabel}<details class="mission-route"><summary>Ver missões</summary><nav class="song-steps" aria-label="${t('Missions')}"><ol>${links}</ol></nav></details></div>`:trackLabel}<h1>${escape(lesson.title)}</h1>${mission?'':`<p>${escape(lesson.instruction)}</p>${studyBook?`<button id="song-read-more" class="song-read-more" type="button">${t('Explore notes and relationships')}</button>`:''}`}
       </div>
       ${mission&&round?`
         <div class="mission-tabs">
-          <div class="mission-tab-list" role="tablist" aria-label="Modo da missão"><button type="button" role="tab" id="mission-tab-prepare" aria-controls="mission-prepare" aria-selected="true">Preparar</button><button type="button" role="tab" id="mission-tab-play" aria-controls="mission-play" aria-selected="false" tabindex="-1">Tocar</button></div>
+          <div class="mission-tab-list" role="tablist" aria-label="${t('Mission mode')}"><button type="button" role="tab" id="mission-tab-prepare" aria-controls="mission-prepare" aria-selected="true">${t('Prepare')}</button><button type="button" role="tab" id="mission-tab-play" aria-controls="mission-play" aria-selected="false" tabindex="-1">${t('Play')}</button></div>
         </div>
         <section id="mission-prepare" role="tabpanel" aria-labelledby="mission-tab-prepare" class="mission-panel">
           <article class="mission-notebook reader-page">
@@ -94,12 +98,12 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
                 <img src="${escape(mission.scene.illustration.src)}" alt="${escape(mission.scene.illustration.alt)}" width="${mission.scene.illustration.size?.width??210}" height="${mission.scene.illustration.size?.height??84}">
                 ${mission.scene.prompt?`<figcaption class="mission-scene-prompt">${escape(mission.scene.prompt)}</figcaption>`:''}
               </figure>`:''}
-              <p class="mission-scene-intro">${studyTextMarkup(mission.scene.text)}</p>
-              ${mission.scene.followup?`<p class="mission-scene-intro">${studyTextMarkup(mission.scene.followup)}</p>`:''}
-              ${mission.hidePreparationExample?'':`<button id="mission-example" class="mission-example" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><span>Ouvir o trecho</span></button>
+              <p class="mission-scene-intro">${studyTextMarkup(mission.scene.text,locale)}</p>
+              ${mission.scene.followup?`<p class="mission-scene-intro">${studyTextMarkup(mission.scene.followup,locale)}</p>`:''}
+              ${mission.hidePreparationExample?'':`<button id="mission-example" class="mission-example" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><span>${t('Hear the passage')}</span></button>
               <p class="mission-example-status" id="mission-example-status" role="status"></p>`}
             </div>
-            ${studyBook?.pages.map((page,i)=>studyTopicMarkup(page,`mission-topic-${i}`)).join('')??''}
+            ${studyBook?.pages.map((page,i)=>studyTopicMarkup(page,`mission-topic-${i}`,locale)).join('')??''}
             <div class="mission-prepare-actions">
               <button id="mission-ready" class="mission-ready" type="button">${escape(mission.practiceLabel)} <span aria-hidden="true">→</span></button>
             </div>
@@ -107,33 +111,33 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
         </section>
         <div class="mission-practice">
           <section id="mission-play" role="tabpanel" aria-labelledby="mission-tab-play" class="mission-panel" hidden>
-            ${mission.playInstruction?`<p class="mission-cue">${studyTextMarkup(mission.playInstruction)}</p>`:''}
+            ${mission.playInstruction?`<p class="mission-cue">${studyTextMarkup(mission.playInstruction,locale)}</p>`:''}
             <div id="mission-player-play"></div>
             <div class="mission-play-actions">
               ${completionMarkup}
-              <a class="mission-next" href="${nextLesson?.href??'/#tracks'}"${nextLesson?` rel="next" aria-label="Próxima missão. ${escape(nextLesson.title)}"`:''}>${nextLesson?'Próxima missão':'Todas as trilhas'}</a>
+              <a class="mission-next" href="${nextLesson?.href??`${home}#tracks`}"${nextLesson?` rel="next" aria-label="${t('Next mission')}. ${escape(nextLesson.title)}"`:''}>${nextLesson?t('Next mission'):t('All tracks')}</a>
             </div>
             ${celebrationMarkup}
           </section>
         </div>`:
-        `<nav class="song-steps" aria-label="Lições de ${escape(track.manifest.title)}"><ol>${links}</ol></nav>`}
+        `<nav class="song-steps" aria-label="${locale==='en'?'Lessons in':'Lições de'} ${escape(track.manifest.title)}"><ol>${links}</ol></nav>`}
 
-      <section id="song-player" class="song-player" aria-label="Estudo por trechos no braço estático">
+      <section id="song-player" class="song-player" aria-label="${t('Study passages on the fretboard')}">
         ${track.mapLegend&&lesson.mapStyle!=='plain-degrees'?`<p class="song-map-legend">${escape(track.mapLegend)}</p>`:''}
         ${mission?'':boardsMarkup}
         ${mission?`<div class="mission-player-header">${missionGridMarkup}${missionTurnMarkup}`:''}
-        <div class="song-controls song-transport" role="group" aria-label="Reprodução"><button id="song-play" class="song-primary" type="button" aria-label="Play" title="Play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button><button id="song-stop" type="button" aria-label="Stop" title="Stop"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v14H5z"/></svg></button><button id="song-options-toggle" class="song-options-toggle" type="button" aria-label="Ajustes da prática" title="Ajustes da prática" aria-expanded="false" aria-controls="song-options"><svg class="song-settings-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h2m4 0h10M4 12h10m4 0h2M4 18h5m4 0h7"/><circle cx="8" cy="6" r="2"/><circle cx="16" cy="12" r="2"/><circle cx="11" cy="18" r="2"/></svg></button></div>
-        ${mission?'</div>':''}
+        <div class="song-controls song-transport" role="group" aria-label="${t('Playback')}"><button id="song-play" class="song-primary" type="button" aria-label="Play" title="Play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button><button id="song-stop" type="button" aria-label="Stop" title="Stop"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v14H5z"/></svg></button><button id="song-options-toggle" class="song-options-toggle" type="button" aria-label="${t('Practice settings')}" title="${t('Practice settings')}" aria-expanded="false" aria-controls="song-options"><svg class="song-settings-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h2m4 0h10M4 12h10m4 0h2M4 18h5m4 0h7"/><circle cx="8" cy="6" r="2"/><circle cx="16" cy="12" r="2"/><circle cx="11" cy="18" r="2"/></svg></button></div>
+        ${mission?`</div>`:''}
         <div id="song-options" class="song-options" hidden>
           ${mission?`
             <div class="mission-option-row">${melodyControl}${timbreMarkup}</div>
-            <div class="mission-option-row">${metronomeControl}<label class="lesson-complete"><input id="song-count-in" type="checkbox"> Contagem inicial</label></div>
+            <div class="mission-option-row">${metronomeControl}<label class="lesson-complete"><input id="song-count-in" type="checkbox"> ${t('Count-in')}</label></div>
             <div class="mission-option-sliders">
               ${speedControl}
               <label class="song-volume">Volume <input id="song-volume" type="range" min="0" max="100" step="1" value="100"><output id="song-volume-value">100%</output></label>
             </div>
             <div class="mission-option-row">${degreesControl}</div>`:`
-            <div class="song-controls"><label class="lesson-complete"><input id="song-loop" type="checkbox"> Repetir</label>${melodyControl}${metronomeControl}</div>
+            <div class="song-controls"><label class="lesson-complete"><input id="song-loop" type="checkbox"> ${t('Repeat')}</label>${melodyControl}${metronomeControl}</div>
             <div class="song-settings">${degreesControl}${timbreMarkup}${speedControl}</div>`}
         </div>
         <p class="song-status" id="song-status" role="status"></p>
@@ -141,7 +145,7 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
       </section>
       ${mission?'':`<footer class="lesson-footer song-footer">
         ${completionMarkup}
-        <nav class="lesson-pager" aria-label="Navegação entre lições"><a href="${nextLesson?.href??'/#tracks'}" ${nextLesson?'rel="next"':''}><span>${nextLesson?'Próxima →':'Voltar →'}</span><strong>${nextLesson?`${String(songLessons.indexOf(nextLesson)+1).padStart(2,'0')} · ${nextLesson.title}`:'Todas as trilhas'}</strong></a></nav>
+        <nav class="lesson-pager" aria-label="Navegação entre lições"><a href="${nextLesson?.href??`${home}#tracks`}" ${nextLesson?'rel="next"':''}><span>${nextLesson?t('Next →'):t('Back →')}</span><strong>${nextLesson?`${String(songLessons.indexOf(nextLesson)+1).padStart(2,'0')} · ${nextLesson.title}`:t('All tracks')}</strong></a></nav>
       </footer>`}
     </main>`;
   const get=<T extends HTMLElement>(id:string)=>app.querySelector<T>(`#${id}`)!;
@@ -155,7 +159,7 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
   const savePracticeProgress=()=>{
     const persisted=saveProgress(lesson.ref,complete.checked?'complete':'practice',revision);
     if(persisted&&currentMissionMarker)currentMissionMarker.hidden=!complete.checked;
-    get('song-storage').textContent=persisted?'':'Não foi possível salvar o progresso.';
+    get('song-storage').textContent=persisted?'':t('Your progress could not be saved.');
   };
   const player=get('song-player');
   if(mission)get('mission-player-play').append(player);
@@ -203,7 +207,7 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
   };
   if(mission){
     options.setAttribute('role','group');
-    options.setAttribute('aria-label','Ajustes da prática');
+    options.setAttribute('aria-label',t('Practice settings'));
     app.querySelector('.mission-tabs')!.append(optionsToggle,options);
     document.addEventListener('click',dismissOptionsOnOutsideClick,true);
     document.addEventListener('keydown',dismissOptionsOnEscape);
@@ -231,12 +235,12 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
   const rangeEnd=()=>preparingMission()&&mission?.exampleBeats?Math.min(plan.beats,mission.exampleBeats):mode==='play'&&round?round.beats:singleIndex===null?plan.beats:plan.entries[singleIndex]!.offset+(plan.entries[singleIndex]!.block.endBeat-plan.entries[singleIndex]!.block.startBeat);
   const updateTransport=()=>{
     const active=running||starting;
-    const label=active?'Pausa':'Play';
+    const label=active?t('Pause'):'Play';
     const icon=active?'M6 5h4v14H6zm8 0h4v14h-4z':'M8 5v14l11-7z';
-    play.setAttribute('aria-label',label);play.title=`${label} (Espaço)`;
+    play.setAttribute('aria-label',label);play.title=`${label} (${locale==='en'?'Space':'Espaço'})`;
     play.querySelector('path')!.setAttribute('d',icon);
     if(example){
-      example.querySelector('span')!.textContent=active&&preparingMission()?'Pausar o trecho':'Ouvir o trecho';
+      example.querySelector('span')!.textContent=active&&preparingMission()?t('Pause the passage'):t('Hear the passage');
       example.querySelector('path')!.setAttribute('d',preparingMission()?icon:'M8 5v14l11-7z');
     }
   };
@@ -295,7 +299,7 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
       const voice=timbre?await loadStudySampleVoice(timbre):playStudyGuitar;
       if(!disposed&&audition===context&&request===auditionRequest)voice(context,midi,context.currentTime+.01,.6,undefined,melodicOutputFor(context));
     }catch{
-      if(!disposed&&request===auditionRequest)status.textContent='Não foi possível ouvir a nota neste navegador.';
+      if(!disposed&&request===auditionRequest)status.textContent=t('This browser could not play the note.');
     }
   };
   // Later rounds use the same audio context and clock as the first one.
@@ -355,36 +359,36 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
     }catch{
       if(attempt!==token)return;
       pause();
-      (preparingMission()&&exampleStatus?exampleStatus:status).textContent='Não foi possível iniciar o áudio. Tente novamente.';
+      (preparingMission()&&exampleStatus?exampleStatus:status).textContent=t('Audio could not start. Please try again.');
     }
   };
   const setBoard=(board:Board,block:StudyBlock)=>{
     if(block.map){
       const map=block.map;
-      if(!map.positions.length)board.setAttribute('empty-message','Ouça a base e encontre seu caminho no instrumento.');
+      if(!map.positions.length)board.setAttribute('empty-message',t('Listen to the backing and find your way on the instrument.'));
       const plain=lesson.mapStyle==='plain-degrees';
       board.classList.toggle('plain-degree-map',plain);
-      const annotations=plain&&!labels.checked?map.positions.map(p=>({stringId:p.stringId,fret:p.fret,label:studyDegree(p.midi,map.tonic),description:`Grau ${studyDegree(p.midi,map.tonic)} em relação à tônica.`})):[];
-      board.configuration={tonic:map.tonic,scaleId:map.scaleId,spelling:map.spelling,startFret:block.startFret,endFret:block.endFret,labelMode:labels.checked?'degree':'letter',positions:map.positions,degreeLabels:map.degreeLabels,roles:plain?[]:studyMapRoles(map),annotations};
+      const annotations=plain&&!labels.checked?map.positions.map(p=>({stringId:p.stringId,fret:p.fret,label:studyDegree(p.midi,map.tonic),description:locale==='en'?`Degree ${studyDegree(p.midi,map.tonic)} relative to the tonic.`:`Grau ${studyDegree(p.midi,map.tonic)} em relação à tônica.`})):[];
+      board.configuration={locale,tonic:map.tonic,scaleId:map.scaleId,spelling:map.spelling,startFret:block.startFret,endFret:block.endFret,labelMode:labels.checked?'degree':'letter',positions:map.positions,degreeLabels:map.degreeLabels,roles:plain?[]:studyMapRoles(map),annotations};
       board.highlightedPositions=[];return;
     }
     const {phrase,possibilities,additional}=lessonMapPositions(lesson,block);
     const positions=[...phrase,...possibilities];
     const intervals=[0,2,3,5,7,8,10];
     const roles=[...positions.filter(pos=>!intervals.includes((pos.midi-4+120)%12)),...additional].map(pos=>({...pos,roles:['context']}));
-    const annotations=[...new Map(block.notes.filter(note=>note.technique).map(note=>[`${note.stringId}:${note.fret}`,{stringId:note.stringId,fret:note.fret,label:note.technique!.kind==='bend'?(note.technique!.semitones===2?'↗1t':'↗¼'):note.pitchCurve?.[0]&&note.pitchCurve[0].midi>note.midi?'↘':'↗',description:note.technique!.kind==='bend'?(note.technique!.semitones===2?'Bend de um tom: eleve o som sem trocar de casa.':'Bend leve: eleve a nota um quarto de tom.'):'Slide: deslize até esta nota.'}])).values()];
-    board.configuration={tonic:4,scaleId:lesson.exploration?'minorPentatonic':'naturalMinor',startFret:lesson.exploration?12:block.startFret,endFret:lesson.exploration?15:block.endFret,spelling:block.id.startsWith('intro')?'flat':'sharp',labelMode:labels.checked?'degree':'letter',positions:positions.filter(pos=>intervals.includes((pos.midi-4+120)%12)),roles,annotations};
+    const annotations=[...new Map(block.notes.filter(note=>note.technique).map(note=>[`${note.stringId}:${note.fret}`,{stringId:note.stringId,fret:note.fret,label:note.technique!.kind==='bend'?(note.technique!.semitones===2?'↗1t':'↗¼'):note.pitchCurve?.[0]&&note.pitchCurve[0].midi>note.midi?'↘':'↗',description:note.technique!.kind==='bend'?(note.technique!.semitones===2?t('Whole-step bend: raise the pitch without changing fret.'):t('Small bend: raise the note by a quarter tone.')):t('Slide: move along the string to this note.')}])).values()];
+    board.configuration={locale,tonic:4,scaleId:lesson.exploration?'minorPentatonic':'naturalMinor',startFret:lesson.exploration?12:block.startFret,endFret:lesson.exploration?15:block.endFret,spelling:block.id.startsWith('intro')?'flat':'sharp',labelMode:labels.checked?'degree':'letter',positions:positions.filter(pos=>intervals.includes((pos.midi-4+120)%12)),roles,annotations};
     board.highlightedPositions=[];
   };
   const renderCards=()=>{
     get('song-boards').classList.toggle('song-boards--current',!!mission);
     get('song-boards').innerHTML=cardPlan.entries.map(({block,entryIndex},i)=>{
       const reference=entryIndex===null,title=escape(lesson.mapTitle??block.title);
-      const boardLabel=mission?.hideBoardTitle?`Braço ${i+1}`:escape(lesson.mapTitle??`Mapa de ${block.title}`);
+      const boardLabel=mission?.hideBoardTitle?(locale==='en'?`Fretboard ${i+1}`:`Braço ${i+1}`):escape(lesson.mapTitle??(locale==='en'?`Map of ${block.title}`:`Mapa de ${block.title}`));
       const progressLabel=mission?.hideBoardTitle?boardLabel:escape(block.title);
-      const boardHeading=reference||mission?title:`<button class="study-card-play" type="button" aria-label="Ouvir apenas ${escape(block.title)}">${title}</button>`;
+      const boardHeading=reference||mission?title:`<button class="study-card-play" type="button" aria-label="${locale==='en'?'Hear only':'Ouvir apenas'} ${escape(block.title)}">${title}</button>`;
       const heading=mission?.hideBoardTitle?'':`<h3 id="song-block-title-${i}">${boardHeading}</h3>`;
-      return `<article class="study-card${reference?' study-card--reference':''}${lesson.exploration?' study-card--exploration':''}" data-study-block="${block.id}"${heading?` aria-labelledby="song-block-title-${i}"`:''}>${heading}<penta-fretboard id="song-board-${i}" aria-label="${boardLabel}"></penta-fretboard>${reference?'':`<input class="study-progress" type="range" min="0" max="${block.endBeat-block.startBeat}" step=".01" value="0" aria-label="Posição em ${progressLabel}">`}</article>`;
+      return `<article class="study-card${reference?' study-card--reference':''}${lesson.exploration?' study-card--exploration':''}" data-study-block="${block.id}"${heading?` aria-labelledby="song-block-title-${i}"`:''}>${heading}<penta-fretboard id="song-board-${i}" aria-label="${boardLabel}"></penta-fretboard>${reference?'':`<input class="study-progress" type="range" min="0" max="${block.endBeat-block.startBeat}" step=".01" value="0" aria-label="${locale==='en'?'Position in':'Posição em'} ${progressLabel}">`}</article>`;
     }).join('');
     cards=Array.from(get('song-boards').querySelectorAll<HTMLElement>('.study-card'));
     boards=cards.map(card=>card.querySelector<Board>('penta-fretboard')!);
@@ -455,8 +459,9 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
     else if(index!==rendered)showBlock(index);
     const turn=app.querySelector<HTMLElement>('#mission-turn');
     if(turn){
-      const phaseLabel=phaseLabelAt(entry.block.phaseCues,local);
-      const label=stopped||now<0?'':phaseLabel==='Toque junto'&&!melody.checked?'Toque':phaseLabel??(!melody.checked||(entry.block.responseBeat!==undefined&&local>=entry.block.responseBeat)?'Toque':'Ouça');
+      const phaseCue=phaseCueAt(entry.block.phaseCues,local);
+      const phaseLabel=phaseCue?phaseCue.kind?t(phaseText[phaseCue.kind]):phaseCue.label:undefined;
+      const label=stopped||now<0?'':phaseCue?.kind==='along'&&!melody.checked?t('turn.play'):phaseLabel??(!melody.checked||(entry.block.responseBeat!==undefined&&local>=entry.block.responseBeat)?t('turn.play'):t('Listen'));
       if(turn.textContent!==label)turn.textContent=label;
     }
     const active=entry.block.notes.filter(note=>!responding&&!stopped&&local>=note.beat&&local<note.beat+note.duration&&now<rangeEnd());
@@ -480,7 +485,7 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
     frame=requestAnimationFrame(draw);
   };
   const togglePlayback=()=>{if(running||starting)pause();else{rendered=-1;void start();}};
-  play.setAttribute('aria-keyshortcuts','Space');play.title='Play (Espaço)';
+  play.setAttribute('aria-keyshortcuts','Space');play.title=t('Play (Space)');
   play.addEventListener('click',togglePlayback);
   example?.addEventListener('click',togglePlayback);
   measures.forEach((measure,index)=>measure.querySelector<HTMLButtonElement>('.mission-cell-jump')?.addEventListener('click',()=>{
@@ -591,7 +596,7 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
   const disposeReader=readMore&&studyBook?mountStudyReader(readMore,studyGuide,lesson.id,()=>{
     pause();
     if(audition){void audition.close().catch(()=>{});audition=null;}
-  }):()=>{};
+  },locale):()=>{};
   window.addEventListener('pagehide',()=>{
     disposed=true;
     document.removeEventListener('keydown',onTransportKey,true);

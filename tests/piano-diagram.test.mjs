@@ -40,9 +40,9 @@ test('compound intervals keep separate octaves, and descending intervals retain 
 });
 
 test('the static diagram exposes note names and endpoints without adding interactive controls',()=>{
- const markup=pianoDiagram({from:40,to:46,spelling:'flat',label:'Mi → Si♭ "exemplo"'});
+ const markup=pianoDiagram({from:40,to:46,spelling:'flat',label:'E → B♭ "exemplo"'});
  assert.match(markup,/role="img"/);
- assert.match(markup,/Si♭, oitava 2, chegada/);
+ assert.match(markup,/B♭, octave 2, end/);
  assert.match(markup,/&quot;exemplo&quot;/);
  assert.match(markup,/>B♭<\/text>/);
  assert.doesNotMatch(markup,/<button|tabindex|onclick/);
@@ -54,6 +54,6 @@ test('a scale highlights only its selected pitches without implying the chromati
  const {keys}=pianoLayout(options);
  assert.deepEqual(keys.filter(key=>key.role!=='context').map(key=>key.midi),[52,55,57,59,62,64]);
  assert.ok(keys.filter(key=>[53,54,56,58,60,61,63].includes(key.midi)).every(key=>key.role==='context'));
- assert.match(pianoDiagram(options),/Notas destacadas: Mi, Sol, Lá, Si, Ré, Mi/);
+ assert.match(pianoDiagram(options),/Highlighted notes: E, G, A, B, D, E/);
  assert.throws(()=>pianoLayout({...options,selectedNotes:[51]}),RangeError);
 });

@@ -12,12 +12,13 @@ Project-authored documentation uses [CC BY 4.0](https://creativecommons.org/lice
 
 The AGPL grant covers application code, not rights in third-party compositions, transcriptions or recordings. References and study arrangements of Purple Haze in the application and `src/data/purple-haze.json` do not imply permission to redistribute the underlying musical work under AGPL. Provenance is recorded in the data and project documentation. Project-authored instructional prose retains the documentation terms above; these do not grant rights in the referenced music.
 
-The source and redistribution permission for `legacy/images/guitar.jpg` still need confirmation; it is not represented as AGPL-licensed. Research PDFs are not included in the public documentation.
+Photographs retain their respective licenses, as listed below; they are not relicensed under AGPL.
 
 ## Included assets and libraries
 
 | Material | Terms and notices |
 | --- | --- |
+| “Closeup photography of electric guitar” (Gibson Les Paul Goldtop), Mikkel Bech | [Unsplash License](https://unsplash.com/license); stored as `legacy/images/guitar.jpg` for the legacy page's social sharing preview. [Original photograph](https://unsplash.com/photos/closeup-photography-of-electric-guitar-OwMIhcZu_X8). |
 | “Grayscale photo of person holding guitar neck and strings”, Caio Silva | Unsplash License; cropped for `src/assets/track-minor-pentatonic.webp`. Provenance and source link in `src/assets/track-minor-pentatonic.source.md`. |
 | FreePats clean guitar samples | CC0 1.0; source and modifications in `src/static/audio/clean-guitar/ATTRIBUTION.txt`. |
 | FreePats Finger Bass YR, Andrea Biasior | CC0 1.0; source and selected pitch centers in `src/static/audio/finger-bass/ATTRIBUTION.txt`. |

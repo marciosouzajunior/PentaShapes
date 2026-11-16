@@ -11,20 +11,20 @@ const {accompanimentChord}=await vite.ssrLoadModule('/src/song-chords.ts');
 test('changing the reference changes the degree, not the target pitch',()=>{
   const inE=referenceRelation('e'),inA=referenceRelation('a');
   assert.equal(inE.target,inA.target);
-  assert.equal(studyNote(inE.target),'Si');
+  assert.equal(studyNote(inE.target),'B');
   assert.deepEqual([inE.degree,inE.target-inE.root],['5',7]);
   assert.deepEqual([inA.degree,inA.target-inA.root],['2',2]);
 });
 
 test('the octave, ninth and raised ninth retain their actual pitch distances',()=>{
-  assert.equal(studyNote(40+2),'Fá♯');
-  assert.equal(studyNote(52+14),'Fá♯');
-  assert.equal(studyNote(52+15),'Sol');
-  assert.equal(studyNote(52+4),'Sol♯');
-  assert.equal(intervalName(12),'oitava');
-  assert.equal(intervalName(14),'nona maior');
-  assert.match(intervalName(15),/nona aumentada/);
-  assert.equal(studyNote(46,'flat'),'Si♭');
+  assert.equal(studyNote(40+2),'F♯');
+  assert.equal(studyNote(52+14),'F♯');
+  assert.equal(studyNote(52+15),'G');
+  assert.equal(studyNote(52+4),'G♯');
+  assert.equal(intervalName(12,'pt-BR'),'oitava');
+  assert.equal(intervalName(14,'pt-BR'),'nona maior');
+  assert.match(intervalName(15,'pt-BR'),/nona aumentada/);
+  assert.equal(studyNote(46,'flat'),'B♭');
 });
 
 test('every pilot lesson has a complete book with playable, valid examples',()=>{

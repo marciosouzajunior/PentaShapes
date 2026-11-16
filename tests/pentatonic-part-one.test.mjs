@@ -6,33 +6,35 @@ after(()=>vite.close());
 const {minorPartOneTrack:track}=await vite.ssrLoadModule('/src/pentatonic-part-one.ts');
 const {validateTrack}=await vite.ssrLoadModule('/src/track-model.ts');
 const {assembleLessonBlocks,midiPitch}=await vite.ssrLoadModule('/src/song-content.ts');
-const {tracks,archivedTracks}=await vite.ssrLoadModule('/src/tracks.ts');
+const {tracks,archivedTracks}=await vite.ssrLoadModule('/src/legacy-track-content.ts');
 const {playableLessons}=await vite.ssrLoadModule('/src/content-catalog.ts');
-const {studyTextMarkup}=await vite.ssrLoadModule('/src/study-reader.ts');
+const {studyTextMarkup:renderStudyText}=await vite.ssrLoadModule('/src/study-reader.ts');
+const studyTextMarkup=value=>renderStudyText(value,'pt-BR');
 const block=id=>track.blocks.find(b=>b.id===id);
 
-test('didactic prose distinguishes notes and chords automatically while degrees stay semantic',()=>{
-  const markup=studyTextMarkup('Mi é a [[degree:5]] de Am; procure a casa 5 e <ouça Ré>.');
-  assert.match(markup,/music-token--note">Mi<\/span>/);
+test('didactic prose marks letter notes explicitly while degrees stay semantic',()=>{
+  const markup=studyTextMarkup('[[note:E]] é a [[degree:5]] de Am; procure a casa 5 e <ouça [[note:D]]>.');
+  assert.match(markup,/music-token--note">E<\/span>/);
   assert.match(markup,/music-token--degree">5<\/span>/);
   assert.match(markup,/music-token--chord">Am<\/span>/);
   assert.match(markup,/casa 5/);
   assert.doesNotMatch(markup,/music-token--degree">5<\/span> e/);
-  assert.match(markup,/&lt;ouça <span class="music-token music-token--note">Ré<\/span>&gt;/);
+  assert.match(markup,/&lt;ouça <span class="music-token music-token--note">D<\/span>&gt;/);
   assert.equal(studyTextMarkup('Em cada acorde, toque Em.'),'Em cada acorde, toque Em.');
+  assert.equal(studyTextMarkup('A frase começa aqui.'),'A frase começa aqui.');
   assert.match(studyTextMarkup('Toque [[chord:Em]].'),/music-token--chord">Em<\/span>/);
   assert.match(studyTextMarkup('Toque [[chord:E7♯9]].'),/music-token--chord">E7♯9<\/span>/);
-  assert.match(studyTextMarkup('A base passa por [[chord:Mi]] e [[chord:Sol]].'),/music-token--chord">Mi<\/span> e <span class="music-token music-token--chord">Sol<\/span>/);
+  assert.match(studyTextMarkup('A base passa por [[chord:E]] e [[chord:G]].'),/music-token--chord">E<\/span> e <span class="music-token music-token--chord">G<\/span>/);
 });
 
 test('degree chips are consistent in the early mission readings without styling fret numbers',()=>{
-  const foundation=track.guide.lessons.find(lesson=>lesson.lessonId==='primeiro-caminho').pages[0];
+  const foundation=track.guide.lessons.find(lesson=>lesson.lessonId==='first-path').pages[0];
   const relationships=studyTextMarkup(foundation.paragraphs[3]);
   for(const degree of ['1','♭3','5','4','♭7'])assert.match(relationships,new RegExp(`music-token--degree">${degree}<\\/span>`));
   const fingering=studyTextMarkup(foundation.paragraphs[2]);
   assert.doesNotMatch(fingering,/music-token--degree/);
   assert.match(fingering,/casa 5/);
-  const transport=track.guide.lessons.find(lesson=>lesson.lessonId==='outros-lugares').pages[0];
+  const transport=track.guide.lessons.find(lesson=>lesson.lessonId==='moving-the-shape').pages[0];
   assert.equal((studyTextMarkup(transport.paragraphs[0]).match(/music-token--degree/g)??[]).length,3);
 });
 
@@ -242,8 +244,8 @@ test('final journey introduces each context then releases the returning chords f
 
 test('validation rejects an example that intrudes into a declared answer window',()=>{
   const changed=structuredClone(track);
-  const b=changed.blocks.find(b=>b.id==='journey-dm-ida');
-  b.notes=[{...changed.blocks.find(b=>b.id==='journey-am-ida').notes[0],beat:8,duration:1}];
+  const b=changed.blocks.find(b=>b.id==='journey-dm-outbound');
+  b.notes=[{...changed.blocks.find(b=>b.id==='journey-am-outbound').notes[0],beat:8,duration:1}];
   assert.throws(()=>validateTrack(changed),/resposta/);
 });
 
@@ -251,7 +253,7 @@ test('validation rejects broken expression timing without rejecting fractional v
   validateTrack(track);
   for(const point of [{beat:3,midi:57},{beat:.5,midi:NaN}]){
     const changed=structuredClone(track);
-    const arrival=changed.blocks.find(b=>b.id==='journey-am-ida').notes.at(-1);
+    const arrival=changed.blocks.find(b=>b.id==='journey-am-outbound').notes.at(-1);
     arrival.pitchCurve=[{beat:0,midi:arrival.midi},point];
     assert.throws(()=>validateTrack(changed),/Expressão inválida/);
   }

@@ -144,7 +144,7 @@ export function renderLesson(app: HTMLDivElement, id: LessonContent['id'] = 'l01
       note.classList.toggle('is-playing', noteIndex === index);
     });
   };
-  // Em altura real, o Lá da 1ª corda, casa 5, soa como A4 e aparece sem clave transpositora.
+  // Em altura real, o A da 1ª corda, casa 5, soa como A4 e aparece sem clave transpositora.
   let scoreResize: ResizeObserver | null = null;
   void import('abcjs').then(({ renderAbc }) => {
     const scoreArea = app.querySelector<HTMLElement>('.player-score')!;

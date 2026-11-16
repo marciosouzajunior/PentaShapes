@@ -14,7 +14,7 @@ O manifesto contém versão do esquema, ID, slug, título, resumo, dono, autor, 
 
 ## Identidade e progresso
 
-IDs não são títulos nem posições na sequência. Alterar nome, slug ou ordem não deve apagar progresso. Ao renomear rotas, preserve aliases existentes. Purple Haze usa `hendrix-purple-haze-missions` como identidade, mesmo que a URL ou o título mudem.
+IDs não são títulos nem posições na sequência. Alterar nome, slug ou ordem não deve apagar progresso. Não mantemos aliases ou redirecionamentos para URLs antigas. Purple Haze usa `hendrix-purple-haze-missions` como identidade, mesmo que a URL ou o título mudem.
 
 `src/content-identity.ts` distingue referências oficiais (`system`, trilha e lição) e de usuário (`user`, dono e lição). Esse é um contrato existente, não uma implementação de contas ou publicação comunitária. Antes de ampliar conteúdo de usuário, resolver explicitamente o agrupamento atual por dono e a identidade de várias trilhas do mesmo autor. Migrações precisam mapear chaves antigas.
 
@@ -27,6 +27,16 @@ Separe propósito (fundamentos ou repertório), assuntos (pentatônica, ritmo, b
 Contribuições devem informar fontes, autoria e permissões dos exemplos e assets. MIDI é uma fonte possível de preparação, não uma dependência obrigatória de uma trilha. Registre adaptações e preserve proveniência sem incluir arquivos privados, legendas integrais ou dados pessoais. Veja [referências musicais](referencias-musicais.md) e [termos de conteúdo](../THIRD_PARTY_NOTICES.md).
 
 O template de autoria inclui a direção didática e editorial de [missões](missoes.md) e [tom de voz](tom-de-voz.md). Declare o objetivo prático, a progressão, a intenção de cada janela de resposta, as durações e as referências necessárias. Não copie automaticamente textos, graus, diagramas ou técnicas de outra trilha. Fontes musicais ficam em `sources`; estudo externo opcional pode usar `StudyPage.insight.link`, com texto e destino claros. O reader apresenta esse box ao final quando `afterPractice` está ativo.
+
+## Idiomas das trilhas oficiais
+
+Inglês é o padrão de autoria, das chaves da interface, dos identificadores e do catálogo público de `src/tracks.ts`. Português é uma localização. Use IDs e slugs em inglês nas novas contribuições; o [guia de localização](localization.md) descreve o contrato. Somente as URLs atuais do catálogo são suportadas, sem aliases ou redirecionamentos para os endereços antigos. Na página principal, a escolha manual tem prioridade sobre a lista de idiomas do navegador; sem correspondência, usa-se inglês. Links explícitos para o início em português usam `?lang=pt-BR`, permitindo manter a escolha mesmo quando o armazenamento está bloqueado. Trilhas arquivadas, `/lesson` e `/legacy/` conservam suas identidades.
+
+`src/track-locales.ts` adapta as duas trilhas anteriores usando a mesma definição musical e o conteúdo editorial de `src/english-content.ts`. Essa compatibilidade usa os dados antigos de `src/legacy-track-content.ts`; novas trilhas podem declarar `TrackContent` diretamente em inglês, sem depender de uma versão portuguesa. Traduções são identificadas por IDs estáveis de missão; a montagem das versões existentes verifica a cobertura de missões, páginas e textos dos diagramas. Ao revisar conteúdo traduzido, atualizar os dois idiomas e conferir sua equivalência musical. O catálogo de rotas inclui ambas as versões; o catálogo de descoberta mostra o idioma escolhido.
+
+IDs de trilha e guia em inglês recebem `-en`, mantendo o progresso e os marcadores de leitura separados. IDs e dados antigos em português não são migrados. Preferências de prática, como velocidade e timbre, continuam compartilhadas. As fases internas do player usam identificadores semânticos; seu comportamento não depende do rótulo traduzido.
+
+Nos dois idiomas, usar letras para notas, conservar a grafia de acidentes e marcar explicitamente notas e acordes na prosa com `[[note:...]]` e `[[chord:...]]`. Uma letra isolada pode ser uma palavra comum. Não acrescentar referências de equivalência. As traduções devem preservar ação, trecho, duração e intenção de repetir ou improvisar. Traduzir também tabelas, legendas, texto alternativo, mensagens e palavras nos esboços; diagramas que contêm apenas cifras e graus podem ser compartilhados. Os renderizadores recebem o idioma explicitamente e mantêm português como padrão para chamadas anteriores.
 
 ## Evolução do catálogo
 

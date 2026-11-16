@@ -5,7 +5,7 @@ import {buildFretboard} from '../public/components/music.mjs';
 
 const vite=await createServer({configFile:false,server:{middlewareMode:true,hmr:false,ws:false},appType:'custom'});
 after(()=>vite.close());
-const {purpleTrack,tracks}=await vite.ssrLoadModule('/src/tracks.ts');
+const {purpleTrack,tracks}=await vite.ssrLoadModule('/src/legacy-track-content.ts');
 const {assembleLessonBlocks,songLessons,studyBlocks}=await vite.ssrLoadModule('/src/song-content.ts');
 const {accompanimentPlan,strumChordNotes}=await vite.ssrLoadModule('/src/song-chords.ts');
 const {beatInMission,boardTransitionProgress,missionPracticeBeats,missionRound,phaseLabelAt}=await vite.ssrLoadModule('/src/song-missions.ts');
@@ -28,7 +28,7 @@ test('Purple Haze missions retain the reviewed examples and have independent pro
   assert.deepEqual(tracks.filter(track=>track.manifest.musicalWork?.title==='Purple Haze'),[purpleTrack]);
   assert.equal(purpleTrack.manifest.title,'Purple Haze');
   assert.deepEqual(purpleTrack.manifest.publication,{status:'published',visibility:'public',revision:1});
-  assert.deepEqual(purpleTrack.lessons.map(lesson=>lesson.id),['s01','s02','s02-variacao','s05','s03','s04']);
+  assert.deepEqual(purpleTrack.lessons.map(lesson=>lesson.id),['s01','s02','s02-variation','s05','s03','s04']);
   for(const lesson of purpleTrack.lessons){
     const original=songLessons.find(item=>item.id===lesson.id);
     const example=assembleLessonBlocks(lesson,purpleTrack.blocks);
@@ -40,7 +40,7 @@ test('Purple Haze missions retain the reviewed examples and have independent pro
     assert.ok(lesson.mission.scene.illustration.src&&book.pages[0].hideTitle);
     assert.deepEqual(example.notes,(original.accompaniment?accompanimentPlan():assembleLessonBlocks(original,studyBlocks)).notes);
     if(lesson.mission.practiceMode==='along')continue;
-    const round=missionRound(example.beats);
+    const round=missionRound(example.beats,undefined,'pt-BR');
     const measureCount=Math.ceil(example.beats/4);
     assert.deepEqual(round.measures.map(measure=>measure.label),[
       ...Array(measureCount).fill('Ouça'),...Array(measureCount).fill('Toque'),

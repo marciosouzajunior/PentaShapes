@@ -1,3 +1,4 @@
+import type { Locale } from './locale';
 export type StudyPosition = { stringId:string; fret:number; midi:number };
 export type StudyBend = {stringId:string;fret:number;targetMidi:number};
 export type StudyVisual =
@@ -25,15 +26,16 @@ export type StudyPage = {
 };
 export type StudyBook = { lessonId:string; title:string; introduction:string; pages:StudyPage[] };
 export type StudyGuide = { id?:string;title:string; lessons:StudyBook[] };
-const names=['Dó','Dó♯','Ré','Ré♯','Mi','Fá','Fá♯','Sol','Sol♯','Lá','Lá♯','Si'];
-const flats=['Dó','Ré♭','Ré','Mi♭','Mi','Fá','Sol♭','Sol','Lá♭','Lá','Si♭','Si'];
+const names=['C','C♯','D','D♯','E','F','F♯','G','G♯','A','A♯','B'];
+const flats=['C','D♭','D','E♭','E','F','G♭','G','A♭','A','B♭','B'];
 export function studyDegree(midi:number,root:number):string{
   return ['1','♭2','2','♭3','3','4','♭5','5','♭6','6','♭7','7'][((midi-root)%12+12)%12]!;
 }
-export function studyNote(midi:number,spelling:'sharp'|'flat'='sharp'):string{
+export function studyNote(midi:number,spelling:'sharp'|'flat'='sharp',_locale:Locale='en'):string{
   return (spelling==='flat'?flats:names)[((midi%12)+12)%12]!;
 }
-export function intervalName(semitones:number):string{
+export function intervalName(semitones:number,locale:Locale='en'):string{
+  if(locale==='en')return ({0:'same pitch',1:'minor second',2:'major second',3:'minor third',4:'major third',5:'perfect fourth',6:'tritone · lowered fifth',7:'perfect fifth',8:'minor sixth',9:'major sixth',10:'minor seventh',11:'major seventh',12:'octave',14:'major ninth',15:'augmented ninth in this chord'} as Record<number,string>)[semitones]??`${semitones} semitones`;
   const intervals:Record<number,string>={0:'mesma altura',1:'segunda menor',2:'segunda maior',3:'terça menor',4:'terça maior',5:'quarta justa',6:'trítono · quinta abaixada',7:'quinta justa',8:'sexta menor',9:'sexta maior',10:'sétima menor',11:'sétima maior',12:'oitava',14:'nona maior',15:'nona aumentada neste acorde'};
   return intervals[semitones]??`${semitones} semitons`;
 }

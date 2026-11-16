@@ -1,8 +1,9 @@
-import {studyNote} from './study-model';
+import type { Locale } from './locale';
+import {studyNote as baseStudyNote} from './study-model';
 import './piano-diagram.css';
 
 export type PianoDiagramOptions={
-  from:number;to:number;startMidi?:number;endMidi?:number;
+  locale?:Locale;from:number;to:number;startMidi?:number;endMidi?:number;
   spelling?:'sharp'|'flat';label?:string;selectedNotes?:number[];
 };
 export type PianoKey={midi:number;black:boolean;x:number;width:number;role:'start'|'end'|'path'|'selected'|'context'};
@@ -35,10 +36,12 @@ export function pianoLayout(options:PianoDiagramOptions):{keys:PianoKey[];width:
 /** Static, accessible diagram: no audio, focus targets or exercise controls. */
 export function pianoDiagram(options:PianoDiagramOptions):string{
   const {keys,width}=pianoLayout(options),spelling=options.spelling??'sharp';
+  const locale=options.locale??'en';
+  const studyNote=(midi:number,spelling:'sharp'|'flat')=>baseStudyNote(midi,spelling,locale);
   const noteNames=spelling==='flat'?flats:letters;
   const distance=Math.abs(options.to-options.from);
-  const label=options.label??(options.selectedNotes?`Notas destacadas: ${options.selectedNotes.map(midi=>studyNote(midi,spelling)).join(', ')}.`:`${studyNote(options.from,spelling)} → ${studyNote(options.to,spelling)}: ${distance} ${distance===1?'semitom':'semitons'}.`);
-  const description=keys.map(key=>`${studyNote(key.midi,spelling)}, oitava ${Math.floor(key.midi/12)-1}${options.selectedNotes?(key.role!=='context'?', destacada':''):key.role==='start'?', partida':key.role==='end'?', chegada':''}`).join('; ');
+  const label=options.label??(options.selectedNotes?`${locale==='en'?'Highlighted notes':'Notas destacadas'}: ${options.selectedNotes.map(midi=>studyNote(midi,spelling)).join(', ')}.`:`${studyNote(options.from,spelling)} → ${studyNote(options.to,spelling)}: ${distance} ${locale==='en'?(distance===1?'semitone':'semitones'):(distance===1?'semitom':'semitons')}.`);
+  const description=keys.map(key=>`${studyNote(key.midi,spelling)}, ${locale==='en'?'octave':'oitava'} ${Math.floor(key.midi/12)-1}${options.selectedNotes?(key.role!=='context'?(locale==='en'?', highlighted':', destacada'):''):key.role==='start'?(locale==='en'?', start':', partida'):key.role==='end'?(locale==='en'?', end':', chegada'):''}`).join('; ');
   const keyMarkup=(key:PianoKey)=>{
     const height=key.black?90:144;
     const right=key.x+key.width,bottom=height+1;

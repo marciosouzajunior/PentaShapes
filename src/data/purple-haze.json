@@ -8,7 +8,7 @@
   "blocks": [
     {
       "id": "intro-a",
-      "title": "Si♭ em duas oitavas",
+      "title": "B♭ em duas oitavas",
       "startBeat": 0,
       "endBeat": 4,
       "startFret": 5,
@@ -204,7 +204,7 @@
     },
     {
       "id": "riff-b",
-      "title": "Voltar ao Mi",
+      "title": "Voltar ao E",
       "startBeat": 12,
       "endBeat": 16,
       "startFret": 0,
@@ -277,7 +277,7 @@
     },
     {
       "id": "riff-variation",
-      "title": "Sol, Lá e a chegada do bend",
+      "title": "G, A e a chegada do bend",
       "startBeat": 24,
       "endBeat": 28,
       "startFret": 5,

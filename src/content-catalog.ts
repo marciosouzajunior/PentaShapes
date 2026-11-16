@@ -1,5 +1,5 @@
 import { lessons } from './lesson-content';
-import { routeTracks } from './tracks';
+import { allRouteTracks as routeTracks } from './track-locales';
 
 // Routing and resume share one catalog; each content type keeps its own player.
 export const playableLessons = [

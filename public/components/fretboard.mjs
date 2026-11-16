@@ -103,6 +103,7 @@ export class PentaFretboard extends HTMLElement {
   }
 
   #render() {
+    const english = this.#configuration.locale !== 'pt-BR';
     this.#model = buildFretboard(this.#configuration);
     const scrollLeft = this.shadowRoot.querySelector('.scroll')?.scrollLeft ?? 0;
     const make = (tag, className, text) => {
@@ -115,7 +116,7 @@ export class PentaFretboard extends HTMLElement {
     style.textContent = stylesheet;
     const scroll = make('div', 'scroll');
     scroll.setAttribute('role', 'region');
-    scroll.setAttribute('aria-label', `Braço do instrumento, casas ${this.#model.startFret} a ${this.#model.endFret}`);
+    scroll.setAttribute('aria-label', english ? `Fretboard, frets ${this.#model.startFret} to ${this.#model.endFret}` : `Braço do instrumento, casas ${this.#model.startFret} a ${this.#model.endFret}`);
     const frets = this.#model.frets.filter(fret => fret > 0);
     const board = make('div', `board ${this.#model.handedness}${this.#model.startFret === 0 ? ' has-open' : ''}${frets.length ? '' : ' open-only'}`);
     board.style.setProperty('--frets', frets.length);
@@ -127,10 +128,11 @@ export class PentaFretboard extends HTMLElement {
       const button = make('button', `note${outside ? ' open-note' : ''}${note.isRoot ? ' root' : ''}${note.emphasized ? ' emphasized' : ''} ${note.roles.join(' ')}${this.#highlighted.has(positionKey(note)) ? ' playing' : ''}`);
       button.type = 'button';
       button.dataset.position = positionKey(note);
-      const role = note.isRoot ? ', tônica' : note.degree ? `, grau ${note.degree}` : ', nota natural';
-      const roleLabels = { chord: 'nota do acorde', target: 'nota-alvo', context: 'nota contextual' };
-      button.setAttribute('aria-label', `${string.number}ª corda, ${note.fret === 0 ? 'solta' : `casa ${note.fret}`}, ${note.name}${role}${note.roles.map(item => ', ' + roleLabels[item]).join('')}${note.emphasized ? ', corda em destaque' : ''}`);
-      button.append(make('span', 'dot', note[this.#model.labelMode]));
+      const role = note.isRoot ? (english?', tonic':', tônica') : note.degree ? `, ${english?'degree':'grau'} ${note.degree}` : (english?', natural note':', nota natural');
+      const roleLabels = english ? {chord:'chord tone',target:'target note',context:'context note'} : { chord: 'nota do acorde', target: 'nota-alvo', context: 'nota contextual' };
+      const position = english ? `String ${string.number}, ${note.fret===0?'open':`fret ${note.fret}`}, ${note.letter}` : `${string.number}ª corda, ${note.fret === 0 ? 'solta' : `casa ${note.fret}`}, ${note.name}`;
+      button.setAttribute('aria-label', `${position}${role}${note.roles.map(item => ', ' + roleLabels[item]).join('')}${note.emphasized ? (english?', highlighted string':', corda em destaque') : ''}`);
+      button.append(make('span', 'dot', english&&this.#model.labelMode==='name'?note.letter:note[this.#model.labelMode]));
       const annotation=(this.#configuration.annotations??[]).find(item=>item.stringId===note.stringId&&item.fret===note.fret);
       if(annotation){
         const mark=make('span','note-annotation',annotation.label);
@@ -146,7 +148,7 @@ export class PentaFretboard extends HTMLElement {
       const label = openNote?.visible
         ? makeNote(openNote, string, true)
         : make('span', 'string-label', string.id === 'e_high' && openPitch.letter === 'E' ? 'e' : openPitch.letter);
-      label.title = string.name;
+      label.title = english ? `${openPitch.letter} string` : string.name;
       const frettedNotes = notes.filter(note => note.fret > 0);
       const cells = frettedNotes.map((note, col) => {
         const bodyEdge = this.#model.handedness === 'left' ? col === 0 : col === frettedNotes.length - 1;
@@ -173,7 +175,7 @@ export class PentaFretboard extends HTMLElement {
     }));
     scroll.append(board);
     this.shadowRoot.replaceChildren(style, scroll);
-    if (!visibleCount) this.shadowRoot.append(make('p', 'empty', this.getAttribute('empty-message') ?? 'Nenhuma nota neste recorte. Escolha outra região.'));
+    if (!visibleCount) this.shadowRoot.append(make('p', 'empty', this.getAttribute('empty-message') ?? (english?'No notes in this view. Choose another region.':'Nenhuma nota neste recorte. Escolha outra região.')));
     scroll.scrollLeft = scrollLeft;
   }
 }
