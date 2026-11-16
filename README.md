@@ -1,36 +1,36 @@
 # PentaShapes
 
-Aplicativo web para praticar improvisação na guitarra e no violão. Reúne exemplos sonoros, diagramas do braço e trilhas guiadas para relacionar acordes, escalas e frases musicais.
+A web app for practising improvisation on electric and acoustic guitar. It brings together audio examples, fretboard diagrams and guided learning tracks to connect chords, scales and musical phrases.
 
-O projeto está em desenvolvimento. A proposta é permitir que a comunidade contribua com o aplicativo e crie novas trilhas usando a mesma estrutura de conteúdo.
+The project is under development. The aim is to let the community contribute to the app and create new tracks using the same content structure. English is the default authoring language; the current tracks and interface also support Portuguese.
 
-## Executar localmente
+## Run locally
 
-Com Node.js e npm instalados:
+With Node.js and npm installed:
 
 ```sh
 npm ci
 npm run dev
 ```
 
-Abra o endereço exibido no terminal. A trilha de referência está em `/track/purple-haze/`.
+Open the URL shown in the terminal. The English Purple Haze track is available at `/en/track/purple-haze/`. The home page follows your browser's language preferences; you can change the language in the header.
 
 ```sh
-npm run check    # Verificação de tipos e testes
-npm run build    # Verificação e build de produção
-npm run preview  # Prévia do build local
+npm run check    # Type checking and tests
+npm run build    # Checks and production build
+npm run preview  # Preview the local build
 ```
 
-A aplicação usa TypeScript e Vite. O build inclui o código anterior em `dist/legacy/`, acessível por `/legacy/`. Pushes na `main` publicam `dist/` no [Firebase Hosting](https://pentashapes.web.app).
+The app uses TypeScript and Vite. The build includes the legacy app in `dist/legacy/`, accessible at `/legacy/`. Pushes to `main` deploy `dist/` to [Firebase Hosting](https://pentashapes.web.app).
 
-## Contribuir
+## Contribute
 
-Sugestões, relatos de uso, correções e propostas de trilhas são bem-vindos por issues e pull requests.
+Suggestions, feedback, fixes and track proposals are welcome through issues and pull requests.
 
-Antes de criar conteúdo, consulte a [documentação do projeto](docs/README.md), o [modelo de missões](docs/missoes.md) e o [tom de voz](docs/tom-de-voz.md). Informe a autoria, as fontes e as permissões dos materiais enviados.
+Before creating content, read the [English-first authoring guide](docs/localization.md), the [project documentation](docs/README.md), the [mission model](docs/missoes.md) and the [tone of voice guidelines](docs/tom-de-voz.md). Most of the detailed documentation is currently in Portuguese. Include authorship, sources and permissions for the materials you submit.
 
-## Licença
+## License
 
-O código autoral, incluindo o legado, usa [AGPL-3.0-only](LICENSE). Uso comercial é permitido; versões derivadas devem cumprir as obrigações de compartilhamento de código previstas na licença, inclusive quando oferecidas pela rede.
+Project-authored code, including the legacy app, is licensed under [AGPL-3.0-only](LICENSE). Commercial use is permitted; derivative versions must comply with the license's source-sharing obligations, including when made available over a network.
 
-Documentação e materiais de terceiros têm termos próprios, descritos em [créditos e escopo das licenças](THIRD_PARTY_NOTICES.md).
+Documentation and third-party materials have their own terms, described in the [licensing scope and third-party notices](THIRD_PARTY_NOTICES.md).
