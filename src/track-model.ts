@@ -28,6 +28,9 @@ export function validateTrack(track:TrackContent):void {
     for(const note of [...block.notes,...block.backing??[]]){
       if(!Number.isFinite(note.beat)||!Number.isFinite(note.duration)||note.beat<0||note.duration<=0||note.beat+note.duration>duration||!Number.isInteger(note.midi)||note.midi<0||note.midi>127)fail(`Evento inválido em ${block.id}.`);
     }
+    for(const note of block.notes){
+      if(note.pitchCurve?.some((point,index,points)=>!Number.isFinite(point.beat)||point.beat<0||point.beat>note.duration||!Number.isFinite(point.midi)||point.midi<0||point.midi>127||(index>0&&point.beat<=points[index-1]!.beat)))fail(`Expressão inválida em ${block.id}.`);
+    }
     if(block.backing?.some(note=>note.instrument!==undefined&&!['clean-guitar','piano','finger-bass','drum-kit','electric-piano'].includes(note.instrument)))fail('Timbre de acompanhamento inválido.');
     if(block.backing?.some(note=>note.velocity!==undefined&&(!Number.isFinite(note.velocity)||note.velocity<0||note.velocity>1)))fail('Dinâmica de acompanhamento inválida.');
     if(block.backingGain!==undefined&&(!Number.isFinite(block.backingGain)||block.backingGain<0||block.backingGain>1))fail('Volume de acompanhamento inválido.');
@@ -39,11 +42,13 @@ export function validateTrack(track:TrackContent):void {
       if(map.reference&&map.reference.root.midi%12!==map.tonic)fail('Fundamental da referência inválida.');
     }
     if(block.cues?.some(c=>!Number.isFinite(c.beat)||c.beat<0||c.beat>=duration))fail('Indicação fora do trecho.');
+    if(block.phaseCues?.some((cue,index)=>!Number.isFinite(cue.beat)||cue.beat<0||cue.beat>=duration||(index===0?cue.beat!==0:cue.beat<=block.phaseCues![index-1]!.beat)))fail('Fase interna inválida.');
   }
   for(const lesson of track.lessons){
     if([...lesson.blocks,...lesson.referenceBlocks??[]].some(id=>!track.blocks.some(b=>b.id===id)))fail('Trecho ausente.');
     if(lesson.referenceBlocks?.some(id=>lesson.blocks.includes(id)))fail('Referência visual não deve participar da reprodução.');
     if(lesson.mission?.exampleBeats!==undefined&&(!Number.isFinite(lesson.mission.exampleBeats)||lesson.mission.exampleBeats<=0))fail('Duração do exemplo inválida.');
+    if(lesson.mission?.practiceBeats!==undefined&&(!Number.isFinite(lesson.mission.practiceBeats)||lesson.mission.practiceBeats<=0||lesson.mission.practiceBeats>lesson.blocks.reduce((sum,id)=>sum+(track.blocks.find(block=>block.id===id)!.endBeat-track.blocks.find(block=>block.id===id)!.startBeat),0)))fail('Duração da prática inválida.');
     if(!track.guide.lessons.some(book=>book.lessonId===lesson.id))fail('Leitura ausente.');
     if(lesson.ref.source==='system'&&lesson.ref.trackId!==track.manifest.id)fail('Progresso aponta para outra trilha.');
     const cards=new Map<string,StudyBlock>();

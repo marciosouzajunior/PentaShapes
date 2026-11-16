@@ -4,6 +4,37 @@ import {pianoDiagram} from './piano-diagram';
 import './study-reader.css';
 
 const escape=(value:string)=>value.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
+type MusicTokenKind='note'|'degree'|'chord';
+const plainStudyText=(value:string)=>value.replace(/\[\[(?:note|degree|chord):([^\[\]]+)\]\]/g,'$1');
+
+function automaticMusicMarkup(value:string):string{
+  const token=/(^|[^\p{L}\p{N}])((?:Dó|Ré|Mi|Fá|Sol|Lá|Si)[♭♯]?|[A-G][#♯♭]?(?:(?:m|maj|min|dim|aug|sus)\d*|\d+)(?:\/[A-G][#♯♭]?)?)(?=$|[^\p{L}\p{N}])/gu;
+  let markup='',cursor=0,match:RegExpExecArray|null;
+  while((match=token.exec(value))!==null){
+    const prefix=match[1]!,label=match[2]!;
+    markup+=escape(value.slice(cursor,match.index))+escape(prefix);
+    if(label==='Em')markup+=escape(label);
+    else{
+      const kind:MusicTokenKind=/^[A-G]/.test(label)?'chord':'note';
+      markup+=`<span class="music-token music-token--${kind}">${escape(label)}</span>`;
+    }
+    cursor=match.index+prefix.length+label.length;
+  }
+  return markup+escape(value.slice(cursor));
+}
+
+/** Adds restrained, semantic emphasis to musical relationships authored in prose. */
+export function studyTextMarkup(value:string):string{
+  const token=/\[\[(note|degree|chord):([^\[\]]+)\]\]/g;
+  let markup='',cursor=0,match:RegExpExecArray|null;
+  while((match=token.exec(value))!==null){
+    markup+=automaticMusicMarkup(value.slice(cursor,match.index));
+    const kind=match[1] as MusicTokenKind;
+    markup+=`<span class="music-token music-token--${kind}">${escape(match[2]!)}</span>`;
+    cursor=match.index+match[0].length;
+  }
+  return markup+automaticMusicMarkup(value.slice(cursor));
+}
 const letters=['C','C♯','D','D♯','E','F','F♯','G','G♯','A','A♯','B'];
 const flats=['C','D♭','D','E♭','E','F','G♭','G','A♭','A','B♭','B'];
 
@@ -48,14 +79,37 @@ function positionsFigure(visual:Extract<StudyVisual,{kind:'positions'|'scale'}>)
     const bendIndex=bends.findIndex(bend=>bend.stringId===position.stringId&&bend.fret===position.fret);
     return bendIndex>=0?`<g class="bend-note" style="--bend-distance:${displacement(bends[bendIndex]!)}px;--bend-delay:${bendIndex*2}s">${note}</g>`:note;
   }).join('');
-  const description=(visual.caption||`Notas no braço, casas ${visual.startFret} a ${visual.endFret}.`)+bends.map(bend=>` Ilustração da corda se deslocando lateralmente, na mesma casa, ${Number.isInteger(bend.targetMidi)?`até o som de ${studyNote(bend.targetMidi)}`:'elevando o som um quarto de tom'}.`).join('');
-  return `<figure><div class="reading-fretboard-scroll"><svg class="reading-fretboard${visual.kind==='scale'&&visual.degreeAnnotations?' reading-fretboard--degrees':''}" viewBox="0 0 ${width} 250" style="--reading-fretboard-width:${width}px" role="img" aria-label="${escape(description)}">${grid}${rows}${frets}${arrow}${gesture}${notes}</svg></div>${visual.caption?`<figcaption>${escape(visual.caption)}</figcaption>`:''}</figure>`;
+  const description=plainStudyText(visual.caption||`Notas no braço, casas ${visual.startFret} a ${visual.endFret}.`)+bends.map(bend=>` Ilustração da corda se deslocando lateralmente, na mesma casa, ${Number.isInteger(bend.targetMidi)?`até o som de ${studyNote(bend.targetMidi)}`:'elevando o som um quarto de tom'}.`).join('');
+  return `<figure><div class="reading-fretboard-scroll"><svg class="reading-fretboard${visual.kind==='scale'&&visual.degreeAnnotations?' reading-fretboard--degrees':''}" viewBox="0 0 ${width} 250" style="--reading-fretboard-width:${width}px" role="img" aria-label="${escape(description)}">${grid}${rows}${frets}${arrow}${gesture}${notes}</svg></div>${visual.caption?`<figcaption>${studyTextMarkup(visual.caption)}</figcaption>`:''}</figure>`;
+}
+
+function scaleOverlayFigure(visual:Extract<StudyVisual,{kind:'scale-overlay'}>):string{
+  const strings=['e_high','b','g','d','a','e_low'];
+  const count=visual.endFret-visual.startFret+1,cell=76;
+  const right=50+count*cell,width=right+30;
+  const labels=['e','B','G','D','A','E'];
+  const grid=Array.from({length:count+1},(_,i)=>`<line x1="${50+i*cell}" y1="20" x2="${50+i*cell}" y2="212"/>`).join('');
+  const rows=strings.map((_,i)=>`<text x="20" y="${44+i*31}" class="string-name">${labels[i]}</text><line x1="50" y1="${40+i*31}" x2="${right}" y2="${40+i*31}" class="string-line"/>`).join('');
+  const frets=Array.from({length:count},(_,i)=>`<text x="${50+(i+.5)*cell}" y="235" class="fret-number">${visual.startFret+i}</text>`).join('');
+  const keys=visual.layers.map(layer=>new Set(layer.positions.map(position=>`${position.stringId}:${position.fret}`)));
+  const positions=[...new Map(visual.layers.flatMap(layer=>layer.positions).map(position=>[`${position.stringId}:${position.fret}`,position])).values()];
+  const names=visual.spelling==='flat'?flats:letters;
+  const notes=positions.map(position=>{
+    const key=`${position.stringId}:${position.fret}`,first=keys[0]!.has(key),second=keys[1]!.has(key);
+    const x=50+(position.fret-visual.startFret+.5)*cell,y=40+strings.indexOf(position.stringId)*31;
+    const classes=['scale-overlay-note',first&&second?'scale-overlay-shared':first?'scale-overlay-first-only':'scale-overlay-second-only',position.midi%12===visual.layers[0].root?'scale-overlay-first-root':'',position.midi%12===visual.layers[1].root?'scale-overlay-second-root':''].filter(Boolean).join(' ');
+    return `<g class="${classes}"><circle cx="${x}" cy="${y}" r="14"/><text x="${x}" y="${y+5}" class="position-note">${names[position.midi%12]}</text></g>`;
+  }).join('');
+  const description=`Sobreposição das escalas ${visual.layers[0].label} e ${visual.layers[1].label}, casas ${visual.startFret} a ${visual.endFret}.`;
+  const firstChecked=visual.initialLayer!=='second',secondChecked=visual.initialLayer!=='first';
+  return `<figure class="reading-scale-overlay"><div class="reading-fretboard-scroll"><svg class="reading-fretboard" viewBox="0 0 ${width} 250" style="--reading-fretboard-width:${width}px" role="img" aria-label="${escape(description)}">${grid}${rows}${frets}${notes}</svg></div><div class="reading-scale-overlay-controls" aria-label="Escalas visíveis"><label><input type="checkbox" data-layer="first"${firstChecked?' checked':''}><span>${escape(visual.layers[0].label)}</span></label><label><input type="checkbox" data-layer="second"${secondChecked?' checked':''}><span>${escape(visual.layers[1].label)}</span></label></div>${visual.caption?`<figcaption>${studyTextMarkup(visual.caption)}</figcaption>`:''}</figure>`;
 }
 
 function visualMarkup(visual:StudyVisual):string{
-  if(visual.kind==='table')return `<figure><div class="reading-table-scroll"><table class="reading-table"><thead><tr>${visual.columns.map(column=>`<th scope="col">${escape(column)}</th>`).join('')}</tr></thead><tbody>${visual.rows.map(row=>`<tr>${row.map(cell=>`<td>${escape(cell)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>${visual.caption?`<figcaption>${escape(visual.caption)}</figcaption>`:''}</figure>`;
-  if(visual.kind==='image')return `<figure class="reading-image"><img src="${escape(visual.src)}" alt="${escape(visual.alt)}"/>${visual.caption?`<figcaption>${escape(visual.caption)}</figcaption>`:''}</figure>`;
+  if(visual.kind==='table')return `<figure><div class="reading-table-scroll"><table class="reading-table"><thead><tr>${visual.columns.map(column=>`<th scope="col">${studyTextMarkup(column)}</th>`).join('')}</tr></thead><tbody>${visual.rows.map(row=>`<tr>${row.map(cell=>`<td>${studyTextMarkup(cell)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>${visual.caption?`<figcaption>${studyTextMarkup(visual.caption)}</figcaption>`:''}</figure>`;
+  if(visual.kind==='image')return `<figure class="reading-image"><img src="${escape(visual.src)}" alt="${escape(visual.alt)}"/>${visual.caption?`<figcaption>${studyTextMarkup(visual.caption)}</figcaption>`:''}</figure>`;
   if(visual.kind==='positions'||visual.kind==='scale')return positionsFigure(visual);
+  if(visual.kind==='scale-overlay')return scaleOverlayFigure(visual);
   if(visual.kind==='fretboard-intervals'){
     return `<div class="reading-fretboard-intervals">${visual.targets.map(target=>{
       const [from,to]=visual.towardRoot?[target,visual.root]:[visual.root,target];
@@ -66,7 +120,7 @@ function visualMarkup(visual:StudyVisual):string{
     const distances=visual.showName===false?[1,2]:visual.distances;
     const limit=Math.max(...distances),spelling=visual.spelling??'sharp';
     const endMidi=Math.floor((visual.root+limit)/12)*12+11;
-    return `<figure class="reading-piano-figure"><div class="reading-intervals">${distances.map(distance=>`<div class="reading-interval">${pianoDiagram({from:visual.root,to:visual.root+distance,endMidi,spelling})}<div class="reading-interval-description"><strong>${studyNote(visual.root,spelling)} → ${studyNote(visual.root+distance,spelling)}</strong><span>${visual.showName===false?(distance===1?'uma casa na mesma corda':'um tom'):intervalName(distance)}<small class="reading-measure"> · ${distance} ${distance===1?'semitom':'semitons'}</small></span></div></div>`).join('')}</div>${visual.caption?`<figcaption>${escape(visual.caption)}</figcaption>`:''}</figure>`;
+    return `<figure class="reading-piano-figure"><div class="reading-intervals">${distances.map(distance=>`<div class="reading-interval">${pianoDiagram({from:visual.root,to:visual.root+distance,endMidi,spelling})}<div class="reading-interval-description"><strong>${studyNote(visual.root,spelling)} → ${studyNote(visual.root+distance,spelling)}</strong><span>${visual.showName===false?(distance===1?'uma casa na mesma corda':'um tom'):intervalName(distance)}<small class="reading-measure"> · ${distance} ${distance===1?'semitom':'semitons'}</small></span></div></div>`).join('')}</div>${visual.caption?`<figcaption>${studyTextMarkup(visual.caption)}</figcaption>`:''}</figure>`;
   }
   if(visual.kind==='degrees'){
     return `<figure><div class="reading-references">${(['e','a'] as const).map(reference=>{
@@ -75,40 +129,42 @@ function visualMarkup(visual:StudyVisual):string{
     }).join('')}</div><figcaption>A nota Si tem a mesma altura nos dois exemplos. A referência muda sua relação.</figcaption></figure>`;
   }
   if(visual.kind==='alternation'){
-    return `<figure class="reading-alternation-figure"><svg class="reading-alternation" viewBox="0 0 320 200" role="img" aria-label="${escape(visual.caption)}"><g class="alternation-arrows" fill="none"><path d="M85 65C120 10 200 10 235 65"/><path d="M224 60L235 65L232 53"/><path d="M235 135C200 190 120 190 85 135"/><path d="M88 147L85 135L97 140"/></g>${visual.notes.map((midi,i)=>`<text x="${i===0?60:260}" y="106" class="alternation-note">${studyNote(midi,visual.spelling??'sharp')}</text>`).join('')}<text x="160" y="105" class="alternation-interval">${escape(visual.intervalLabel??intervalName(Math.abs(visual.notes[1]-visual.notes[0])))}</text></svg>${visual.showCaption===false?'':`<figcaption>${escape(visual.caption)}</figcaption>`}</figure>`;
+    return `<figure class="reading-alternation-figure"><svg class="reading-alternation" viewBox="0 0 320 200" role="img" aria-label="${escape(visual.caption)}"><g class="alternation-arrows" fill="none"><path d="M85 65C120 10 200 10 235 65"/><path d="M224 60L235 65L232 53"/><path d="M235 135C200 190 120 190 85 135"/><path d="M88 147L85 135L97 140"/></g>${visual.notes.map((midi,i)=>`<text x="${i===0?60:260}" y="106" class="alternation-note">${studyNote(midi,visual.spelling??'sharp')}</text>`).join('')}<text x="160" y="105" class="alternation-interval">${escape(visual.intervalLabel??intervalName(Math.abs(visual.notes[1]-visual.notes[0])))}</text></svg>${visual.showCaption===false?'':`<figcaption>${studyTextMarkup(visual.caption)}</figcaption>`}</figure>`;
   }
   if(visual.kind==='path'){
     return `<figure><div class="reading-path${visual.compact?' reading-path-compact':''}">${visual.notes.map((midi,i)=>{
       const next=visual.notes[i+1],distance=next===undefined?0:Math.abs(next-midi);
       return `<strong>${studyNote(midi,visual.spelling??'sharp')}</strong>${next===undefined?'':`<span><b aria-hidden="true">${next>midi?'↗':next<midi?'↘':'→'}</b><small>${distance>=8?intervalName(distance):`${distance} ${distance===1?'semitom':'semitons'}`}</small></span>`}`;
-    }).join('')}</div>${visual.showCaption===false?'':`<figcaption>${escape(visual.caption)}</figcaption>`}</figure>`;
+    }).join('')}</div>${visual.showCaption===false?'':`<figcaption>${studyTextMarkup(visual.caption)}</figcaption>`}</figure>`;
   }
   const roles=visual.kind==='chord'?visual.roles:visual.degrees;
-  return `<figure><div class="reading-notes">${visual.notes.map((midi,i)=>`<div><strong>${studyNote(midi)}</strong><small>${escape(roles[i]!)}</small></div>`).join('')}</div><figcaption>${escape(visual.caption)}</figcaption></figure>`;
+  return `<figure><div class="reading-notes">${visual.notes.map((midi,i)=>`<div><strong>${studyNote(midi)}</strong><small>${escape(roles[i]!)}</small></div>`).join('')}</div><figcaption>${studyTextMarkup(visual.caption)}</figcaption></figure>`;
 }
 
 export function studyTopicMarkup(page:StudyPage,id:string):string{
   const figure=`<div class="reader-visual">${visualMarkup(page.visual)}</div>`;
+  const insightMarkup=page.insight?`<aside class="reader-insight" aria-labelledby="${id}-insight"><strong id="${id}-insight">${studyTextMarkup(page.insight.title)}</strong><p>${studyTextMarkup(page.insight.text)}</p>${page.insight.link?`<a href="${escape(page.insight.link.href)}" target="_blank" rel="noopener noreferrer">${escape(page.insight.link.label)} <span aria-hidden="true">↗</span></a>`:''}</aside>`:'';
   const inlineVisual=page.visualAfterParagraph!==undefined&&page.visualAfterParagraph>=1&&page.visualAfterParagraph<=page.paragraphs.length;
   const prose=page.paragraphs.map((paragraph,i)=>{
     const position=i+1;
     const extraFigures=(page.additionalVisuals??[]).filter(item=>item.afterParagraph===position)
       .map(item=>`<div class="reader-visual">${visualMarkup(item.visual)}</div>`).join('');
-    const insight=page.insight?.afterParagraph===position
-      ?`<aside class="reader-insight" aria-labelledby="${id}-insight"><strong id="${id}-insight">${escape(page.insight.title)}</strong><p>${escape(page.insight.text)}</p></aside>`
+    const insight=page.insight?.afterParagraph===position&&!page.insight.afterPractice
+      ?insightMarkup
       :'';
-    return `<div class="reader-prose"><p>${escape(paragraph)}</p></div>${inlineVisual&&position===page.visualAfterParagraph?figure:''}${extraFigures}${insight}`;
+    return `<div class="reader-prose"><p>${studyTextMarkup(paragraph)}</p></div>${inlineVisual&&position===page.visualAfterParagraph?figure:''}${extraFigures}${insight}`;
   }).join('');
   let practice='';
   if(page.practice){
     practice=page.highlightPractice
-      ?`<div class="reader-insight"><strong>Experimente na guitarra</strong><p>${escape(page.practice)}</p></div>`
-      :`<p class="reader-practice"><span class="reader-practice-icon" aria-hidden="true">♪</span><span><span class="sr-only">No instrumento: </span>${escape(page.practice)}</span></p>`;
+      ?`<div class="reader-insight"><strong>Experimente na guitarra</strong><p>${studyTextMarkup(page.practice)}</p></div>`
+      :`<p class="reader-practice"><span class="reader-practice-icon" aria-hidden="true">♪</span><span><span class="sr-only">No instrumento: </span>${studyTextMarkup(page.practice)}</span></p>`;
   }
   return `<section class="reader-topic" aria-labelledby="${id}">
     <h2 id="${id}" tabindex="-1"${page.hideTitle?' hidden':''}>${escape(page.title)}</h2>
     ${prose}${inlineVisual?'':figure}
     ${practice}
+    ${page.insight?.afterPractice?insightMarkup:''}
   </section>`;
 }
 

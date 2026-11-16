@@ -55,7 +55,7 @@ const missionCopy:Record<string,SongMission&{title:string}>={
     practiceMode:'along',
     scene:{
       title:'O caminho de volta ao Mi',
-      text:'Na base do verso, o acorde de Mi ocupa quatro tempos. Sol e Lá passam mais rápido, com dois tempos cada. Ouça a sequência e conte junto para sentir quando chega a hora de voltar ao Mi.',
+      text:'Na base do verso, o acorde de [[chord:Mi]] ocupa quatro tempos. [[chord:Sol]] e [[chord:Lá]] passam mais rápido, com dois tempos cada. Ouça a sequência e conte junto para sentir quando chega a hora de voltar ao [[chord:Mi]].',
       illustration:{src:chordsSketch,alt:'E7♯9 ocupa quatro tempos. G e A ocupam dois tempos cada.',size:{width:230,height:84}},
     },
   },

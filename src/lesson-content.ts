@@ -101,7 +101,7 @@ export const lessons: LessonContent[] = [
   {
     id: 'l01', ref: identity('l01'), revision: 1, number: 'L01', title: 'Encontre o repouso', href: '/lesson/',
     instruction: 'Toque o Lá na 1ª corda, casa 5, sobre Am. Deixe a nota soar, faça uma pausa e perceba o efeito de voltar a ela.',
-    degreeExplanation: 'O grau mostra a relação de uma nota com a tônica, nossa referência. Aqui, Lá é a tônica: grau 1. Ouça como é voltar a ela depois de uma pausa.',
+    degreeExplanation: 'O grau mostra a relação de uma nota com a tônica, nossa referência. Aqui, Lá é a tônica: grau [[degree:1]]. Ouça como é voltar a ela depois de uma pausa.',
     practiceInstruction: 'Toque o Lá e deixe espaço antes de voltar a ele.',
     exampleInstruction: 'Escute o Lá no primeiro tempo de cada compasso.',
     reflection: 'Consegui voltar ao Lá e deixar uma pausa. A execução é avaliada por você.',
@@ -113,7 +113,7 @@ export const lessons: LessonContent[] = [
   {
     id: 'l02', ref: identity('l02'), revision: 1, number: 'L02', title: 'Duas notas, muitos ritmos', href: '/lesson/l02/',
     instruction: 'Use Lá (1ª corda, casa 5) e Dó (1ª corda, casa 8). Imite o exemplo, mude o ritmo e termine em Lá.',
-    degreeExplanation: 'Em relação ao Lá, Lá é o grau 1 e Dó é a terça menor, ♭3. O ♭ compara esse grau com a escala maior de Lá: não significa que a nota se chama Dó bemol. Compare o som de terminar em Dó com o de voltar ao Lá.',
+    degreeExplanation: 'Em relação ao Lá, Lá é o grau [[degree:1]] e Dó é a terça menor, [[degree:♭3]]. O ♭ compara esse grau com a escala maior de Lá: não significa que a nota se chama Dó bemol. Compare o som de terminar em Dó com o de voltar ao Lá.',
     practiceInstruction: 'Crie uma frase com Lá e Dó. Inclua uma pausa e volte ao Lá.',
     exampleInstruction: 'Escute Lá, pausa, Dó e Lá. O motivo se repete a cada dois compassos.',
     reflection: 'Usei as duas notas, deixei uma pausa e terminei em Lá. A execução é avaliada por você.',
@@ -125,7 +125,7 @@ export const lessons: LessonContent[] = [
   {
     id: 'l03', ref: identity('l03'), revision: 1, number: 'L03', title: 'Pergunta e resposta', href: '/lesson/l03/',
     instruction: 'Acrescente Mi (2ª corda, casa 5). Escute uma pergunta de dois compassos e crie uma resposta de dois compassos com Lá, Dó e Mi, terminando em Lá.',
-    degreeExplanation: 'Lá, Dó e Mi são os graus 1, ♭3 e 5 em relação ao Lá. Eles formam o acorde de Am: tônica, terça menor e quinta. O ♭ em ♭3 indica a comparação com a terça da escala maior; a nota aqui é Dó. Experimente ouvir finais em cada uma das três notas.',
+    degreeExplanation: 'Lá, Dó e Mi são os graus [[degree:1]], [[degree:♭3]] e [[degree:5]] em relação ao Lá. Eles formam o acorde de Am: tônica, terça menor e quinta. O ♭ em [[degree:♭3]] indica a comparação com a terça da escala maior; a nota aqui é Dó. Experimente ouvir finais em cada uma das três notas.',
     practiceInstruction: 'Escute a pergunta por dois compassos; responda nos dois seguintes. Termine em Lá e deixe espaço.',
     exampleInstruction: 'Escute a pergunta com Lá, Dó e Mi. Depois experimente sua própria resposta.',
     reflection: 'Criei uma resposta com espaço e chegada ao Lá. A execução é avaliada por você.',
@@ -139,7 +139,7 @@ export const lessons: LessonContent[] = [
   {
     id: 'l04', ref: identity('l04'), revision: 1, number: 'L04', title: 'Complete o pequeno mapa', href: '/lesson/l04/',
     instruction: 'Acrescente Sol (2ª corda, casa 8) e Ré (3ª corda, casa 7). Com Lá, Dó e Mi, você tem as cinco notas da pentatônica menor de Lá. Use uma das notas novas numa frase curta e volte ao Lá.',
-    degreeExplanation: 'A pentatônica menor tem os graus 1–♭3–4–5–♭7. Em Lá: Lá = 1, Dó = ♭3, Ré = 4, Mi = 5 e Sol = ♭7. Ré e Sol ampliam o vocabulário; 1, ♭3 e 5 continuam formando Am. O ♭ compara o grau com a escala maior da mesma tônica: Dó e Sol não passam a se chamar Dó bemol e Sol bemol.',
+    degreeExplanation: 'A pentatônica menor tem os graus [[degree:1]]–[[degree:♭3]]–[[degree:4]]–[[degree:5]]–[[degree:♭7]]. Em Lá: Lá = [[degree:1]], Dó = [[degree:♭3]], Ré = [[degree:4]], Mi = [[degree:5]] e Sol = [[degree:♭7]]. Ré e Sol ampliam o vocabulário; [[degree:1]], [[degree:♭3]] e [[degree:5]] continuam formando Am. O ♭ compara o grau com a escala maior da mesma tônica: Dó e Sol não passam a se chamar Dó bemol e Sol bemol.',
     practiceInstruction: 'Experimente Ré ou Sol em uma frase. Deixe uma pausa e volte ao Lá; não precisa usar todas as notas.',
     exampleInstruction: 'Escute como Ré e Sol ampliam a frase, que termina em Lá.',
     reflection: 'Experimentei uma nota nova, deixei espaço e voltei ao Lá. A execução é avaliada por você.',
@@ -151,7 +151,7 @@ export const lessons: LessonContent[] = [
   {
     id: 'l05', ref: identity('l05'), revision: 1, number: 'L05', title: 'Repita e transforme', href: '/lesson/l05/',
     instruction: 'Um motivo é uma pequena ideia musical que você reconhece quando ela volta. Escute o motivo e sua variação. Depois crie o seu, repita e mude apenas o ritmo, mantendo as notas e a chegada ao Lá.',
-    degreeExplanation: 'O motivo do exemplo usa 1–♭3–5–1: Lá–Dó–Mi–Lá. A variação mantém esses graus e muda o ritmo. Os graus descrevem a relação das notas com o Lá, não sua duração ou o número da casa.',
+    degreeExplanation: 'O motivo do exemplo usa [[degree:1]]–[[degree:♭3]]–[[degree:5]]–[[degree:1]]: Lá–Dó–Mi–Lá. A variação mantém esses graus e muda o ritmo. Os graus descrevem a relação das notas com o Lá, não sua duração ou o número da casa.',
     practiceInstruction: 'Escute quatro compassos. Nos quatro seguintes, toque seu motivo e repita mudando apenas o ritmo. Termine em Lá.',
     exampleInstruction: 'Escute a mesma sequência de notas duas vezes: na segunda, o Dó dura mais e o Mi entra depois.',
     reflection: 'Repeti uma ideia e mudei seu ritmo sem perder a chegada ao Lá. A execução é avaliada por você.',
@@ -165,11 +165,11 @@ export const lessons: LessonContent[] = [
   {
     id: 'l06', ref: identity('l06'), revision: 1, number: 'L06', title: 'Um box inteiro', href: '/lesson/l06/',
     instruction: 'Um box é uma posição da escala. Agora explore a pentatônica de Am nas seis cordas, entre as casas 5 e 8. Ouça o mesmo motivo em dois registros. Na prática, escolha um grupo de cordas, crie uma frase curta e procure um Lá para terminar.',
-    degreeExplanation: 'O box inteiro continua usando 1–♭3–4–5–♭7. Há mais posições, mas as classes de notas são as mesmas: Lá, Dó, Ré, Mi e Sol. Os Lás da 6ª corda/casa 5, 4ª corda/casa 7 e 1ª corda/casa 5 são o grau 1 em oitavas diferentes. Acorde e escala continuam sendo Am e sua pentatônica menor.',
+    degreeExplanation: 'O box inteiro continua usando [[degree:1]]–[[degree:♭3]]–[[degree:4]]–[[degree:5]]–[[degree:♭7]]. Há mais posições, mas as classes de notas são as mesmas: Lá, Dó, Ré, Mi e Sol. Os Lás da 6ª corda/casa 5, 4ª corda/casa 7 e 1ª corda/casa 5 são o grau [[degree:1]] em oitavas diferentes. Acorde e escala continuam sendo Am e sua pentatônica menor.',
     practiceInstruction: 'Explore um grupo de cordas por vez. Repita uma frase com pausa e termine no Lá disponível nesse grupo. Depois tente outro registro.',
     exampleInstruction: 'Escute Lá–Dó–Mi–Lá nas cordas agudas e, depois, uma oitava abaixo, mantendo o ritmo.',
     reflection: 'Encontrei um Lá em outro registro e mantive uma ideia musical com pausa. A execução é avaliada por você.',
-    check: { question: 'O que muda ao levar esse motivo uma oitava abaixo?', choices: ['A escala passa a ter mais de cinco notas diferentes', 'O registro; as notas e os graus permanecem', 'A tônica deixa de ser Lá'], answer: 1, explanation: 'O motivo soa mais grave, mas mantém Lá–Dó–Mi–Lá e os graus 1–♭3–5–1. Mudar de registro não é mudar de tom.', practice: 'Consegui levar uma ideia a outro registro.' },
+    check: { question: 'O que muda ao levar esse motivo uma oitava abaixo?', choices: ['A escala passa a ter mais de cinco notas diferentes', 'O registro; as notas e os graus permanecem', 'A tônica deixa de ser Lá'], answer: 1, explanation: 'O motivo soa mais grave, mas mantém Lá–Dó–Mi–Lá e os graus [[degree:1]]–[[degree:♭3]]–[[degree:5]]–[[degree:1]]. Mudar de registro não é mudar de tom.', practice: 'Consegui levar uma ideia a outro registro.' },
     score: score('"Am"A c E z | A2 z2 |\n"Am"A, C E, z | A,2 z2 |'), scoreDescription: 'Lá, Dó, Mi, pausa; Lá por dois tempos e pausa. O mesmo motivo se repete uma oitava abaixo, com o mesmo ritmo.',
     chord, maps: { example: fullBox, practice: fullBox },
     phrase: { beats: 16, notes: [{ position: a, beat: 0, duration: 1 }, { position: c, beat: 1, duration: 1 }, { position: e, beat: 2, duration: 1 }, { position: a, beat: 4, duration: 2 }, { position: aMiddle, beat: 8, duration: 1 }, { position: cMiddle, beat: 9, duration: 1 }, { position: eMiddle, beat: 10, duration: 1 }, { position: aMiddle, beat: 12, duration: 2 }] },
@@ -178,7 +178,7 @@ export const lessons: LessonContent[] = [
   {
     id: 'l07', ref: identity('l07'), revision: 1, number: 'L07', title: 'Uma ponte no braço', href: '/lesson/l07/',
     instruction: 'Dó (1ª corda, casa 8) e Sol (2ª corda, casa 8) ligam o recorte conhecido às casas 8–10. A partir deles, alcance Ré (1ª corda, casa 10) e Lá (2ª corda, casa 10). Mova a mão para acompanhar a frase, sem tentar alcançar tudo de uma vez.',
-    degreeExplanation: 'A escala continua sendo a pentatônica menor de Lá: 1–♭3–4–5–♭7. Dó é ♭3 e Sol é ♭7 nos dois recortes; eles servem como pontos de passagem. Ré na casa 10 é o grau 4. Lá na 2ª corda/casa 10 e na 1ª corda/casa 5 têm a mesma altura e o mesmo grau 1, em posições diferentes. Conectar regiões não é trocar de escala ou de tom.',
+    degreeExplanation: 'A escala continua sendo a pentatônica menor de Lá: [[degree:1]]–[[degree:♭3]]–[[degree:4]]–[[degree:5]]–[[degree:♭7]]. Dó é [[degree:♭3]] e Sol é [[degree:♭7]] nos dois recortes; eles servem como pontos de passagem. Ré na casa 10 é o grau [[degree:4]]. Lá na 2ª corda/casa 10 e na 1ª corda/casa 5 têm a mesma altura e o mesmo grau [[degree:1]], em posições diferentes. Conectar regiões não é trocar de escala ou de tom.',
     practiceInstruction: 'Faça uma frase passando por Dó ou Sol na casa 8. Explore a casa 10, deixe uma pausa e termine em um dos Lás. Mova a mão com calma.',
     exampleInstruction: 'A primeira frase passa por Dó e alcança Ré. A segunda passa por Sol e termina no Lá da 2ª corda, casa 10.',
     reflection: 'Conectei os recortes usando Dó ou Sol e terminei em Lá. A execução é avaliada por você.',
@@ -190,11 +190,11 @@ export const lessons: LessonContent[] = [
   {
     id: 'l08', ref: identity('l08'), revision: 1, number: 'L08', title: 'Leve sua frase a outro tom', href: '/lesson/l08/',
     instruction: 'Leve o recorte de Am duas casas em direção à pestana: das casas 5–8 para 3–6. Lá vira Sol, Dó vira Si bemol e Mi vira Ré. O motivo da L03 mantém o ritmo e os graus; agora toque sobre Gm e termine em Sol.',
-    degreeExplanation: 'Transpor muda as alturas e a tônica, mantendo as relações. Lá–Dó–Mi vira Sol–Si♭–Ré: 1–♭3–5 nos dois tons. A pentatônica de Gm é Sol–Si♭–Dó–Ré–Fá, com graus 1–♭3–4–5–♭7. Aqui, Si♭ é o nome da nota e ♭3 é sua relação com Sol. O acorde Gm contém Sol, Si♭ e Ré.',
+    degreeExplanation: 'Transpor muda as alturas e a tônica, mantendo as relações. Lá–Dó–Mi vira Sol–Si♭–Ré: [[degree:1]]–[[degree:♭3]]–[[degree:5]] nos dois tons. A pentatônica de Gm é Sol–Si♭–Dó–Ré–Fá, com graus [[degree:1]]–[[degree:♭3]]–[[degree:4]]–[[degree:5]]–[[degree:♭7]]. Aqui, Si♭ é o nome da nota e [[degree:♭3]] é sua relação com Sol. O acorde Gm contém Sol, Si♭ e Ré.',
     practiceInstruction: 'Escute dois compassos; responda nos dois seguintes sobre Gm. Preserve uma ideia rítmica e termine em Sol, na 1ª corda, casa 3.',
     exampleInstruction: 'Reconheça o motivo da L03: o ritmo continua igual, mas agora ele soa dois semitons abaixo, sobre Gm.',
     reflection: 'Mantive uma ideia rítmica em Gm e voltei ao Sol. A execução é avaliada por você.',
-    check: { question: 'Ao transpor o motivo de Am para Gm, o que permanece?', choices: ['Os nomes e as alturas de todas as notas', 'A tônica Lá', 'O ritmo e os graus 1–♭3–5'], answer: 2, explanation: 'Lá–Dó–Mi vira Sol–Si♭–Ré. As notas descem dois semitons, mas o motivo mantém seu ritmo e as relações com a nova tônica.', practice: 'Consegui manter o ritmo e terminar em Sol.' },
+    check: { question: 'Ao transpor o motivo de Am para Gm, o que permanece?', choices: ['Os nomes e as alturas de todas as notas', 'A tônica Lá', 'O ritmo e os graus [[degree:1]]–[[degree:♭3]]–[[degree:5]]'], answer: 2, explanation: 'Lá–Dó–Mi vira Sol–Si♭–Ré. As notas descem dois semitons, mas o motivo mantém seu ritmo e as relações com a nova tônica.', practice: 'Consegui manter o ritmo e terminar em Sol.' },
     score: score('"Gm"G z B D | B z G2 |', 'Gm'), scoreDescription: 'Sol, pausa, Si bemol, Ré; Si bemol, pausa e Sol por dois tempos. Mesmo ritmo do motivo de L03, dois semitons abaixo.',
     chord: gmChord, maps: { example: gmMap, practice: gmMap },
     phrase: { beats: 8, notes: [{ position: gTonic, beat: 0, duration: 1 }, { position: bb, beat: 2, duration: 1 }, { position: dGm, beat: 3, duration: 1 }, { position: bb, beat: 4, duration: 1 }, { position: gTonic, beat: 6, duration: 2 }] },
@@ -204,11 +204,11 @@ export const lessons: LessonContent[] = [
   {
     id: 'l09', ref: identity('l09'), revision: 1, number: 'L09', title: 'Uma cor a mais no acorde', href: '/lesson/l09/',
     instruction: 'Am tem Lá, Dó e Mi. Am7 acrescenta Sol. Escute a mesma frase terminando em Sol: primeiro sobre Am, depois sobre Am7. Na prática, repita uma ideia nos dois acompanhamentos e compare o efeito dessa chegada.',
-    degreeExplanation: 'Em relação ao Lá, Sol é ♭7: a sétima menor. Am usa 1–♭3–5; Am7 usa 1–♭3–5–♭7. O Sol já estava na pentatônica: não aprendemos uma nota nova, mudamos o acorde. A tônica continua sendo Lá, mesmo quando o alvo da frase é Sol. O 7 de Am7 indica a sétima menor acrescentada à tríade menor.',
+    degreeExplanation: 'Em relação ao Lá, Sol é [[degree:♭7]]: a sétima menor. Am usa [[degree:1]]–[[degree:♭3]]–[[degree:5]]; Am7 usa [[degree:1]]–[[degree:♭3]]–[[degree:5]]–[[degree:♭7]]. O Sol já estava na pentatônica: não aprendemos uma nota nova, mudamos o acorde. A tônica continua sendo Lá, mesmo quando o alvo da frase é Sol. O [[degree:7]] de Am7 indica a sétima menor acrescentada à tríade menor.',
     practiceInstruction: 'Toque uma frase curta terminando em Sol, na 2ª corda, casa 8. Repita sobre Am e Am7, dois compassos de cada, e escute a diferença. Deixe uma pausa.',
     exampleInstruction: 'Escute a mesma chegada ao Sol: dois compassos sobre Am, depois dois sobre Am7.',
     reflection: 'Repeti uma frase sobre Am e Am7 e comparei a chegada ao Sol. A execução é avaliada por você.',
-    check: { question: 'Qual nota é acrescentada a Am para formar Am7?', choices: ['Fá', 'Sol', 'Si'], answer: 1, explanation: 'Sol é a sétima menor, ♭7, em relação ao Lá. Am7 contém Lá, Dó, Mi e Sol; a tônica permanece Lá.', practice: 'Consegui ouvir a chegada ao Sol nos dois acordes.' },
+    check: { question: 'Qual nota é acrescentada a Am para formar Am7?', choices: ['Fá', 'Sol', 'Si'], answer: 1, explanation: 'Sol é a sétima menor, [[degree:♭7]], em relação ao Lá. Am7 contém Lá, Dó, Mi e Sol; a tônica permanece Lá.', practice: 'Consegui ouvir a chegada ao Sol nos dois acordes.' },
     score: score('"Am"A z G2 | z4 |\n"Am7"A z G2 | z4 |'), scoreDescription: 'Lá, pausa, Sol por dois tempos e um compasso de pausa sobre Am; a mesma frase se repete sobre Am7.',
     chord, maps: { example: amTargetMap, practice: amTargetMap },
     harmony: [{ beat: 0, chord, map: amTargetMap }, { beat: 8, chord: am7Chord, map: am7TargetMap }],
@@ -217,7 +217,7 @@ export const lessons: LessonContent[] = [
   {
     id: 'l10', ref: identity('l10'), revision: 1, number: 'L10', title: 'Acompanhe dois acordes', href: '/lesson/l10/',
     instruction: 'Am7 e Dm7 alternam a cada dois compassos. Lá e Dó pertencem aos dois acordes: use essas notas para atravessar a mudança. Depois experimente Fá (2ª corda, casa 6) somente sobre Dm7, como uma nova chegada.',
-    degreeExplanation: 'Am7 tem Lá, Dó, Mi e Sol; Dm7 tem Ré, Fá, Lá e Dó. Lá e Dó são notas comuns. O centro do mapa permanece Lá: seus graus não mudam com cada acorde. Fá é ♭6 em relação a Lá e ♭3 em relação a Ré, a terça menor de Dm7. Ele está fora da pentatônica de Am e aparece como nota contextual, não como parte da escala.',
+    degreeExplanation: 'Am7 tem Lá, Dó, Mi e Sol; Dm7 tem Ré, Fá, Lá e Dó. Lá e Dó são notas comuns. O centro do mapa permanece Lá: seus graus não mudam com cada acorde. Fá é [[degree:♭6]] em relação a Lá e [[degree:♭3]] em relação a Ré, a terça menor de Dm7. Ele está fora da pentatônica de Am e aparece como nota contextual, não como parte da escala.',
     practiceInstruction: 'Crie uma frase e chegue a Lá ou Dó na mudança de acorde. Se quiser, experimente Fá quando entrar Dm7. Inclua pausas; Fá não é obrigatório.',
     exampleInstruction: 'A frase passa por Lá e Dó nos dois acordes; Fá aparece apenas no trecho de Dm7.',
     reflection: 'Percebi a troca e usei Lá ou Dó para conectar as frases. A execução é avaliada por você.',
@@ -230,7 +230,7 @@ export const lessons: LessonContent[] = [
   {
     id: 'l11', ref: identity('l11'), revision: 1, number: 'L11', title: 'Mesmas notas, outro centro', href: '/lesson/l11/',
     instruction: 'As pentatônicas de Lá menor e Dó maior compartilham as mesmas notas. Ouça dois compassos sobre Am7, terminando em Lá, e dois sobre C, terminando em Dó. Na prática, mantenha o pequeno mapa e mude a chegada conforme o acompanhamento.',
-    degreeExplanation: 'As notas Lá, Dó, Ré, Mi e Sol formam duas escalas relativas. Com Lá como centro, os graus são 1–♭3–4–5–♭7. Com Dó como centro: Dó = 1, Ré = 2, Mi = 3, Sol = 5 e Lá = 6. As posições e alturas permanecem; acompanhamento, referência e final da frase ajudam a ouvir o novo centro. Começar uma sequência em Dó, sozinho, não garante essa mudança.',
+    degreeExplanation: 'As notas Lá, Dó, Ré, Mi e Sol formam duas escalas relativas. Com Lá como centro, os graus são [[degree:1]]–[[degree:♭3]]–[[degree:4]]–[[degree:5]]–[[degree:♭7]]. Com Dó como centro: Dó = [[degree:1]], Ré = [[degree:2]], Mi = [[degree:3]], Sol = [[degree:5]] e Lá = [[degree:6]]. As posições e alturas permanecem; acompanhamento, referência e final da frase ajudam a ouvir o novo centro. Começar uma sequência em Dó, sozinho, não garante essa mudança.',
     practiceInstruction: 'Sobre Am7, faça uma frase chegando ao Lá. Sobre C, chegue ao Dó. Use as mesmas notas, deixe espaço e ouça a diferença entre os dois trechos.',
     exampleInstruction: 'Observe o aro mudar de Lá para Dó com o acompanhamento. O mapa mantém as mesmas posições.',
     reflection: 'Usei as mesmas notas e escolhi uma chegada para cada centro. A execução é avaliada por você.',
@@ -243,7 +243,7 @@ export const lessons: LessonContent[] = [
   {
     id: 'l12', ref: identity('l12'), revision: 1, number: 'L12', title: 'Mini jam e retomada', href: '/lesson/l12/',
     instruction: 'Reúna o que praticou: motivo, pausa, chegada e conexão de posições. Sobre Am7 e Dm7, dois compassos de cada, escolha uma ideia pequena e repita com uma variação. Use Lá ou Dó como chegada; Fá sobre Dm7 e a conexão com a casa 10 são opções.',
-    degreeExplanation: 'O mapa mantém a pentatônica de Am: 1–♭3–4–5–♭7. Lá e Dó conectam Am7 e Dm7 por serem notas comuns. Fá só aparece sobre Dm7 como nota contextual: ♭6 em relação ao centro Lá e terça menor do acorde Dm7. Não é preciso usar todas as notas ou todas as posições para criar uma frase.',
+    degreeExplanation: 'O mapa mantém a pentatônica de Am: [[degree:1]]–[[degree:♭3]]–[[degree:4]]–[[degree:5]]–[[degree:♭7]]. Lá e Dó conectam Am7 e Dm7 por serem notas comuns. Fá só aparece sobre Dm7 como nota contextual: [[degree:♭6]] em relação ao centro Lá e terça menor do acorde Dm7. Não é preciso usar todas as notas ou todas as posições para criar uma frase.',
     practiceInstruction: 'Crie sua mini jam em blocos de 16 compassos. Repita uma ideia, varie uma parte e deixe pausas. Se um trecho ficar difícil, pare, reduza o BPM e repita.',
     exampleInstruction: 'Ouça 16 compassos com motivos, pausas e conexões. O exemplo usa Fá uma vez sobre Dm7; na sua jam ele é opcional.',
     reflection: 'Repeti uma ideia, deixei pausas e escolhi chegadas acompanhando os acordes. Posso repetir o trecho que quero desenvolver. A execução é avaliada por você.',

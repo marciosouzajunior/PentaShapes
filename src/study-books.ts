@@ -8,7 +8,7 @@ const hendrixChordDiagram:Extract<StudyVisual,{kind:'positions'}>={
   kind:'positions',
   positions:[{stringId:'a',fret:7,midi:52},{stringId:'d',fret:6,midi:56},{stringId:'g',fret:7,midi:62},{stringId:'b',fret:8,midi:67}],
   annotations:[{stringId:'g',fret:7,label:'7'},{stringId:'b',fret:8,label:'♯9'}],
-  startFret:5,endFret:8,rootMidi:52,context:'chord',caption:'E7♯9 · Ré (7) e Sol (♯9)',
+  startFret:5,endFret:8,rootMidi:52,context:'chord',caption:'[[chord:E7♯9]] · Ré ([[degree:7]]) e Sol ([[degree:♯9]])',
 };
 const books:Omit<StudyBook,'introduction'>[]=[
  {lessonId:'s01',title:'A abertura, por dentro',pages:[
@@ -22,11 +22,11 @@ const books:Omit<StudyBook,'introduction'>[]=[
   page('Por que esse contraste com Mi?',[
    'Mi é o ponto de apoio da música. Ouça um Mi e depois o Si♭ da abertura: esse contraste faz parte do som que reconhecemos na frase.',
    'A distância entre esse Mi e Si♭ é de seis semitons, ou três tons. Por isso recebe o nome de trítono.',
-   'O Si♭ também aparece como ♭5, a quinta abaixada de Mi: Si é a quinta, e Si♭ fica um semitom abaixo.'
+   'O Si♭ também aparece como [[degree:♭5]], a quinta abaixada de Mi: Si é a quinta, e Si♭ fica um semitom abaixo.'
   ],{kind:'interval',root:40,distances:[6],initial:6,spelling:'flat'},
   'Toque um Mi antes da abertura. Depois alterne os dois Si♭ e ouça o contraste com essa referência.',
-  'O ♭5 significa casa 5?',
-  'Não. Indica a quinta de Mi um semitom abaixo: Si♭.')
+  'O [[degree:♭5]] significa casa 5?',
+  'Não. [[degree:♭5]] indica a quinta de Mi um semitom abaixo: Si♭.')
  ]},
  {lessonId:'s02',title:'O caminho do riff',pages:[
   page('Cinco notas que se encontram',[
@@ -84,13 +84,13 @@ const books:Omit<StudyBook,'introduction'>[]=[
  ]},
  {lessonId:'s05',title:'As notas dentro dos acordes',pages:[
   page('A base entre os trechos',[
-   'E7♯9 é um acorde de Mi com sétima e nona aumentada. O nome reúne essas duas ideias; vamos encontrar cada uma no braço. Depois, use esse acorde na base Mi–Sol–Lá do verso.',
-   'O 7 acrescenta Ré, a sétima menor de Mi. Para reconhecer esse som, pense em um Mi e desça um tom: você chega a Ré. No desenho, procure o Ré marcado com 7.',
+   '[[chord:E7♯9]] é um acorde de Mi com sétima e nona aumentada. O nome reúne essas duas ideias; vamos encontrar cada uma no braço. Depois, use esse acorde na base [[chord:Mi]]–[[chord:Sol]]–[[chord:Lá]] do verso.',
+   'O [[degree:7]] acrescenta Ré, a sétima menor de Mi. Para reconhecer esse som, pense em um Mi e desça um tom: você chega a Ré. No desenho, procure o Ré marcado com [[degree:7]].',
    'A nona é a segunda na próxima oitava. Ao chegar a outro Mi, pense que a escala recomeça: Fá♯ é a segunda desse novo Mi e a nona contando desde o Mi mais grave.',
-   'O ♯ pede subir essa nona mais um semitom, chegando ao som de Sol. Parta do Mi tracejado e avance duas casas na mesma corda até Fá♯; mais uma casa chega ao Sol marcado com ♯9. Mi e Fá♯ tracejados são apenas referências: a nota acrescentada ao acorde é esse Sol.'
+   'O ♯ pede subir essa nona mais um semitom, chegando ao som de Sol. Parta do Mi tracejado e avance duas casas na mesma corda até Fá♯; mais uma casa chega ao Sol marcado com [[degree:♯9]]. Mi e Fá♯ tracejados são apenas referências: a nota acrescentada ao acorde é esse Sol.'
   ],{...hendrixChordDiagram,additionalPositions:[{stringId:'b',fret:5,midi:64},{stringId:'b',fret:7,midi:66}]},
-  'Ouça as notas do E7♯9 separadas e depois juntas. Pratique a troca para Sol e Lá, voltando ao Mi sem apressar o movimento.',
-  'Quais sons o 7 e o ♯9 acrescentam ao acorde de Mi?',
+  'Ouça as notas do [[chord:E7♯9]] separadas e depois juntas. Pratique a troca para [[chord:Sol]] e [[chord:Lá]], voltando ao [[chord:Mi]] sem apressar o movimento.',
+  'Quais sons o [[degree:7]] e o [[degree:♯9]] acrescentam ao acorde de Mi?',
   'Ré é a sétima menor; o Sol agudo é a nona aumentada. Fá♯ serve apenas para entender de onde a nona aumentada vem.')
  ]}
 ];
@@ -123,7 +123,7 @@ export const missionBookCopy:Record<string,(Pick<StudyPage,'title'|'hideTitle'|'
       title:'A sombra do Mi',
       paragraphs:[
         'Toque um Mi antes de voltar ao Si♭. Mi é o ponto de apoio da música. Ao ouvir as duas notas juntas na memória, talvez você reconheça o contraste da abertura.',
-        'Entre Mi e Si♭ há seis semitons, ou três tons. Essa distância se chama trítono. O Si♭ também pode aparecer como ♭5: é a quinta de Mi, o Si, abaixada um semitom.',
+        'Entre Mi e Si♭ há seis semitons, ou três tons. Essa distância se chama trítono. O Si♭ também pode aparecer como [[degree:♭5]]: é a quinta de Mi, o Si, abaixada um semitom.',
       ],
       practice:'Toque Mi, depois faça o salto entre os dois Si♭. Volte ao Mi e ouça o que muda quando a frase chega a esse ponto de apoio.',
     },
@@ -156,16 +156,16 @@ export const missionBookCopy:Record<string,(Pick<StudyPage,'title'|'hideTitle'|'
       hideTitle:true,
       paragraphs:[
         'Comece pelo Mi, a tônica que dá nome ao acorde. Acrescente Sol♯, a terça maior. A quinta de Mi é Si, que fica de fora nesta digitação.',
-        'Junte o Ré, a sétima menor de Mi. É a nota que o 7 indica no nome do acorde.',
-        'Por fim, acrescente o Sol agudo, marcado com ♯9. Ele é a nona aumentada. Toque as três primeiras notas juntas e depois acrescente esse Sol para ouvir o que muda.',
-        'Para tocar o E7♯9, use as quatro cordas do meio. Sol e Lá usam formas abertas. No Lá, deixe a corda mais grossa em silêncio.',
+        'Junte o Ré, a sétima menor de Mi. É a nota que o [[degree:7]] indica no nome do acorde.',
+        'Por fim, acrescente o Sol agudo, marcado com [[degree:♯9]]. Ele é a nona aumentada. Toque as três primeiras notas juntas e depois acrescente esse Sol para ouvir o que muda.',
+        'Para tocar o [[chord:E7♯9]], use as quatro cordas do meio. [[chord:Sol]] e [[chord:Lá]] usam formas abertas. No [[chord:Lá]], deixe a corda mais grossa em silêncio.',
       ],
       visual:hendrixChordDiagram,
       visualAfterParagraph:3,
       insight:{
         afterParagraph:4,
         title:'Da segunda à nona',
-        text:'Em Mi, a segunda maior é Fá♯. Toque esse Fá♯ uma oitava acima e você tem a nona. Para chegar à ♯9, avance mais uma casa na mesma corda. Esse é o Sol agudo do acorde.',
+        text:'Em Mi, a segunda maior é Fá♯. Toque esse Fá♯ uma oitava acima e você tem a nona. Para chegar à [[degree:♯9]], avance mais uma casa na mesma corda. Esse é o Sol agudo do acorde.',
       },
       practice:'',
     },
@@ -179,7 +179,7 @@ export const missionBookCopy:Record<string,(Pick<StudyPage,'title'|'hideTitle'|'
         'A marca ↗¼ no Si e no Sol agudo indica um bend de um quarto de tom. É um movimento pequeno da corda, bem menor que o bend de Lá a Si da variação do riff.',
       ],
       highlightPractice:true,
-      practice:'Toque Dó♯–Mi–Si. Depois recue uma casa na corda Ré para começar em Dó natural e toque Dó–Mi–Si. Ouça como o salto até Mi é um semitom mais curto quando você começa em Dó♯. O Dó natural faz parte de Mi menor natural. Já o Dó♯ é a sexta maior de Mi e apareceu no acorde de Lá maior da missão anterior.',
+      practice:'Toque Dó♯–Mi–Si e reencontre o mesmo Mi na corda Ré para começar a segunda parte. Faça a troca de posição devagar, mantendo o Mi como referência sonora.',
     },
   ],
   s04:[

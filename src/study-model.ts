@@ -11,6 +11,7 @@ export type StudyVisual =
   | { kind:'positions'; positions:StudyPosition[]; startFret:number; endFret:number; spelling?:'sharp'|'flat'; caption:string;rootMidi?:number;showDirection?:boolean;context?:'chord'|'comparison';bend?:StudyBend;bends?:StudyBend[];annotations?:{stringId:string;fret:number;label:string}[];additionalPositions?:StudyPosition[] }
   | { kind:'fretboard-intervals'; root:StudyPosition;targets:StudyPosition[];startFret:number;endFret:number;context?:'comparison';towardRoot?:boolean }
   | { kind:'scale'; positions:StudyPosition[]; startFret:number; endFret:number; root:number; caption:string; spelling?:'sharp'|'flat'; phrasePositions?:StudyPosition[];additionalPositions?:StudyPosition[];chordPositions?:StudyPosition[];chordTones?:number[];degreeAnnotations?:boolean }
+  | { kind:'scale-overlay'; layers:[{label:string;root:number;positions:StudyPosition[]},{label:string;root:number;positions:StudyPosition[]}];startFret:number;endFret:number;caption:string;spelling?:'sharp'|'flat';initialLayer?:'first'|'second'|'both' }
   | { kind:'chord'; notes:number[]; roles:string[]; caption:string };
 export type StudyPage = {
   title:string; paragraphs:string[]; visual:StudyVisual;
@@ -18,7 +19,7 @@ export type StudyPage = {
   /** Insert the visual after this many paragraphs; otherwise it follows the prose. */
   visualAfterParagraph?:number;
   additionalVisuals?:{afterParagraph:number;visual:StudyVisual}[];
-  insight?:{afterParagraph:number;title:string;text:string};
+  insight?:{afterParagraph:number;afterPractice?:boolean;title:string;text:string;link?:{label:string;href:string}};
   highlightPractice?:boolean;
   practice:string; question:string; answer:string;
 };
@@ -46,6 +47,7 @@ export function soundOfVisual(visual:StudyVisual):number[]{
   if(visual.kind==='interval')return [visual.root,visual.root+visual.initial];
   if(visual.kind==='degrees')return [40,47];
   if(visual.kind==='scale'||visual.kind==='positions')return [...visual.positions,...visual.additionalPositions??[]].map(position=>position.midi);
+  if(visual.kind==='scale-overlay')return [...new Map(visual.layers.flatMap(layer=>layer.positions).map(position=>[`${position.stringId}:${position.fret}`,position.midi])).values()];
   if(visual.kind==='fretboard-intervals')return [visual.root.midi,...visual.targets.map(position=>position.midi)];
   return visual.notes;
 }

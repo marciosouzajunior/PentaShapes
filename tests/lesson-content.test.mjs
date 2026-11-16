@@ -7,6 +7,18 @@ const vite = await createServer({ configFile: false, server: { middlewareMode: t
 after(() => vite.close());
 const { lessons, getLesson } = await vite.ssrLoadModule('/src/lesson-content.ts');
 const { DEFAULT_LESSON_BARS, MAX_LESSON_BARS, planHarmony, planPhrase } = await vite.ssrLoadModule('/src/lesson-playback.ts');
+const { studyTextMarkup } = await vite.ssrLoadModule('/src/study-reader.ts');
+
+test('every fundamentals lesson renders its degrees through the shared semantic markup',()=>{
+  for(const lesson of lessons){
+    assert.match(lesson.degreeExplanation,/\[\[degree:/,lesson.id);
+    const unmarked=lesson.degreeExplanation.replaceAll(/\[\[degree:[^\]]+\]\]/g,'');
+    assert.doesNotMatch(unmarked,/[♭♯][1-9]/,lesson.id);
+    const markup=studyTextMarkup(lesson.degreeExplanation);
+    assert.match(markup,/music-token--degree/,lesson.id);
+    assert.doesNotMatch(markup,/\[\[degree:/,lesson.id);
+  }
+});
 
 test('long sessions repeat complete phrases and retain silent response windows', () => {
   for (const lesson of lessons) {

@@ -5,7 +5,7 @@ O PentaShapes reúne prática guiada de improvisação, exemplos sonoros e diagr
 | Documento | Conteúdo |
 | --- | --- |
 | [Arquitetura e desenvolvimento](arquitetura.md) | Módulos, execução, testes e publicação. |
-| [Missões e leitura de estudo](missoes.md) | Experiência compartilhada de Preparar e Tocar e critérios de revisão. |
+| [Missões e leitura de estudo](missoes.md) | Experiência compartilhada de Preparar e Tocar, direção visual dos esboços e critérios de revisão. |
 | [Tom de voz](tom-de-voz.md) | Escrita da interface e do conteúdo didático. |
 | [Catálogo e autoria](catalogo-e-autoria.md) | Contrato de trilhas, identidade, progresso e evolução do catálogo. |
 | [Referências musicais](referencias-musicais.md) | Princípios usados no conteúdo, fontes e limites de interpretação. |

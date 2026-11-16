@@ -5,6 +5,7 @@ import { buildFretboard } from '../public/components/music.mjs';
 import { bindLessonSelector, renderLessonPager, renderLessonSelector } from './lesson-navigation';
 import './lesson.css';
 import { renderBrand } from './brand';
+import {studyTextMarkup} from './study-reader';
 
 type FretboardElement = HTMLElement & {
   configuration: object;
@@ -21,7 +22,7 @@ export function renderLesson(app: HTMLDivElement, id: LessonContent['id'] = 'l01
     <a class="skip-link" href="#lesson-main">Ir para a lição</a>
     <header class="header lesson-header">${renderBrand()}${renderLessonSelector(id)}</header>
     <main id="lesson-main" class="lesson-layout">
-      <div class="lesson-intro"><p class="eyebrow">FUNDAMENTOS · ${lesson.number}</p><h1>${lesson.title}</h1><p>${lesson.instruction}</p><details class="lesson-degrees"><summary>Entenda os graus</summary><p>${lesson.degreeExplanation}</p></details></div>
+      <div class="lesson-intro"><p class="eyebrow">FUNDAMENTOS · ${lesson.number}</p><h1>${lesson.title}</h1><p>${studyTextMarkup(lesson.instruction)}</p><details class="lesson-degrees"><summary>Entenda os graus</summary><p>${studyTextMarkup(lesson.degreeExplanation)}</p></details></div>
       <div class="lesson-board board-panel">
         <div class="lesson-board-layout">
           <div class="lesson-board-map"><penta-fretboard id="lesson-fretboard"></penta-fretboard><p class="lesson-scroll-hint">Deslize para explorar as casas →</p><div class="lesson-board-tools">${lesson.practiceGroups ? `<label>Praticar em <select id="practice-group"><option value="all">Todas as cordas</option>${lesson.practiceGroups.map(group => `<option value="${group.id}">${group.label}</option>`).join('')}</select></label>` : ''}<label><input type="checkbox" role="switch" id="show-degrees"> Mostrar graus</label></div></div>
@@ -58,8 +59,8 @@ export function renderLesson(app: HTMLDivElement, id: LessonContent['id'] = 'l01
       </footer>
       <section class="lesson-check" id="lesson-check" aria-labelledby="check-title" hidden>
         <h2 id="check-title">Confira o que aprendeu</h2>
-        <fieldset><legend>${lesson.check.question}</legend>
-          ${lesson.check.choices.map((choice, index) => `<label class="lesson-check-choice"><input type="radio" name="lesson-check-answer" value="${index}"><span>${choice}</span></label>`).join('')}
+        <fieldset><legend>${studyTextMarkup(lesson.check.question)}</legend>
+          ${lesson.check.choices.map((choice, index) => `<label class="lesson-check-choice"><input type="radio" name="lesson-check-answer" value="${index}"><span>${studyTextMarkup(choice)}</span></label>`).join('')}
         </fieldset>
         <p class="lesson-check-feedback" id="check-feedback" role="status" aria-live="polite"></p>
       </section>
@@ -83,8 +84,8 @@ export function renderLesson(app: HTMLDivElement, id: LessonContent['id'] = 'l01
   checkPanel.addEventListener('change', event => {
     const input = event.target;
     if (!(input instanceof HTMLInputElement) || input.name !== 'lesson-check-answer') return;
-    checkFeedback.textContent = Number(input.value) === lesson.check.answer
-      ? `Isso! ${lesson.check.explanation}`
+    checkFeedback.innerHTML = Number(input.value) === lesson.check.answer
+      ? `Isso! ${studyTextMarkup(lesson.check.explanation)}`
       : 'Tente outra opção. Você pode ouvir o exemplo e consultar o braço novamente.';
   });
 

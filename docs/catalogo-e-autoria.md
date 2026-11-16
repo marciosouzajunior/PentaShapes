@@ -26,6 +26,8 @@ Separe propósito (fundamentos ou repertório), assuntos (pentatônica, ritmo, b
 
 Contribuições devem informar fontes, autoria e permissões dos exemplos e assets. MIDI é uma fonte possível de preparação, não uma dependência obrigatória de uma trilha. Registre adaptações e preserve proveniência sem incluir arquivos privados, legendas integrais ou dados pessoais. Veja [referências musicais](referencias-musicais.md) e [termos de conteúdo](../THIRD_PARTY_NOTICES.md).
 
+O template de autoria inclui a direção didática e editorial de [missões](missoes.md) e [tom de voz](tom-de-voz.md). Declare o objetivo prático, a progressão, a intenção de cada janela de resposta, as durações e as referências necessárias. Não copie automaticamente textos, graus, diagramas ou técnicas de outra trilha. Fontes musicais ficam em `sources`; estudo externo opcional pode usar `StudyPage.insight.link`, com texto e destino claros. O reader apresenta esse box ao final quando `afterPractice` está ativo.
+
 ## Evolução do catálogo
 
 Editor, contas, rascunhos privados, uploads e pesquisa remota ainda não estão implementados. A evolução deve separar:

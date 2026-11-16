@@ -1,1 +1,27 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 94" fill="none" stroke="#694775" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m20 57 27-15 27-13h27m36 30 25-16 28 17h42"/><path d="M106 29h20" stroke-dasharray="2 6"/><g fill="#694775"><circle cx="20" cy="57" r="3"/><circle cx="47" cy="42" r="3"/><circle cx="74" cy="29" r="3"/><circle cx="137" cy="59" r="3"/><circle cx="162" cy="43" r="3"/><circle cx="190" cy="60" r="3"/></g><path d="M90 73q18 12 36 0" stroke-dasharray="3 5"/><path d="m224 55 8 5-8 5"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 10 260 100" fill="none" stroke="#694775" stroke-linecap="round" stroke-linejoin="round">
+  <defs>
+    <path id="mark" d="M-5-3c5-3 8 0 7 5s-8 5-8 0c0-2 0-3 2-4" stroke-width="1.6"/>
+    <path id="accent" d="M-5 0c0-5 6-7 10-3 3 4 0 10-5 10-5 1-7-3-5-7Z" stroke="none"/>
+  </defs>
+
+  <g>
+    <use href="#accent" transform="translate(77 40)" fill="#e3c3ff"/>
+    <use href="#accent" transform="translate(109 40)" fill="#bdebdc"/>
+    <use href="#accent" transform="translate(141 85)" fill="#e3c3ff"/>
+    <use href="#accent" transform="translate(173 85)" fill="#bdebdc"/>
+  </g>
+
+  <g>
+    <use href="#mark" transform="translate(79 25) rotate(-7)"/><use href="#mark" transform="translate(175 25) rotate(5)"/>
+    <use href="#mark" transform="translate(79 40) rotate(4)"/><use href="#mark" transform="translate(111 40) rotate(-6)"/><use href="#mark" transform="translate(175 40) rotate(5)"/>
+    <use href="#mark" transform="translate(79 55) rotate(-5)"/><use href="#mark" transform="translate(143 55) rotate(7)"/>
+    <use href="#mark" transform="translate(79 70) rotate(6)"/><use href="#mark" transform="translate(143 70) rotate(-4)"/>
+    <use href="#mark" transform="translate(79 85) rotate(-7)"/><use href="#mark" transform="translate(143 85) rotate(5)"/><use href="#mark" transform="translate(175 85) rotate(-5)"/>
+    <use href="#mark" transform="translate(79 100) rotate(4)"/><use href="#mark" transform="translate(175 100) rotate(-6)"/>
+  </g>
+
+  <path d="M88 35c5-5 10 0 15 0" stroke-width="1.5" stroke-dasharray="3 5"/>
+  <path d="m98 31 6 4-6 4" stroke-width="1.5"/>
+  <path d="M152 80c5-5 10 0 15 0" stroke-width="1.5" stroke-dasharray="3 5"/>
+  <path d="m162 76 6 4-6 4" stroke-width="1.5"/>
+</svg>

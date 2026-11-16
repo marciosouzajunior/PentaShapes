@@ -10,6 +10,9 @@
 .song-boards{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .song-map-legend{margin:0 0 16px;color:#657188;font-size:12px;line-height:1.7}
 .study-card{min-width:0;border:1px solid #dfe5ef;border-radius:14px;padding:20px 12px;background:#fff}
+.song-boards:not(.song-boards--current) .study-card.is-current penta-fretboard{animation:song-board-change .28s ease-out both}
+@keyframes song-board-change{from{opacity:.3;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.song-boards:not(.song-boards--current) .study-card.is-current penta-fretboard{animation:none}}
 .study-card h3{font-size:13px;font-weight:500;line-height:1.5;color:#657188;letter-spacing:0;margin:0 8px 14px}.study-card penta-fretboard{margin:0;padding-inline:12px;--fretboard-width:480px;--fretboard-context-border-style:solid}.study-card.is-current{border-color:#a8baf1;box-shadow:0 4px 20px #3156e82b,0 0 0 1px #3156e812;background:#fff}
 .song-controls{display:flex;align-items:center;flex-wrap:wrap;gap:12px 20px;padding:18px 0 8px}
 .song-page button{border:1px solid #dbe1ec;border-radius:10px;background:#fff;color:#253f91;padding:11px 16px;cursor:pointer;font-weight:650;font-size:13px}

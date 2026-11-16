@@ -6,13 +6,17 @@ Use uma voz calma, clara e intuitiva. O público já pode tocar acordes sem conh
 
 Prefira convites concretos: ouvir, alternar, comparar, encontrar, sustentar e experimentar. Dê uma ação pequena e um motivo musical compreensível. Evite pressão, promessas de domínio, elogios automáticos e frases motivacionais.
 
-A orientação inicial deve permitir começar com uma ideia principal e poucas frases. Desenvolva as relações na leitura de estudo, sem transformar o início da prática em uma aula de teoria. Quando houver a chamada de aprofundamento, use “Explorar notas e relações”. A apresentação das missões segue [Preparar e Tocar](missoes.md).
+A orientação inicial deve permitir começar com uma ideia principal e poucas frases. Em Preparar, acrescente somente as relações que ajudam a ouvir ou tocar a missão. Em Tocar, diga a ação, o trecho e a duração. Não repita a mesma instrução nos dois lugares. A apresentação das missões segue [Preparar e Tocar](missoes.md); “Explorar notas e relações” é o nome do leitor complementar onde esse controle existe.
+
+Use “toque junto” para acompanhar a melodia-guia, “repita” para imitá-la e “improvise” ou “crie uma resposta” para uma frase própria. “Responda” sozinho não define se a pessoa deve copiar ou inventar: a instrução precisa esclarecer essa intenção. Prefira “dois compassos em cada acorde” a “uma volta”. Se houver retorno na sequência, nomeie os acordes e o ponto em que reaparecem.
+
+Proponha uma transformação audível por vez. Por exemplo: “Na próxima resposta, termine em Lá.” Evite exigir simultaneamente preservar abertura, mudar final, manter contorno e explorar novas notas. Uma sugestão deve ser fácil de reconhecer durante a execução, sem depender de lembrar uma explicação anterior.
 
 Exemplo contextual de Purple Haze, não um roteiro obrigatório para outras lições:
 
 > Ouça o Si♭ grave e sua versão aguda. Alterne os dois e perceba o contraste com o Mi, o ponto de apoio da música.
 
-Neste exemplo, o aprofundamento pode apresentar a oitava entre os dois Si♭ e o trítono entre Mi e Si♭. Em outras lições, explique as relações relevantes ao trecho estudado. O princípio é partir da experiência e depois nomear a relação musical; as notas e os conceitos dependem do conteúdo.
+Neste exemplo, a oitava pode ajudar a reconhecer o mesmo som em outra altura. O trítono só entra quando houver uma comparação sonora que o justifique. Introduza o conceito depois da experiência que lhe dá sentido. Não é necessário explicar todas as relações de uma frase para praticá-la.
 
 Não atribua intenções ao compositor sem evidência nem apresente uma digitação de estudo como execução original.
 
@@ -33,9 +37,19 @@ Quando um intervalo grande fizer parte do assunto, procure uma relação próxim
 
 Deixe as coordenadas de corda e casa no desenho quando ele já as mostra. No texto, explique o que comparar, ouvir ou transformar. Não narre cada ponto nem enumere a função de todas as notas sem uma tarefa musical.
 
+## Ênfase musical no texto
+
+O leitor reconhece automaticamente nomes de notas em português e cifras com qualidade ou extensão, apresentando notas com peso e cor discretos e acordes com peso próprio. Aplique `[[degree:5]]` aos graus, pois um número isolado também pode indicar casa, corda ou contagem. Use marcações explícitas como `[[note:Lá–Dó–Lá]]` ou `[[chord:E]]` quando for preciso agrupar uma sequência ou destacar uma cifra que o reconhecimento automático não possa distinguir com segurança. `Em` nunca é reconhecido automaticamente como cifra, pois também é uma preposição frequente em português; escreva `[[chord:Em]]` quando significar Mi menor.
+
+Use a marcação de grau somente quando o número expressar uma função musical — por exemplo, “Mi é a `[[degree:5]]` de Am”. Nunca marque como grau um número de casa, corda, compasso ou quantidade.
+
 ## Leitura e controles
 
 Integre conceitos complementares em uma leitura contínua, com poucos parágrafos e os diagramas necessários. Evite títulos duplicados e explicações repetidas. Fontes, adaptações e detalhes de importação ficam nos metadados e na documentação técnica.
+
+Prefira uma pista aplicável a uma enumeração de graus. Comece com “Uma dica para encontrar…” e associe a relação a uma referência concreta. Use graus apenas quando ajudarem a encontrar, comparar ou transportar uma nota; a ênfase visual não obriga a acrescentar teoria ao texto.
+
+Ofereça estudo adicional no box “Para explorar depois”, ao final da leitura. Diga o assunto, a instituição ou autoria e o idioma quando necessário. O link deve levar diretamente a uma aula sobre o conceito, não a um material amplo que apenas o menciona. A leitura externa é opcional para executar a missão.
 
 Use nomes de notas em português no texto e os rótulos previstos pelo componente nos diagramas. Mantenha nomes de controles consistentes, como “Mostrar graus”. Explique a música sem depender da localização de um botão; use o nome real do controle ao ensinar seu uso.
 

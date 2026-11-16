@@ -12,20 +12,21 @@ export const songStrings = [
 export type SongNote = { stringId: string; fret: number; midi: number; beat: number; duration: number; sourceTicks: number;technique?:{kind:string;semitones?:number};pitchCurve?:{beat:number;midi:number}[] };
 export type BackingNote = { midi:number; beat:number; duration:number; instrument?:'clean-guitar'|'piano'|'finger-bass'|'drum-kit'|'electric-piano'; velocity?:number };
 export type StudyMap = {tonic:number; positions:SongPosition[]; chordTones:number[]; scaleId:string; spelling?:'sharp'|'flat'; degreeLabels?:Partial<Record<number,string>>; chordPositions?:SongPosition[]; reference?:{name:string;root:SongPosition}};
-export type StudyBlock = { id: string; cardId?:string; title: string; startBeat: number; endBeat: number; startFret: number; endFret: number; notes: SongNote[]; backing?:BackingNote[]; backingGain?:number; map?:StudyMap; responseBeat?:number; cues?:{beat:number;label:string}[] };
+export type StudyBlock = { id: string; cardId?:string; title: string; startBeat: number; endBeat: number; startFret: number; endFret: number; notes: SongNote[]; backing?:BackingNote[]; backingGain?:number; map?:StudyMap; responseBeat?:number; cues?:{beat:number;label:string;group?:string}[]; phaseCues?:{beat:number;label:string}[] };
 export type SongPosition = {stringId:string;fret:number;midi:number};
 export type SongMission = {
   playInstruction?:string;
   practiceLabel:string;
   practiceMode?:'along';
-  /** Keep long practice sequences readable without stacking every context's board. */
-  boardDisplay?:'current';
   /** A short audition can precede a much longer practice round. */
   exampleBeats?:number;
+  /** Duration of the repeating practice round when it differs from the short audition. */
+  practiceBeats?:number;
   hidePreparationExample?:boolean;
   metronomeByDefault?:boolean;
+  hideTurnLabel?:boolean;
   hideBoardTitle?:boolean;
-  scene:{title:string;text:string;prompt?:string;illustration?:{src:string;alt:string;size?:{width:number;height:number}}};
+  scene:{title:string;text:string;followup?:string;prompt?:string;illustration?:{src:string;alt:string;size?:{width:number;height:number}}};
 };
 export type SongLesson = { id: string; ref: LessonRef; href: string; title: string; navTitle:string; instruction: string; explanation?: string[]; blocks: string[]; referenceBlocks?:string[]; repeatByDefault?:boolean; accompaniment?: boolean; singleCardTitle?: string; exploration?:SongPosition[]; additionalPositions?:SongPosition[]; mapTitle?:string; mapStyle?:'plain-degrees'; mission?:SongMission };
 export const soloExplorationPositions:SongPosition[]=[

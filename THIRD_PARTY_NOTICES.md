@@ -18,6 +18,7 @@ The source and redistribution permission for `legacy/images/guitar.jpg` still ne
 
 | Material | Terms and notices |
 | --- | --- |
+| “Grayscale photo of person holding guitar neck and strings”, Caio Silva | Unsplash License; cropped for `src/assets/track-minor-pentatonic.webp`. Provenance and source link in `src/assets/track-minor-pentatonic.source.md`. |
 | FreePats clean guitar samples | CC0 1.0; source and modifications in `src/static/audio/clean-guitar/ATTRIBUTION.txt`. |
 | FreePats Finger Bass YR, Andrea Biasior | CC0 1.0; source and selected pitch centers in `src/static/audio/finger-bass/ATTRIBUTION.txt`. |
 | MuldjordKit / FreePats, Lars Muldjord | CC BY 4.0. Drum samples provided by DrumGizmo.org. Source and adaptation in `src/static/audio/drum-kit/ATTRIBUTION.txt`. |

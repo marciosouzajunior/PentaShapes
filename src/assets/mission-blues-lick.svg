@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 118" fill="none">
+  <g stroke="#694775" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M32 69c6-22 20-35 42-39" stroke-width="2.6"/>
+    <path d="m65 24 10 4-6 9" stroke-width="2.3"/>
+    <path d="M96 33c8-2 16-2 23 0" stroke-width="2"/>
+    <path d="M205 47c34 26 72 47 117 61" stroke-width="2.2" stroke-dasharray="5 7" opacity=".82"/>
+    <path d="m314 100 9 8-11 2" stroke-width="2.2"/>
+  </g>
+  <g fill="#51375b" font-family="'Bradley Hand', 'Comic Sans MS', 'Chalkboard SE', cursive" font-size="24" font-weight="600" text-anchor="middle">
+    <text x="20" y="86" transform="rotate(-7 20 86)">4</text>
+    <text x="84" y="36" transform="rotate(4 84 36)">5</text>
+    <text x="130" y="37" transform="rotate(-4 130 37)" font-size="27">1</text>
+    <text x="166" y="60" transform="rotate(-3 166 60)" letter-spacing="4">...</text>
+    <text x="204" y="29" transform="rotate(-5 204 29)">♭7</text>
+    <text x="238" y="49" transform="rotate(4 238 49)">5</text>
+    <text x="270" y="68" transform="rotate(-5 270 68)">4</text>
+    <text x="302" y="87" transform="rotate(4 302 87)">♭3</text>
+    <text x="332" y="103" transform="rotate(-5 332 103)" font-size="27">1</text>
+  </g>
+</svg>

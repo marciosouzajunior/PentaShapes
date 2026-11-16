@@ -7,14 +7,14 @@ import { accompanimentPlan, strumChordNotes } from './song-chords';
 import type { TrackContent } from './track-model';
 import { purpleTrack } from './tracks';
 const escape=(text:string)=>text.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
-import { mountStudyReader, studyTopicMarkup } from './study-reader';
+import { mountStudyReader, studyTextMarkup, studyTopicMarkup } from './study-reader';
 import {pitchAutomation} from './song-expression';
 import {playStudyGuitar} from './song-audio';
 import {loadStudySampleVoice,type SampledInstrument,type StudySampleVoice} from './study-samples';
 import {readPracticeSettings,savePracticeSettings} from './practice-settings';
 import {preserveBreadcrumbScroll} from './breadcrumb-scroll';
 import {studyDegree} from './study-model';
-import {beatInMission,missionRound} from './song-missions';
+import {beatInMission,boardTransitionProgress,missionPracticeBeats,missionRound,phaseLabelAt} from './song-missions';
 import {createStudyRoom} from './study-room';
 
 type Board = HTMLElement & { configuration: object; highlightedPositions: {stringId:string;fret:number}[] };
@@ -36,7 +36,19 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
   const plan=lesson.accompaniment&&!lesson.blocks.length?accompanimentPlan():assembleLessonBlocks(lesson,track.blocks);
   const practiceCues=mission?.practiceMode==='along'?plan.entries.flatMap(({block,offset})=>
     (block.cues??[]).map(cue=>({...cue,beat:offset+cue.beat}))).sort((a,b)=>a.beat-b.beat):undefined;
-  const round=mission?missionRound(plan.beats,practiceCues):null;
+  const round=mission?missionRound(missionPracticeBeats(plan.beats,mission.practiceMode,mission.exampleBeats,mission.practiceBeats),practiceCues):null;
+  type MissionMeasure=NonNullable<typeof round>['measures'][number];
+  const cueGroups:{label:string;items:{cue:MissionMeasure;index:number}[]}[]=[];
+  round?.measures.forEach((cue,index)=>{
+    const label=cue.group??'';
+    const group=cueGroups.at(-1);
+    if(!group||group.label!==label)cueGroups.push({label,items:[{cue,index}]});
+    else group.items.push({cue,index});
+  });
+  const gridLabel=practiceCues?'Sequência da prática':'Compassos da rodada';
+  const missionGridMarkup=`<div class="mission-grid" role="group" aria-label="${gridLabel}"${practiceCues?' data-mode="along"':''}>${cueGroups.map(group=>`<ol class="mission-grid-group"${group.label?` aria-label="${escape(group.label)}"`:''}>${group.items.map(({cue,index})=>`<li class="mission-cell" data-phase="${cue.phase}"><button class="mission-cell-jump" type="button" data-cue-index="${index}" aria-label="Tocar a partir de ${escape(cue.label)}, trecho ${index+1}" title="Tocar a partir daqui"><span>${escape(cue.label)}</span></button></li>`).join('')}</ol>`).join('')}</div>`;
+  const missionTurnMarkup=mission&&!mission.hideTurnLabel&&plan.entries.some(entry=>entry.block.responseBeat!==undefined||entry.block.phaseCues?.length)
+    ?'<p class="mission-turn" id="mission-turn" role="status"></p>':'';
   let mode:'prepare'|'play'='prepare';
   const preparingMission=()=>!!mission&&mode==='prepare';
   const links=songLessons.map((item,i)=>{
@@ -53,12 +65,15 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
   const celebrationMarkup=mission&&!nextLesson?`
     <dialog id="mission-celebration" class="mission-celebration" aria-labelledby="mission-celebration-title" aria-describedby="mission-celebration-description">
       <div class="mission-celebration-body">
-      <button class="mission-celebration-close" type="button" aria-label="Fechar comemoração">×</button>
+      <button class="mission-celebration-close" type="button" aria-label="Fechar">×</button>
       <div class="mission-confetti" aria-hidden="true">${Array.from({length:14},(_,i)=>`<i style="--piece:${i};--drift:${i%2===0?-1:1};--delay:${i%4*60}ms"></i>`).join('')}</div>
       <svg class="mission-celebration-icon" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="19"/><path d="m15 24 6 6 12-13"/></svg>
-      <h2 id="mission-celebration-title">Parabéns pela prática!</h2>
-      <p id="mission-celebration-description">Você concluiu a última missão. Que tal explorar outra música ou uma nova ideia no instrumento?</p>
-      <a class="mission-celebration-link" href="/#tracks">Escolher outra trilha <span aria-hidden="true">→</span></a>
+      <h2 id="mission-celebration-title">Última missão concluída</h2>
+      <p id="mission-celebration-description">Você pode continuar tocando por aqui ou explorar outra trilha.</p>
+      <div class="mission-celebration-actions">
+        <a class="mission-celebration-link" href="/#tracks" autofocus>Ver outras trilhas <span aria-hidden="true">→</span></a>
+        <button class="mission-celebration-stay" type="button">Continuar praticando</button>
+      </div>
       </div>
     </dialog>`:'';
   app.innerHTML=`
@@ -79,7 +94,8 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
                 <img src="${escape(mission.scene.illustration.src)}" alt="${escape(mission.scene.illustration.alt)}" width="${mission.scene.illustration.size?.width??210}" height="${mission.scene.illustration.size?.height??84}">
                 ${mission.scene.prompt?`<figcaption class="mission-scene-prompt">${escape(mission.scene.prompt)}</figcaption>`:''}
               </figure>`:''}
-              <p class="mission-scene-intro">${escape(mission.scene.text)}</p>
+              <p class="mission-scene-intro">${studyTextMarkup(mission.scene.text)}</p>
+              ${mission.scene.followup?`<p class="mission-scene-intro">${studyTextMarkup(mission.scene.followup)}</p>`:''}
               ${mission.hidePreparationExample?'':`<button id="mission-example" class="mission-example" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><span>Ouvir o trecho</span></button>
               <p class="mission-example-status" id="mission-example-status" role="status"></p>`}
             </div>
@@ -91,9 +107,7 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
         </section>
         <div class="mission-practice">
           <section id="mission-play" role="tabpanel" aria-labelledby="mission-tab-play" class="mission-panel" hidden>
-            ${mission.playInstruction?`<p class="mission-cue">${escape(mission.playInstruction)}</p>`:''}
-            <ol class="mission-grid" aria-label="${practiceCues?'Sequência da prática':'Compassos da rodada'}"${practiceCues?' data-mode="along"':''}>${round.measures.map(item=>`<li class="mission-cell" data-phase="${item.phase}"><span>${escape(item.label)}</span></li>`).join('')}</ol>
-            ${plan.entries.some(entry=>entry.block.responseBeat!==undefined)?'<p class="mission-turn" id="mission-turn" role="status"></p>':''}
+            ${mission.playInstruction?`<p class="mission-cue">${studyTextMarkup(mission.playInstruction)}</p>`:''}
             <div id="mission-player-play"></div>
             <div class="mission-play-actions">
               ${completionMarkup}
@@ -107,7 +121,9 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
       <section id="song-player" class="song-player" aria-label="Estudo por trechos no braço estático">
         ${track.mapLegend&&lesson.mapStyle!=='plain-degrees'?`<p class="song-map-legend">${escape(track.mapLegend)}</p>`:''}
         ${mission?'':boardsMarkup}
+        ${mission?`<div class="mission-player-header">${missionGridMarkup}${missionTurnMarkup}`:''}
         <div class="song-controls song-transport" role="group" aria-label="Reprodução"><button id="song-play" class="song-primary" type="button" aria-label="Play" title="Play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button><button id="song-stop" type="button" aria-label="Stop" title="Stop"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v14H5z"/></svg></button><button id="song-options-toggle" class="song-options-toggle" type="button" aria-label="Ajustes da prática" title="Ajustes da prática" aria-expanded="false" aria-controls="song-options"><svg class="song-settings-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h2m4 0h10M4 12h10m4 0h2M4 18h5m4 0h7"/><circle cx="8" cy="6" r="2"/><circle cx="16" cy="12" r="2"/><circle cx="11" cy="18" r="2"/></svg></button></div>
+        ${mission?'</div>':''}
         <div id="song-options" class="song-options" hidden>
           ${mission?`
             <div class="mission-option-row">${melodyControl}${timbreMarkup}</div>
@@ -361,7 +377,7 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
     board.highlightedPositions=[];
   };
   const renderCards=()=>{
-    get('song-boards').classList.toggle('song-boards--current',mission?.boardDisplay==='current');
+    get('song-boards').classList.toggle('song-boards--current',!!mission);
     get('song-boards').innerHTML=cardPlan.entries.map(({block,entryIndex},i)=>{
       const reference=entryIndex===null,title=escape(lesson.mapTitle??block.title);
       const boardLabel=mission?.hideBoardTitle?`Braço ${i+1}`:escape(lesson.mapTitle??`Mapa de ${block.title}`);
@@ -381,13 +397,20 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
     }));
     rendered=-1;
   };
-  const showBlock=(index:number)=>{
+  const showBlock=(index:number,nextIndex?:number,transition=0)=>{
     rendered=index;
+    const currentCard=cardPlan.indices[index];
+    const nextCard=nextIndex===undefined?undefined:cardPlan.indices[nextIndex];
+    const blending=!!mission&&nextCard!==undefined&&nextCard!==currentCard&&transition>0;
     cards.forEach((card,i)=>{
-      const current=i===cardPlan.indices[index];
-      card.hidden=mission?.boardDisplay==='current'&&!current;
+      const current=i===currentCard,incoming=blending&&i===nextCard;
+      card.hidden=!!mission&&!current&&!incoming;
       card.classList.toggle('is-current',current);
+      card.classList.toggle('is-next',incoming);
+      card.inert=incoming;
+      card.style.setProperty('--board-opacity',String(incoming?transition:current&&blending?1-transition:1));
       if(current)card.setAttribute('aria-current','step');else card.removeAttribute('aria-current');
+      if(incoming)card.setAttribute('aria-hidden','true');else card.removeAttribute('aria-hidden');
     });
   };
   const draw=()=>{
@@ -420,11 +443,20 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
       measures[measure]?.style.setProperty('--cue-progress',String(Math.max(0,Math.min(1,elapsed/(end-start)))));
     }
     const index=singleIndex??blockIndexAt(plan,phraseBeat);
-    if(index!==rendered)showBlock(index);
     const entry=plan.entries[index]!,local=phraseBeat-entry.offset;
+    const duration=entry.block.endBeat-entry.block.startBeat;
+    const nextIndex=singleIndex===null
+      ?index<plan.entries.length-1?index+1:repeatingMission?0:undefined
+      :undefined;
+    const boardTransition=running&&!stopped&&nextIndex!==undefined&&now<rangeEnd()&&!reducedMotion.matches
+      ?boardTransitionProgress(local,duration)
+      :0;
+    if(mission)showBlock(index,boardTransition>0?nextIndex:undefined,boardTransition);
+    else if(index!==rendered)showBlock(index);
     const turn=app.querySelector<HTMLElement>('#mission-turn');
     if(turn){
-      const label=stopped||now<0?'':!melody.checked||(entry.block.responseBeat!==undefined&&local>=entry.block.responseBeat)?'Toque':'Ouça';
+      const phaseLabel=phaseLabelAt(entry.block.phaseCues,local);
+      const label=stopped||now<0?'':phaseLabel==='Toque junto'&&!melody.checked?'Toque':phaseLabel??(!melody.checked||(entry.block.responseBeat!==undefined&&local>=entry.block.responseBeat)?'Toque':'Ouça');
       if(turn.textContent!==label)turn.textContent=label;
     }
     const active=entry.block.notes.filter(note=>!responding&&!stopped&&local>=note.beat&&local<note.beat+note.duration&&now<rangeEnd());
@@ -435,11 +467,11 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
     const preparation=Math.max(0,Math.min(1,(now+4)/4));
     play.style.setProperty('--count-in-progress',`${(reducedMotion.matches?Math.floor(preparation*4)/4:preparation)*360}deg`);
     cards.forEach((card,i)=>{
-      const duration=cardPlan.entries[i]!.block.endBeat-cardPlan.entries[i]!.block.startBeat;
-      const progress=stopped||i!==cardPlan.indices[index]?0:Math.max(0,Math.min(duration,local));
+      const cardDuration=cardPlan.entries[i]!.block.endBeat-cardPlan.entries[i]!.block.startBeat;
+      const progress=stopped||i!==cardPlan.indices[index]?0:Math.max(0,Math.min(cardDuration,local));
       const input=card.querySelector<HTMLInputElement>('.study-progress');
       if(!input)return;
-      input.value=String(progress);input.style.setProperty('--study-progress',`${progress/duration*100}%`);
+      input.value=String(progress);input.style.setProperty('--study-progress',`${progress/cardDuration*100}%`);
     });
     if(running&&now>=rangeEnd()){
       pause();
@@ -451,6 +483,12 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
   play.setAttribute('aria-keyshortcuts','Space');play.title='Play (Espaço)';
   play.addEventListener('click',togglePlayback);
   example?.addEventListener('click',togglePlayback);
+  measures.forEach((measure,index)=>measure.querySelector<HTMLButtonElement>('.mission-cell-jump')?.addEventListener('click',()=>{
+    const cue=round?.measures[index];
+    if(!cue)return;
+    pause();singleIndex=null;beat=cue.beat;stopped=false;rendered=-1;
+    void start();
+  }));
   const onTransportKey=(event:KeyboardEvent)=>{
     if(preparingMission())return;
     if(document.querySelector('dialog[open]')||(event.target instanceof HTMLElement&&event.target.closest('input,select,textarea,button:not(#song-play),a')))return;
@@ -537,7 +575,7 @@ export function renderSongLesson(app: HTMLDivElement, lesson: SongLesson, track:
   celebration?.addEventListener('click',event=>{
     if(event.target===celebration)celebration.close();
   });
-  celebration?.querySelector('button')?.addEventListener('click',()=>celebration.close());
+  celebration?.querySelectorAll('button').forEach(button=>button.addEventListener('click',()=>celebration.close()));
   celebration?.addEventListener('close',()=>celebration.classList.remove('is-celebrating'));
   complete.addEventListener('change',()=>{
     savePracticeProgress();
