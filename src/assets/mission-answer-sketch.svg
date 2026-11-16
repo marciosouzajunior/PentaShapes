@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 230 84" fill="none">
+  <g stroke="#644b6c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M13 52l17-13 17-15 17 15 17 13 17-13"/>
+    <path d="M111 44h29m-6-4 6 4-6 4"/>
+    <path d="M153 52q28-26 55-10" stroke-dasharray="3 5"/>
+  </g>
+  <g fill="#644b6c">
+    <circle cx="13" cy="52" r="2.8"/><circle cx="30" cy="39" r="2.8"/><circle cx="47" cy="24" r="2.8"/>
+    <circle cx="64" cy="39" r="2.8"/><circle cx="81" cy="52" r="2.8"/><circle cx="98" cy="39" r="2.8"/>
+  </g>
+  <g fill="#413146" font-family="Georgia, serif" font-size="13" font-style="italic" text-anchor="middle">
+    <text x="56" y="73">frase</text><text x="185" y="73">sua resposta</text><text x="215" y="43" font-size="20">?</text>
+  </g>
+</svg>

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 10 260 100" fill="none" stroke="#694775" stroke-linecap="round" stroke-linejoin="round">
+  <defs>
+    <path id="mark" d="M-5-3c5-3 8 0 7 5s-8 5-8 0c0-2 0-3 2-4" stroke-width="1.6"/>
+    <path id="accent" d="M-5 0c0-5 6-7 10-3 3 4 0 10-5 10-5 1-7-3-5-7Z" stroke="none"/>
+  </defs>
+
+  <g>
+    <use href="#accent" transform="translate(77 40)" fill="#e3c3ff"/>
+    <use href="#accent" transform="translate(109 40)" fill="#bdebdc"/>
+    <use href="#accent" transform="translate(141 85)" fill="#e3c3ff"/>
+    <use href="#accent" transform="translate(173 85)" fill="#bdebdc"/>
+  </g>
+
+  <g>
+    <use href="#mark" transform="translate(79 25) rotate(-7)"/><use href="#mark" transform="translate(175 25) rotate(5)"/>
+    <use href="#mark" transform="translate(79 40) rotate(4)"/><use href="#mark" transform="translate(111 40) rotate(-6)"/><use href="#mark" transform="translate(175 40) rotate(5)"/>
+    <use href="#mark" transform="translate(79 55) rotate(-5)"/><use href="#mark" transform="translate(143 55) rotate(7)"/>
+    <use href="#mark" transform="translate(79 70) rotate(6)"/><use href="#mark" transform="translate(143 70) rotate(-4)"/>
+    <use href="#mark" transform="translate(79 85) rotate(-7)"/><use href="#mark" transform="translate(143 85) rotate(5)"/><use href="#mark" transform="translate(175 85) rotate(-5)"/>
+    <use href="#mark" transform="translate(79 100) rotate(4)"/><use href="#mark" transform="translate(175 100) rotate(-6)"/>
+  </g>
+
+  <path d="M88 35c5-5 10 0 15 0" stroke-width="1.5" stroke-dasharray="3 5"/>
+  <path d="m98 31 6 4-6 4" stroke-width="1.5"/>
+  <path d="M152 80c5-5 10 0 15 0" stroke-width="1.5" stroke-dasharray="3 5"/>
+  <path d="m162 76 6 4-6 4" stroke-width="1.5"/>
+</svg>

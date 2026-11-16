@@ -1,46 +1,36 @@
-# 🎸 PentaShapes
-[https://pentashapes.web.app](https://pentashapes.web.app)  
+# PentaShapes
 
-**PentaShapes** is an interactive web tool that helps guitarists visualize and understand scales across the fretboard.
+Aplicativo web para praticar improvisação na guitarra e no violão. Reúne exemplos sonoros, diagramas do braço e trilhas guiadas para relacionar acordes, escalas e frases musicais.
 
-You choose the root note, scale type (like pentatonic), and which shapes to display — and the app shows the intervals on the neck, making it easier to connect patterns and create solos.
+O projeto está em desenvolvimento. A proposta é permitir que a comunidade contribua com o aplicativo e crie novas trilhas usando a mesma estrutura de conteúdo.
 
----
+## Executar localmente
 
-## 💭 Why this project?
+Com Node.js e npm instalados:
 
-Many guitar players know scale shapes — but struggle to use them musically. **PentaShapes** was created to bridge that gap, by showing intervals clearly and helping players think beyond shapes.
+```sh
+npm ci
+npm run dev
+```
 
----
+Abra o endereço exibido no terminal. A trilha de referência está em `/track/purple-haze/`.
 
-## 🤝 Want to contribute?
+```sh
+npm run check    # Verificação de tipos e testes
+npm run build    # Verificação e build de produção
+npm run preview  # Prévia do build local
+```
 
-- If you're a dev who loves music: **let’s build it together!**
-- If you're a guitarist: open issues with feedback, ideas or requests.
-- Contributions in UX or new scale systems are more than welcome!
+A aplicação usa TypeScript e Vite. O build inclui o código anterior em `dist/legacy/`, acessível por `/legacy/`. Pushes na `main` publicam `dist/` no [Firebase Hosting](https://pentashapes.web.app).
 
----
+## Contribuir
 
-## ⚙️ Tech Stack
+Sugestões, relatos de uso, correções e propostas de trilhas são bem-vindos por issues e pull requests.
 
-- HTML, CSS, JavaScript  
-- jQuery
+Antes de criar conteúdo, consulte a [documentação do projeto](docs/README.md), o [modelo de missões](docs/missoes.md) e o [tom de voz](docs/tom-de-voz.md). Informe a autoria, as fontes e as permissões dos materiais enviados.
 
----
+## Licença
 
-## ⭐ Support the Project
+O código autoral, incluindo o legado, usa [AGPL-3.0-only](LICENSE). Uso comercial é permitido; versões derivadas devem cumprir as obrigações de compartilhamento de código previstas na licença, inclusive quando oferecidas pela rede.
 
-If you like the idea and want to support it:
-
-- Give it a ⭐ on GitHub!
-- Share it with other guitarists
-
----
-
-## License
-
-This project is licensed under the [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/).  
-Feel free to use, modify, and share the code, even commercially, as long as you give credit to [Márcio Souza Junior](https://github.com/marciosouzajunior).
-
-
----
+Documentação e materiais de terceiros têm termos próprios, descritos em [créditos e escopo das licenças](THIRD_PARTY_NOTICES.md).

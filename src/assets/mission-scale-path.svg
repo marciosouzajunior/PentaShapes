@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 110" fill="none" stroke="#694775" stroke-linecap="round" stroke-linejoin="round">
+  <defs>
+    <path id="root-mark" d="M-5 0c0-5 6-7 10-3 3 4 0 10-5 10-5 1-7-3-5-7Z" fill="#e3c3ff" stroke="none"/>
+    <path id="mark" d="M-5-3c5-3 8 0 7 5s-8 5-8 0c0-2 0-3 2-4" stroke-width="1.6"/>
+  </defs>
+  <use href="#root-mark" transform="translate(38 91) rotate(4)"/>
+  <g>
+    <use href="#mark" transform="translate(40 16) rotate(-8)"/><use href="#mark" transform="translate(70 16) rotate(5)"/>
+    <use href="#mark" transform="translate(40 31) rotate(4)"/><use href="#mark" transform="translate(70 31) rotate(-6)"/>
+    <use href="#mark" transform="translate(40 46) rotate(-5)"/><use href="#mark" transform="translate(60 46) rotate(7)"/>
+    <use href="#mark" transform="translate(40 61) rotate(6)"/><use href="#mark" transform="translate(60 61) rotate(-4)"/>
+    <use href="#mark" transform="translate(40 76) rotate(-7)"/><use href="#mark" transform="translate(60 76) rotate(5)"/>
+    <use href="#mark" transform="translate(40 91) rotate(4)"/><use href="#mark" transform="translate(70 91) rotate(-6)"/>
+  </g>
+  <path d="M96 66c17-38 47-13 72-13" stroke-width="2" stroke-dasharray="4 6"/>
+  <path d="m159 48 10 5-10 5" stroke-width="2"/>
+  <use href="#root-mark" transform="translate(188 76) rotate(-7)"/>
+  <g>
+    <use href="#mark" transform="translate(190 16) rotate(-7)"/><use href="#mark" transform="translate(220 16) rotate(6)"/>
+    <use href="#mark" transform="translate(200 31) rotate(5)"/><use href="#mark" transform="translate(220 31) rotate(-5)"/>
+    <use href="#mark" transform="translate(190 46) rotate(-6)"/><use href="#mark" transform="translate(210 46) rotate(7)"/>
+    <use href="#mark" transform="translate(190 61) rotate(5)"/><use href="#mark" transform="translate(210 61) rotate(-4)"/>
+    <use href="#mark" transform="translate(190 76) rotate(-7)"/><use href="#mark" transform="translate(220 76) rotate(6)"/>
+    <use href="#mark" transform="translate(190 91) rotate(4)"/><use href="#mark" transform="translate(220 91) rotate(-6)"/>
+  </g>
+  <path d="m23 31-9-4m8 12-11-1m225 22 10-4m-8 12 11 1" stroke-width="1.5" opacity=".58"/>
+</svg>

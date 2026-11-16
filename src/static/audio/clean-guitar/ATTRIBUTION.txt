@@ -1,0 +1,11 @@
+Electric Guitar FSBS (clean), FreePats, release 2026-08-07.
+Clean #1, bridge pickup, small SFZ + WAV distribution.
+https://freepats.zenvoid.org/ElectricGuitar/clean-electric-guitar.html
+https://github.com/freepats/electric-guitar-FSBS-clean/releases/tag/2026-08-07
+
+Published by FreePats under the CC0 1.0 Universal public domain dedication.
+https://creativecommons.org/publicdomain/zero/1.0/
+
+PentaShapes uses eight mono samples. The copies are shortened to 4.6 s,
+faded at the end and resampled to 22.05 kHz. Playback can transpose them
+to nearby pitches and apply the note's scheduled slide or bend.

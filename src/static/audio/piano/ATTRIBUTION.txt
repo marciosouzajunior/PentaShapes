@@ -1,0 +1,13 @@
+Salamander Grand Piano v3, recorded by Alexander Holm.
+License: Creative Commons Attribution 3.0 Unported.
+https://creativecommons.org/licenses/by/3.0/
+
+Original collection:
+https://archive.org/details/SalamanderGrandPianoV3
+
+MP3 distribution:
+https://github.com/Tonejs/audio/tree/master/salamander
+
+PentaShapes uses six of the distributed MP3 samples. Playback transposes
+samples to nearby pitches, adjusts their level and fades notes at their
+scheduled end. The MP3 files are stored as distributed.

@@ -1,0 +1,6 @@
+Finger Bass YR (2019-09-30), recorded by Andrea Biasior (reusenoise).
+Yamaha RBX finger-played electric bass, distributed by FreePats under CC0 1.0.
+Source: https://freepats.zenvoid.org/ElectricGuitar/clean-electric-bass.html
+Samples: https://github.com/freepats/electric-bass-YR
+Selected E1, A1, C2 and D2 recordings; renamed only, no audio modifications.
+SFZ pitch centers: MIDI 28, 33, 36 and 38. See LICENSE.txt.
