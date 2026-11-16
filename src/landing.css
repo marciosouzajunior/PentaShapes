@@ -1,3 +1,14 @@
+.language-picker{position:relative;margin-left:auto;font-size:13px;color:var(--app-muted)}
+.language-picker summary{display:flex;align-items:center;gap:12px;min-height:44px;padding:8px 10px;border-radius:6px;list-style:none;cursor:pointer}
+.language-picker summary::-webkit-details-marker{display:none}
+.language-picker summary:hover,.language-picker[open] summary{color:var(--app-text);background:rgba(169,143,198,.08)}
+.language-picker summary:focus-visible{outline:2px solid var(--app-accent);outline-offset:2px}
+.language-picker nav{position:absolute;z-index:10;right:0;top:calc(100% + 6px);min-width:140px;padding:5px;background:var(--app-header);border:1px solid var(--app-border);border-radius:8px;box-shadow:0 8px 24px #0003}
+.language-picker nav a{display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:40px;padding:8px 10px;border-radius:4px;color:var(--app-muted);text-decoration:none}
+.language-picker nav a[aria-current]{color:var(--app-accent);background:rgba(169,143,198,.1)}
+.language-picker nav a[aria-current]::after{content:'✓';font-size:12px}
+.language-picker nav a:hover{color:var(--app-text);background:rgba(169,143,198,.16)}
+body:has(.landing-page) .header .language-picker nav a:focus-visible{outline:2px solid var(--app-accent);outline-offset:-2px}
 .landing-page .hero{padding-block:64px 72px;gap:40px}
 .landing-page .eyebrow{color:var(--app-accent)}
 .landing-page .hero h1{margin:16px 0 24px;font-size:clamp(36px,4.3vw,58px);font-weight:750;letter-spacing:-.04em}

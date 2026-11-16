@@ -10,7 +10,7 @@ export const chordSource={
 export function accompanimentChord(id:BaseChord):StudyBlock{
   const frets=id==='e'?[null,7,6,7,8,null]:id==='g'?[3,2,0,0,0,3]:[null,0,2,2,2,0];
   const beats=id==='e'?4:2;
-  const title=id==='e'?'E7♯9 · Mi com sétima e nona aumentada':id==='g'?'G · Sol maior':'A · Lá maior';
+  const title=id==='e'?'E7♯9 · E com sétima e nona aumentada':id==='g'?'G · G maior':'A · A maior';
   const positions=frets.flatMap((fret,i)=>fret===null?[]:[{stringId:strings[i]!,fret,midi:tuning[i]!+fret}]);
   return {id:'chord-'+id,title,startBeat:0,endBeat:beats,startFret:id==='e'?5:0,endFret:id==='e'?8:4,
     notes:Array.from({length:beats},(_,beat)=>positions.map(position=>({...position,beat,duration:.8,sourceTicks:-1}))).flat()};

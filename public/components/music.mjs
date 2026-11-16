@@ -1,11 +1,11 @@
 /** Pure musical data. String IDs follow the instrument, never its screen orientation. */
 export const STANDARD_TUNING = Object.freeze([
-  { id: 'e_high', number: 1, midi: 64, name: 'Mi agudo' },
-  { id: 'b', number: 2, midi: 59, name: 'Si' },
-  { id: 'g', number: 3, midi: 55, name: 'Sol' },
-  { id: 'd', number: 4, midi: 50, name: 'Ré' },
-  { id: 'a', number: 5, midi: 45, name: 'Lá' },
-  { id: 'e_low', number: 6, midi: 40, name: 'Mi grave' },
+  { id: 'e_high', number: 1, midi: 64, name: 'E agudo' },
+  { id: 'b', number: 2, midi: 59, name: 'B' },
+  { id: 'g', number: 3, midi: 55, name: 'G' },
+  { id: 'd', number: 4, midi: 50, name: 'D' },
+  { id: 'a', number: 5, midi: 45, name: 'A' },
+  { id: 'e_low', number: 6, midi: 40, name: 'E grave' },
 ].map(Object.freeze));
 
 export const SCALES = Object.freeze({
@@ -16,9 +16,9 @@ export const SCALES = Object.freeze({
   chromatic: Object.freeze({ name: 'Cromática', intervals: Object.freeze([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]) }),
 });
 
-const NAMES = ['Dó', 'Dó♯', 'Ré', 'Ré♯', 'Mi', 'Fá', 'Fá♯', 'Sol', 'Sol♯', 'Lá', 'Lá♯', 'Si'];
+const NAMES = ['C', 'C♯', 'D', 'D♯', 'E', 'F', 'F♯', 'G', 'G♯', 'A', 'A♯', 'B'];
 const LETTERS = ['C', 'C♯', 'D', 'D♯', 'E', 'F', 'F♯', 'G', 'G♯', 'A', 'A♯', 'B'];
-const FLAT_NAMES = ['Dó', 'Ré♭', 'Ré', 'Mi♭', 'Mi', 'Fá', 'Sol♭', 'Sol', 'Lá♭', 'Lá', 'Si♭', 'Si'];
+const FLAT_NAMES = ['C', 'D♭', 'D', 'E♭', 'E', 'F', 'G♭', 'G', 'A♭', 'A', 'B♭', 'B'];
 const FLAT_LETTERS = ['C', 'D♭', 'D', 'E♭', 'E', 'F', 'G♭', 'G', 'A♭', 'A', 'B♭', 'B'];
 const DEGREES = ['1', '♭2', '2', '♭3', '3', '4', '♭5', '5', '♭6', '6', '♭7', '7'];
 export const mod12 = value => ((value % 12) + 12) % 12;

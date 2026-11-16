@@ -29,7 +29,7 @@ test('every lesson has valid sounding events, explicit chord references and one 
   }
 });
 test('five A minor regions contain full pentatonics and recognizable, correctly named chord voicings',()=>{
-  assert.deepEqual(amRegions.map(r=>r.form),['Sol menor','Mi menor','Ré menor','Dó menor','Lá menor']);
+  assert.deepEqual(amRegions.map(r=>r.form),['G menor','E menor','D menor','C menor','A menor']);
   for(const region of amRegions){
     assert.equal(region.positions.length,12);
     assert.deepEqual([...new Set(region.positions.map(p=>p.midi%12))].sort((a,b)=>a-b),[0,2,4,7,9]);

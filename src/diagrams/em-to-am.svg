@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="480" height="232" viewBox="0 0 480 232" role="img" aria-labelledby="title desc">
-  <title id="title">De Mi menor aberto a Lá menor</title>
-  <desc id="desc">Os acordes aparecem com a sexta corda à esquerda. Mi menor: 0, 2, 2, 0, 0, 0. Ao avançar cinco casas, Lá menor: 5, 7, 7, 5, 5, 5, com pestana na casa 5.</desc>
+  <title id="title">De E menor aberto a A menor</title>
+  <desc id="desc">Os acordes aparecem com a sexta corda à esquerda. E menor: 0, 2, 2, 0, 0, 0. Ao avançar cinco casas, A menor: 5, 7, 7, 5, 5, 5, com pestana na casa 5.</desc>
   <style>
     text{font-family:Arial,sans-serif;text-anchor:middle;fill:#384259}
     .title{font-size:18px;font-weight:600}

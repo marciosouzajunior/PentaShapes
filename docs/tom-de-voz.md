@@ -10,11 +10,11 @@ A orientação inicial deve permitir começar com uma ideia principal e poucas f
 
 Use “toque junto” para acompanhar a melodia-guia, “repita” para imitá-la e “improvise” ou “crie uma resposta” para uma frase própria. “Responda” sozinho não define se a pessoa deve copiar ou inventar: a instrução precisa esclarecer essa intenção. Prefira “dois compassos em cada acorde” a “uma volta”. Se houver retorno na sequência, nomeie os acordes e o ponto em que reaparecem.
 
-Proponha uma transformação audível por vez. Por exemplo: “Na próxima resposta, termine em Lá.” Evite exigir simultaneamente preservar abertura, mudar final, manter contorno e explorar novas notas. Uma sugestão deve ser fácil de reconhecer durante a execução, sem depender de lembrar uma explicação anterior.
+Proponha uma transformação audível por vez. Por exemplo: “Na próxima resposta, termine em A.” Evite exigir simultaneamente preservar abertura, mudar final, manter contorno e explorar novas notas. Uma sugestão deve ser fácil de reconhecer durante a execução, sem depender de lembrar uma explicação anterior.
 
 Exemplo contextual de Purple Haze, não um roteiro obrigatório para outras lições:
 
-> Ouça o Si♭ grave e sua versão aguda. Alterne os dois e perceba o contraste com o Mi, o ponto de apoio da música.
+> Ouça o B♭ grave e sua versão aguda. Alterne os dois e perceba o contraste com o E, o ponto de apoio da música.
 
 Neste exemplo, a oitava pode ajudar a reconhecer o mesmo som em outra altura. O trítono só entra quando houver uma comparação sonora que o justifique. Introduza o conceito depois da experiência que lhe dá sentido. Não é necessário explicar todas as relações de uma frase para praticá-la.
 
@@ -31,17 +31,17 @@ Não atribua intenções ao compositor sem evidência nem apresente uma digitaç
 | Grau | Relação da nota com uma referência explícita. |
 | Tensão | Contraste a comparar pelo ouvido, sem impor uma sensação universal. |
 
-Um grau não equivale a um tom. Contagem de nomes, distância em semitons, número da casa e posição numa lista de notas são informações diferentes. Diferencie o movimento da frase da função de uma nota em relação ao centro. Por exemplo, Mi–Ré pode ser um movimento descendente de um tom, enquanto Ré tem o papel de sétima menor em relação ao centro Mi. Use essa distinção quando ajudar a compreender o trecho, sem acrescentar uma explicação de graus a toda lição.
+Um grau não equivale a um tom. Contagem de nomes, distância em semitons, número da casa e posição numa lista de notas são informações diferentes. Diferencie o movimento da frase da função de uma nota em relação ao centro. Por exemplo, E–D pode ser um movimento descendente de um tom, enquanto D tem o papel de sétima menor em relação ao centro E. Use essa distinção quando ajudar a compreender o trecho, sem acrescentar uma explicação de graus a toda lição.
 
-Quando um intervalo grande fizer parte do assunto, procure uma relação próxima que ajude a compreendê-lo. Por exemplo, Fá♯ é a segunda de Mi e, uma oitava acima, a nona. Essa comparação ilustra a abordagem; não exige ensinar nonas em outros contextos. As contagens em semitons são apoio, não o ponto de partida. Preserve oitava, direção, qualidade e grafia do intervalo.
+Quando um intervalo grande fizer parte do assunto, procure uma relação próxima que ajude a compreendê-lo. Por exemplo, F♯ é a segunda de E e, uma oitava acima, a nona. Essa comparação ilustra a abordagem; não exige ensinar nonas em outros contextos. As contagens em semitons são apoio, não o ponto de partida. Preserve oitava, direção, qualidade e grafia do intervalo.
 
 Deixe as coordenadas de corda e casa no desenho quando ele já as mostra. No texto, explique o que comparar, ouvir ou transformar. Não narre cada ponto nem enumere a função de todas as notas sem uma tarefa musical.
 
 ## Ênfase musical no texto
 
-O leitor reconhece automaticamente nomes de notas em português e cifras com qualidade ou extensão, apresentando notas com peso e cor discretos e acordes com peso próprio. Aplique `[[degree:5]]` aos graus, pois um número isolado também pode indicar casa, corda ou contagem. Use marcações explícitas como `[[note:Lá–Dó–Lá]]` ou `[[chord:E]]` quando for preciso agrupar uma sequência ou destacar uma cifra que o reconhecimento automático não possa distinguir com segurança. `Em` nunca é reconhecido automaticamente como cifra, pois também é uma preposição frequente em português; escreva `[[chord:Em]]` quando significar Mi menor.
+Use letras para as notas nos dois idiomas, preservando acidentes e grafia musical. Marque notas na prosa com `[[note:A]]` ou sequências com `[[note:A–C–A]]`; use `[[chord:A]]` para acordes. Marque cada acorde de uma sequência, por exemplo `[[chord:Dm]], [[chord:Em]] e [[chord:Cm]]`, nos dois idiomas. A redação deve distinguir “nota A” de “acorde A”. Não acrescente equivalências com nomes em português. Letras isoladas podem ser palavras comuns e não recebem destaque automático. Embora exista reconhecimento de cifras com qualidade ou extensão no texto português, a autoria deve usar marcação explícita para garantir destaque consistente nos dois idiomas. `Em` sem marcação continua sendo texto comum, pois também é uma preposição. Aplique `[[degree:5]]` aos graus, pois um número isolado também pode indicar casa, corda ou contagem.
 
-Use a marcação de grau somente quando o número expressar uma função musical — por exemplo, “Mi é a `[[degree:5]]` de Am”. Nunca marque como grau um número de casa, corda, compasso ou quantidade.
+Use a marcação de grau somente quando o número expressar uma função musical — por exemplo, “E é a `[[degree:5]]` de Am”. Nunca marque como grau um número de casa, corda, compasso ou quantidade.
 
 ## Leitura e controles
 
@@ -51,7 +51,7 @@ Prefira uma pista aplicável a uma enumeração de graus. Comece com “Uma dica
 
 Ofereça estudo adicional no box “Para explorar depois”, ao final da leitura. Diga o assunto, a instituição ou autoria e o idioma quando necessário. O link deve levar diretamente a uma aula sobre o conceito, não a um material amplo que apenas o menciona. A leitura externa é opcional para executar a missão.
 
-Use nomes de notas em português no texto e os rótulos previstos pelo componente nos diagramas. Mantenha nomes de controles consistentes, como “Mostrar graus”. Explique a música sem depender da localização de um botão; use o nome real do controle ao ensinar seu uso.
+Use letras para notas no texto, nos diagramas, nas legendas e nas descrições acessíveis, tanto em português quanto em inglês. Mantenha nomes de controles consistentes, como “Mostrar graus”. Explique a música sem depender da localização de um botão; use o nome real do controle ao ensinar seu uso.
 
 ## Mensagens e conclusão
 

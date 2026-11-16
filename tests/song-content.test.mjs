@@ -63,17 +63,17 @@ test('assembled timeline advances the preview at boundaries and removes only the
 });
 
 test('pitch labels teach names and degrees relative to E rather than fret numbers',()=>{
-  assert.equal(noteLabel(46,'name','flat'),'Si♭');
+  assert.equal(noteLabel(46,'name','flat'),'B♭');
   assert.equal(noteLabel(46,'degree'),'♭5');
   assert.equal(noteLabel(40,'degree'),'1');
   assert.equal(noteLabel(55,'degree'),'♭3');
-  assert.equal(noteLabel(66),'Fá♯');
+  assert.equal(noteLabel(66),'F♯');
   assert.equal(noteLabel(62,'degree'),'♭7');
   assert.throws(()=>midiPitch({stringId:'g',fret:-1}),/Posição/);
 });
 
 test('new content has independent progress and preserves the foundation catalog',()=>{
-  assert.deepEqual(songLessons.map(lesson=>lesson.id),['s01','s02','s02-variacao','s05','s03','s04']);
+  assert.deepEqual(songLessons.map(lesson=>lesson.id),['s01','s02','s02-variation','s05','s03','s04']);
   assert.equal(playableLessons.filter(l=>l.kind==='phrase').length,12);
   assert.equal(playableLessons.filter(l=>l.kind==='song'&&l.ref.trackId==='hendrix-purple-haze-missions').length,6);
   assert.equal(playableLessons.filter(l=>l.kind==='song'&&l.ref.trackId==='hendrix-purple-haze').length,0);
@@ -171,8 +171,8 @@ test('the intro variation separates the fretted A from its bend destination B',(
   assert.equal(pitchAt(bent,.25),59);
   assert.equal(midiPitch(bent),57);
   const ids=songLessons.map(lesson=>lesson.id);
-  assert.ok(ids.indexOf('s02-variacao')>ids.indexOf('s02'));
-  assert.ok(ids.indexOf('s02-variacao')<ids.indexOf('s03'));
+  assert.ok(ids.indexOf('s02-variation')>ids.indexOf('s02'));
+  assert.ok(ids.indexOf('s02-variation')<ids.indexOf('s03'));
 });
 
 test('exploration expands the map without adding audio notes or inheriting descent completion',()=>{

@@ -8,11 +8,11 @@ export type ChordRegion={id:string;chord:string;form:string;tonic:number;startFr
 
 /** Authored reference voicings, not a transcription of the teachers' grips or box numbers. */
 export const amRegions:ChordRegion[]=[
-  {id:'g',chord:'Am7',form:'Sol menor',tonic:9,startFret:2,endFret:5,root:position('e_low',5),chordPositions:grip([5,null,5,5,5,5]),chordTones:[9,0,4,7],positions:shape([[3,5],[3,5],[2,5],[2,5],[3,5],[3,5]]),phrase:[position('g',5),position('b',5),position('e_high',5)]},
-  {id:'e',chord:'Am',form:'Mi menor',tonic:9,startFret:5,endFret:8,root:position('e_low',5),chordPositions:grip([5,7,7,5,5,5]),chordTones:[9,0,4],positions:shape([[5,8],[5,7],[5,7],[5,7],[5,8],[5,8]]),phrase:[position('g',5),position('b',5),position('e_high',5)]},
-  {id:'d',chord:'Am',form:'Ré menor',tonic:9,startFret:7,endFret:10,root:position('d',7),chordPositions:grip([null,null,7,9,10,8]),chordTones:[9,0,4],positions:shape([[8,10],[7,10],[7,10],[7,9],[8,10],[8,10]]),phrase:[position('d',10),position('g',9),position('b',10)]},
-  {id:'c',chord:'Am',form:'Dó menor',tonic:9,startFret:9,endFret:13,root:position('a',12),chordPositions:grip([null,12,10,9,10,12]),chordTones:[9,0,4],positions:shape([[10,12],[10,12],[10,12],[9,12],[10,13],[10,12]]),phrase:[position('d',10),position('g',9),position('b',10)]},
-  {id:'a',chord:'Am',form:'Lá menor',tonic:9,startFret:12,endFret:15,root:position('a',12),chordPositions:grip([null,12,14,14,13,12]),chordTones:[9,0,4],positions:shape([[12,15],[12,15],[12,14],[12,14],[13,15],[12,15]]),phrase:[position('d',14),position('b',13),position('g',14)]},
+  {id:'g',chord:'Am7',form:'G menor',tonic:9,startFret:2,endFret:5,root:position('e_low',5),chordPositions:grip([5,null,5,5,5,5]),chordTones:[9,0,4,7],positions:shape([[3,5],[3,5],[2,5],[2,5],[3,5],[3,5]]),phrase:[position('g',5),position('b',5),position('e_high',5)]},
+  {id:'e',chord:'Am',form:'E menor',tonic:9,startFret:5,endFret:8,root:position('e_low',5),chordPositions:grip([5,7,7,5,5,5]),chordTones:[9,0,4],positions:shape([[5,8],[5,7],[5,7],[5,7],[5,8],[5,8]]),phrase:[position('g',5),position('b',5),position('e_high',5)]},
+  {id:'d',chord:'Am',form:'D menor',tonic:9,startFret:7,endFret:10,root:position('d',7),chordPositions:grip([null,null,7,9,10,8]),chordTones:[9,0,4],positions:shape([[8,10],[7,10],[7,10],[7,9],[8,10],[8,10]]),phrase:[position('d',10),position('g',9),position('b',10)]},
+  {id:'c',chord:'Am',form:'C menor',tonic:9,startFret:9,endFret:13,root:position('a',12),chordPositions:grip([null,12,10,9,10,12]),chordTones:[9,0,4],positions:shape([[10,12],[10,12],[10,12],[9,12],[10,13],[10,12]]),phrase:[position('d',10),position('g',9),position('b',10)]},
+  {id:'a',chord:'Am',form:'A menor',tonic:9,startFret:12,endFret:15,root:position('a',12),chordPositions:grip([null,12,14,14,13,12]),chordTones:[9,0,4],positions:shape([[12,15],[12,15],[12,14],[12,14],[13,15],[12,15]]),phrase:[position('d',14),position('b',13),position('g',14)]},
 ];
 export const amRegion=amRegions[1]!;
 export const amNeighborRegion=amRegions[2]!;

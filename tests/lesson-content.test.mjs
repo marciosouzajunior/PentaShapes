@@ -104,12 +104,12 @@ test('L08 transposes L03 by two semitones with corresponding chord, degrees and 
   const notes = buildFretboard(lesson.maps.practice).rows.flatMap(row => row.notes).filter(note => note.visible);
   assert.deepEqual([...new Set(notes.map(note => note.pitchClass))].sort((a,b) => a-b), [0, 2, 5, 7, 10]);
   assert.equal(notes.find(note => note.pitchClass === 10).letter, 'B♭');
-  assert.equal(notes.find(note => note.pitchClass === 10).name, 'Si♭');
+  assert.equal(notes.find(note => note.pitchClass === 10).name, 'B♭');
   assert.equal(notes.find(note => note.pitchClass === 10).degree, '♭3');
   for (const note of notes) assert.equal(note.roles.includes('chord'), [7, 10, 2].includes(note.pitchClass));
   assert.equal(notes.find(note => note.isRoot).midi, 67);
   assert.ok(planPhrase(lesson, 'practice', 8).every(note => note.beat % 16 + note.duration <= 8));
-  assert.match(lesson.responseInstruction, /Sol/);
+  assert.match(lesson.responseInstruction, /G/);
   assert.throws(() => buildFretboard({ spelling: 'unknown' }), /Grafia/);
 });
 

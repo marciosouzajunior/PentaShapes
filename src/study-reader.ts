@@ -1,5 +1,6 @@
+import { ui, type Locale } from './locale';
 import type { StudyGuide, StudyPage, StudyVisual } from './study-model';
-import { intervalName, referenceRelation, studyNote, studyDegree } from './study-model';
+import { intervalName as baseIntervalName, referenceRelation, studyNote as baseStudyNote, studyDegree } from './study-model';
 import {pianoDiagram} from './piano-diagram';
 import './study-reader.css';
 
@@ -7,8 +8,8 @@ const escape=(value:string)=>value.replaceAll('&','&amp;').replaceAll('<','&lt;'
 type MusicTokenKind='note'|'degree'|'chord';
 const plainStudyText=(value:string)=>value.replace(/\[\[(?:note|degree|chord):([^\[\]]+)\]\]/g,'$1');
 
-function automaticMusicMarkup(value:string):string{
-  const token=/(^|[^\p{L}\p{N}])((?:Dó|Ré|Mi|Fá|Sol|Lá|Si)[♭♯]?|[A-G][#♯♭]?(?:(?:m|maj|min|dim|aug|sus)\d*|\d+)(?:\/[A-G][#♯♭]?)?)(?=$|[^\p{L}\p{N}])/gu;
+function portugueseMusicMarkup(value:string):string{
+  const token=/(^|[^\p{L}\p{N}])([A-G][#♯♭]?(?:(?:m|maj|min|dim|aug|sus)\d*|\d+)(?:\/[A-G][#♯♭]?)?)(?=$|[^\p{L}\p{N}])/gu;
   let markup='',cursor=0,match:RegExpExecArray|null;
   while((match=token.exec(value))!==null){
     const prefix=match[1]!,label=match[2]!;
@@ -24,7 +25,8 @@ function automaticMusicMarkup(value:string):string{
 }
 
 /** Adds restrained, semantic emphasis to musical relationships authored in prose. */
-export function studyTextMarkup(value:string):string{
+export function studyTextMarkup(value:string,locale:Locale='en'):string{
+  const automaticMusicMarkup=(text:string)=>locale==='en'?escape(text):portugueseMusicMarkup(text);
   const token=/\[\[(note|degree|chord):([^\[\]]+)\]\]/g;
   let markup='',cursor=0,match:RegExpExecArray|null;
   while((match=token.exec(value))!==null){
@@ -38,7 +40,8 @@ export function studyTextMarkup(value:string):string{
 const letters=['C','C♯','D','D♯','E','F','F♯','G','G♯','A','A♯','B'];
 const flats=['C','D♭','D','E♭','E','F','G♭','G','A♭','A','B♭','B'];
 
-function positionsFigure(visual:Extract<StudyVisual,{kind:'positions'|'scale'}>):string{
+function positionsFigure(visual:Extract<StudyVisual,{kind:'positions'|'scale'}>,locale:Locale='en'):string{
+  const studyNote=(midi:number)=>baseStudyNote(midi,'sharp',locale);
   const strings=['e_high','b','g','d','a','e_low'];
   const count=visual.endFret-visual.startFret+1,cell=76;
   const right=50+count*cell,width=right+30;
@@ -79,11 +82,11 @@ function positionsFigure(visual:Extract<StudyVisual,{kind:'positions'|'scale'}>)
     const bendIndex=bends.findIndex(bend=>bend.stringId===position.stringId&&bend.fret===position.fret);
     return bendIndex>=0?`<g class="bend-note" style="--bend-distance:${displacement(bends[bendIndex]!)}px;--bend-delay:${bendIndex*2}s">${note}</g>`:note;
   }).join('');
-  const description=plainStudyText(visual.caption||`Notas no braço, casas ${visual.startFret} a ${visual.endFret}.`)+bends.map(bend=>` Ilustração da corda se deslocando lateralmente, na mesma casa, ${Number.isInteger(bend.targetMidi)?`até o som de ${studyNote(bend.targetMidi)}`:'elevando o som um quarto de tom'}.`).join('');
-  return `<figure><div class="reading-fretboard-scroll"><svg class="reading-fretboard${visual.kind==='scale'&&visual.degreeAnnotations?' reading-fretboard--degrees':''}" viewBox="0 0 ${width} 250" style="--reading-fretboard-width:${width}px" role="img" aria-label="${escape(description)}">${grid}${rows}${frets}${arrow}${gesture}${notes}</svg></div>${visual.caption?`<figcaption>${studyTextMarkup(visual.caption)}</figcaption>`:''}</figure>`;
+  const description=plainStudyText(visual.caption||(locale==='en'?`Notes on the fretboard, frets ${visual.startFret} to ${visual.endFret}.`:`Notas no braço, casas ${visual.startFret} a ${visual.endFret}.`))+bends.map(bend=>locale==='en'?` The string moves sideways at the same fret, ${Number.isInteger(bend.targetMidi)?`up to ${studyNote(bend.targetMidi)}`:'raising the pitch by a quarter tone'}.`:` Ilustração da corda se deslocando lateralmente, na mesma casa, ${Number.isInteger(bend.targetMidi)?`até o som de ${studyNote(bend.targetMidi)}`:'elevando o som um quarto de tom'}.`).join('');
+  return `<figure><div class="reading-fretboard-scroll"><svg class="reading-fretboard${visual.kind==='scale'&&visual.degreeAnnotations?' reading-fretboard--degrees':''}" viewBox="0 0 ${width} 250" style="--reading-fretboard-width:${width}px" role="img" aria-label="${escape(description)}">${grid}${rows}${frets}${arrow}${gesture}${notes}</svg></div>${visual.caption?`<figcaption>${studyTextMarkup(visual.caption,locale)}</figcaption>`:''}</figure>`;
 }
 
-function scaleOverlayFigure(visual:Extract<StudyVisual,{kind:'scale-overlay'}>):string{
+function scaleOverlayFigure(visual:Extract<StudyVisual,{kind:'scale-overlay'}>,locale:Locale='en'):string{
   const strings=['e_high','b','g','d','a','e_low'];
   const count=visual.endFret-visual.startFret+1,cell=76;
   const right=50+count*cell,width=right+30;
@@ -100,65 +103,67 @@ function scaleOverlayFigure(visual:Extract<StudyVisual,{kind:'scale-overlay'}>):
     const classes=['scale-overlay-note',first&&second?'scale-overlay-shared':first?'scale-overlay-first-only':'scale-overlay-second-only',position.midi%12===visual.layers[0].root?'scale-overlay-first-root':'',position.midi%12===visual.layers[1].root?'scale-overlay-second-root':''].filter(Boolean).join(' ');
     return `<g class="${classes}"><circle cx="${x}" cy="${y}" r="14"/><text x="${x}" y="${y+5}" class="position-note">${names[position.midi%12]}</text></g>`;
   }).join('');
-  const description=`Sobreposição das escalas ${visual.layers[0].label} e ${visual.layers[1].label}, casas ${visual.startFret} a ${visual.endFret}.`;
+  const description=locale==='en'?`Overlapping ${visual.layers[0].label} and ${visual.layers[1].label} scales, frets ${visual.startFret} to ${visual.endFret}.`:`Sobreposição das escalas ${visual.layers[0].label} e ${visual.layers[1].label}, casas ${visual.startFret} a ${visual.endFret}.`;
   const firstChecked=visual.initialLayer!=='second',secondChecked=visual.initialLayer!=='first';
-  return `<figure class="reading-scale-overlay"><div class="reading-fretboard-scroll"><svg class="reading-fretboard" viewBox="0 0 ${width} 250" style="--reading-fretboard-width:${width}px" role="img" aria-label="${escape(description)}">${grid}${rows}${frets}${notes}</svg></div><div class="reading-scale-overlay-controls" aria-label="Escalas visíveis"><label><input type="checkbox" data-layer="first"${firstChecked?' checked':''}><span>${escape(visual.layers[0].label)}</span></label><label><input type="checkbox" data-layer="second"${secondChecked?' checked':''}><span>${escape(visual.layers[1].label)}</span></label></div>${visual.caption?`<figcaption>${studyTextMarkup(visual.caption)}</figcaption>`:''}</figure>`;
+  return `<figure class="reading-scale-overlay"><div class="reading-fretboard-scroll"><svg class="reading-fretboard" viewBox="0 0 ${width} 250" style="--reading-fretboard-width:${width}px" role="img" aria-label="${escape(description)}">${grid}${rows}${frets}${notes}</svg></div><div class="reading-scale-overlay-controls" aria-label="${ui(locale,'Visible scales')}"><label><input type="checkbox" data-layer="first"${firstChecked?' checked':''}><span>${escape(visual.layers[0].label)}</span></label><label><input type="checkbox" data-layer="second"${secondChecked?' checked':''}><span>${escape(visual.layers[1].label)}</span></label></div>${visual.caption?`<figcaption>${studyTextMarkup(visual.caption,locale)}</figcaption>`:''}</figure>`;
 }
 
-function visualMarkup(visual:StudyVisual):string{
-  if(visual.kind==='table')return `<figure><div class="reading-table-scroll"><table class="reading-table"><thead><tr>${visual.columns.map(column=>`<th scope="col">${studyTextMarkup(column)}</th>`).join('')}</tr></thead><tbody>${visual.rows.map(row=>`<tr>${row.map(cell=>`<td>${studyTextMarkup(cell)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>${visual.caption?`<figcaption>${studyTextMarkup(visual.caption)}</figcaption>`:''}</figure>`;
-  if(visual.kind==='image')return `<figure class="reading-image"><img src="${escape(visual.src)}" alt="${escape(visual.alt)}"/>${visual.caption?`<figcaption>${studyTextMarkup(visual.caption)}</figcaption>`:''}</figure>`;
-  if(visual.kind==='positions'||visual.kind==='scale')return positionsFigure(visual);
-  if(visual.kind==='scale-overlay')return scaleOverlayFigure(visual);
+function visualMarkup(visual:StudyVisual,locale:Locale='en'):string{
+  const studyNote=(midi:number,spelling:'sharp'|'flat'='sharp')=>baseStudyNote(midi,spelling,locale);
+  const intervalName=(distance:number)=>baseIntervalName(distance,locale);
+  if(visual.kind==='table')return `<figure><div class="reading-table-scroll"><table class="reading-table"><thead><tr>${visual.columns.map(column=>`<th scope="col">${studyTextMarkup(column,locale)}</th>`).join('')}</tr></thead><tbody>${visual.rows.map(row=>`<tr>${row.map(cell=>`<td>${studyTextMarkup(cell,locale)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>${visual.caption?`<figcaption>${studyTextMarkup(visual.caption,locale)}</figcaption>`:''}</figure>`;
+  if(visual.kind==='image')return `<figure class="reading-image"><img src="${escape(visual.src)}" alt="${escape(visual.alt)}"/>${visual.caption?`<figcaption>${studyTextMarkup(visual.caption,locale)}</figcaption>`:''}</figure>`;
+  if(visual.kind==='positions'||visual.kind==='scale')return positionsFigure(visual,locale);
+  if(visual.kind==='scale-overlay')return scaleOverlayFigure(visual,locale);
   if(visual.kind==='fretboard-intervals'){
     return `<div class="reading-fretboard-intervals">${visual.targets.map(target=>{
       const [from,to]=visual.towardRoot?[target,visual.root]:[visual.root,target];
-      return positionsFigure({kind:'positions',positions:[from!,to!],rootMidi:visual.root.midi,showDirection:true,startFret:visual.startFret,endFret:visual.endFret,caption:`${studyNote(from!.midi)} → ${studyNote(to!.midi)} · ${intervalName(to!.midi-from!.midi)}`});
+      return positionsFigure({kind:'positions',positions:[from!,to!],rootMidi:visual.root.midi,showDirection:true,startFret:visual.startFret,endFret:visual.endFret,caption:`${studyNote(from!.midi)} → ${studyNote(to!.midi)} · ${intervalName(to!.midi-from!.midi)}`},locale);
     }).join('')}</div>`;
   }
   if(visual.kind==='interval'){
     const distances=visual.showName===false?[1,2]:visual.distances;
     const limit=Math.max(...distances),spelling=visual.spelling??'sharp';
     const endMidi=Math.floor((visual.root+limit)/12)*12+11;
-    return `<figure class="reading-piano-figure"><div class="reading-intervals">${distances.map(distance=>`<div class="reading-interval">${pianoDiagram({from:visual.root,to:visual.root+distance,endMidi,spelling})}<div class="reading-interval-description"><strong>${studyNote(visual.root,spelling)} → ${studyNote(visual.root+distance,spelling)}</strong><span>${visual.showName===false?(distance===1?'uma casa na mesma corda':'um tom'):intervalName(distance)}<small class="reading-measure"> · ${distance} ${distance===1?'semitom':'semitons'}</small></span></div></div>`).join('')}</div>${visual.caption?`<figcaption>${studyTextMarkup(visual.caption)}</figcaption>`:''}</figure>`;
+    return `<figure class="reading-piano-figure"><div class="reading-intervals">${distances.map(distance=>`<div class="reading-interval">${pianoDiagram({from:visual.root,to:visual.root+distance,endMidi,spelling,locale})}<div class="reading-interval-description"><strong>${studyNote(visual.root,spelling)} → ${studyNote(visual.root+distance,spelling)}</strong><span>${visual.showName===false?(locale==='en'?(distance===1?'one fret on the same string':'a whole step'):(distance===1?'uma casa na mesma corda':'um tom')):intervalName(distance)}<small class="reading-measure"> · ${distance} ${locale==='en'?(distance===1?'semitone':'semitones'):(distance===1?'semitom':'semitons')}</small></span></div></div>`).join('')}</div>${visual.caption?`<figcaption>${studyTextMarkup(visual.caption,locale)}</figcaption>`:''}</figure>`;
   }
   if(visual.kind==='degrees'){
     return `<figure><div class="reading-references">${(['e','a'] as const).map(reference=>{
       const relation=referenceRelation(reference);
-      return `<div><strong>${studyNote(relation.root)} → Si</strong><span>Si é o <b>${relation.degree}º grau</b></span><small>${relation.distance} semitons de distância</small></div>`;
-    }).join('')}</div><figcaption>A nota Si tem a mesma altura nos dois exemplos. A referência muda sua relação.</figcaption></figure>`;
+      return locale==='en'?`<div><strong>${studyNote(relation.root)} → B</strong><span>B is degree <b>${relation.degree}</b></span><small>${relation.distance} semitones apart</small></div>`:`<div><strong>${studyNote(relation.root)} → B</strong><span>B é o <b>${relation.degree}º grau</b></span><small>${relation.distance} semitons de distância</small></div>`;
+    }).join('')}</div><figcaption>${locale==='en'?'B has the same pitch in both examples. Its relationship changes with the reference.':'A nota B tem a mesma altura nos dois exemplos. A referência muda sua relação.'}</figcaption></figure>`;
   }
   if(visual.kind==='alternation'){
-    return `<figure class="reading-alternation-figure"><svg class="reading-alternation" viewBox="0 0 320 200" role="img" aria-label="${escape(visual.caption)}"><g class="alternation-arrows" fill="none"><path d="M85 65C120 10 200 10 235 65"/><path d="M224 60L235 65L232 53"/><path d="M235 135C200 190 120 190 85 135"/><path d="M88 147L85 135L97 140"/></g>${visual.notes.map((midi,i)=>`<text x="${i===0?60:260}" y="106" class="alternation-note">${studyNote(midi,visual.spelling??'sharp')}</text>`).join('')}<text x="160" y="105" class="alternation-interval">${escape(visual.intervalLabel??intervalName(Math.abs(visual.notes[1]-visual.notes[0])))}</text></svg>${visual.showCaption===false?'':`<figcaption>${studyTextMarkup(visual.caption)}</figcaption>`}</figure>`;
+    return `<figure class="reading-alternation-figure"><svg class="reading-alternation" viewBox="0 0 320 200" role="img" aria-label="${escape(visual.caption)}"><g class="alternation-arrows" fill="none"><path d="M85 65C120 10 200 10 235 65"/><path d="M224 60L235 65L232 53"/><path d="M235 135C200 190 120 190 85 135"/><path d="M88 147L85 135L97 140"/></g>${visual.notes.map((midi,i)=>`<text x="${i===0?60:260}" y="106" class="alternation-note">${studyNote(midi,visual.spelling??'sharp')}</text>`).join('')}<text x="160" y="105" class="alternation-interval">${escape(visual.intervalLabel??intervalName(Math.abs(visual.notes[1]-visual.notes[0])))}</text></svg>${visual.showCaption===false?'':`<figcaption>${studyTextMarkup(visual.caption,locale)}</figcaption>`}</figure>`;
   }
   if(visual.kind==='path'){
     return `<figure><div class="reading-path${visual.compact?' reading-path-compact':''}">${visual.notes.map((midi,i)=>{
       const next=visual.notes[i+1],distance=next===undefined?0:Math.abs(next-midi);
-      return `<strong>${studyNote(midi,visual.spelling??'sharp')}</strong>${next===undefined?'':`<span><b aria-hidden="true">${next>midi?'↗':next<midi?'↘':'→'}</b><small>${distance>=8?intervalName(distance):`${distance} ${distance===1?'semitom':'semitons'}`}</small></span>`}`;
-    }).join('')}</div>${visual.showCaption===false?'':`<figcaption>${studyTextMarkup(visual.caption)}</figcaption>`}</figure>`;
+      return `<strong>${studyNote(midi,visual.spelling??'sharp')}</strong>${next===undefined?'':`<span><b aria-hidden="true">${next>midi?'↗':next<midi?'↘':'→'}</b><small>${distance>=8?intervalName(distance):`${distance} ${locale==='en'?(distance===1?'semitone':'semitones'):(distance===1?'semitom':'semitons')}`}</small></span>`}`;
+    }).join('')}</div>${visual.showCaption===false?'':`<figcaption>${studyTextMarkup(visual.caption,locale)}</figcaption>`}</figure>`;
   }
   const roles=visual.kind==='chord'?visual.roles:visual.degrees;
-  return `<figure><div class="reading-notes">${visual.notes.map((midi,i)=>`<div><strong>${studyNote(midi)}</strong><small>${escape(roles[i]!)}</small></div>`).join('')}</div><figcaption>${studyTextMarkup(visual.caption)}</figcaption></figure>`;
+  return `<figure><div class="reading-notes">${visual.notes.map((midi,i)=>`<div><strong>${studyNote(midi)}</strong><small>${escape(roles[i]!)}</small></div>`).join('')}</div><figcaption>${studyTextMarkup(visual.caption,locale)}</figcaption></figure>`;
 }
 
-export function studyTopicMarkup(page:StudyPage,id:string):string{
-  const figure=`<div class="reader-visual">${visualMarkup(page.visual)}</div>`;
-  const insightMarkup=page.insight?`<aside class="reader-insight" aria-labelledby="${id}-insight"><strong id="${id}-insight">${studyTextMarkup(page.insight.title)}</strong><p>${studyTextMarkup(page.insight.text)}</p>${page.insight.link?`<a href="${escape(page.insight.link.href)}" target="_blank" rel="noopener noreferrer">${escape(page.insight.link.label)} <span aria-hidden="true">↗</span></a>`:''}</aside>`:'';
+export function studyTopicMarkup(page:StudyPage,id:string,locale:Locale='en'):string{
+  const figure=`<div class="reader-visual">${visualMarkup(page.visual,locale)}</div>`;
+  const insightMarkup=page.insight?`<aside class="reader-insight" aria-labelledby="${id}-insight"><strong id="${id}-insight">${studyTextMarkup(page.insight.title,locale)}</strong><p>${studyTextMarkup(page.insight.text,locale)}</p>${page.insight.link?`<a href="${escape(page.insight.link.href)}" target="_blank" rel="noopener noreferrer">${escape(page.insight.link.label)} <span aria-hidden="true">↗</span></a>`:''}</aside>`:'';
   const inlineVisual=page.visualAfterParagraph!==undefined&&page.visualAfterParagraph>=1&&page.visualAfterParagraph<=page.paragraphs.length;
   const prose=page.paragraphs.map((paragraph,i)=>{
     const position=i+1;
     const extraFigures=(page.additionalVisuals??[]).filter(item=>item.afterParagraph===position)
-      .map(item=>`<div class="reader-visual">${visualMarkup(item.visual)}</div>`).join('');
+      .map(item=>`<div class="reader-visual">${visualMarkup(item.visual,locale)}</div>`).join('');
     const insight=page.insight?.afterParagraph===position&&!page.insight.afterPractice
       ?insightMarkup
       :'';
-    return `<div class="reader-prose"><p>${studyTextMarkup(paragraph)}</p></div>${inlineVisual&&position===page.visualAfterParagraph?figure:''}${extraFigures}${insight}`;
+    return `<div class="reader-prose"><p>${studyTextMarkup(paragraph,locale)}</p></div>${inlineVisual&&position===page.visualAfterParagraph?figure:''}${extraFigures}${insight}`;
   }).join('');
   let practice='';
   if(page.practice){
     practice=page.highlightPractice
-      ?`<div class="reader-insight"><strong>Experimente na guitarra</strong><p>${studyTextMarkup(page.practice)}</p></div>`
-      :`<p class="reader-practice"><span class="reader-practice-icon" aria-hidden="true">♪</span><span><span class="sr-only">No instrumento: </span>${studyTextMarkup(page.practice)}</span></p>`;
+      ?`<div class="reader-insight"><strong>${ui(locale,'Try it on guitar')}</strong><p>${studyTextMarkup(page.practice,locale)}</p></div>`
+      :`<p class="reader-practice"><span class="reader-practice-icon" aria-hidden="true">♪</span><span><span class="sr-only">${ui(locale,'On your instrument: ')}</span>${studyTextMarkup(page.practice,locale)}</span></p>`;
   }
   return `<section class="reader-topic" aria-labelledby="${id}">
     <h2 id="${id}" tabindex="-1"${page.hideTitle?' hidden':''}>${escape(page.title)}</h2>
@@ -169,7 +174,7 @@ export function studyTopicMarkup(page:StudyPage,id:string):string{
 }
 
 /** A continuous reading view. Diagrams are static; practice happens on the instrument. */
-export function mountStudyReader(trigger:HTMLButtonElement,guide:StudyGuide,lessonId:string,onOpen:()=>void):()=>void{
+export function mountStudyReader(trigger:HTMLButtonElement,guide:StudyGuide,lessonId:string,onOpen:()=>void,locale:Locale='en'):()=>void{
   const dialog=document.createElement('dialog');
   dialog.className='study-reader';
   dialog.id='song-study-reader';
@@ -177,11 +182,11 @@ export function mountStudyReader(trigger:HTMLButtonElement,guide:StudyGuide,less
   trigger.setAttribute('aria-haspopup','dialog');
   trigger.setAttribute('aria-controls',dialog.id);
   dialog.innerHTML=`
-    <header class="reader-header"><div><p>Caderno de estudo · ${escape(guide.title)}</p><strong id="${dialog.id}-title">${escape((guide.lessons.find(book=>book.lessonId===lessonId)??guide.lessons[0])?.title??guide.title)}</strong></div><button type="button" class="reader-close" aria-label="Fechar leitura" autofocus>×</button></header>
-    <div class="reader-scroll" tabindex="0" aria-label="Conteúdo da leitura"><article class="reader-page">
-      ${guide.lessons.map(book=>`<div class="reader-lesson" id="reading-${book.lessonId}">${book.pages.map((page,i)=>studyTopicMarkup(page,`reading-${book.lessonId}-topic-${i}`)).join('')}</div>`).join('')}
+    <header class="reader-header"><div><p>${ui(locale,'Study notebook')} · ${escape(guide.title)}</p><strong id="${dialog.id}-title">${escape((guide.lessons.find(book=>book.lessonId===lessonId)??guide.lessons[0])?.title??guide.title)}</strong></div><button type="button" class="reader-close" aria-label="${ui(locale,'Close reading')}" autofocus>×</button></header>
+    <div class="reader-scroll" tabindex="0" aria-label="${ui(locale,'Reading content')}"><article class="reader-page">
+      ${guide.lessons.map(book=>`<div class="reader-lesson" id="reading-${book.lessonId}">${book.pages.map((page,i)=>studyTopicMarkup(page,`reading-${book.lessonId}-topic-${i}`,locale)).join('')}</div>`).join('')}
     </article></div>
-    <footer class="reader-footer"><button type="button" class="reader-return">Voltar à prática →</button></footer>`;
+    <footer class="reader-footer"><button type="button" class="reader-return">${ui(locale,'Back to practice →')}</button></footer>`;
   document.body.append(dialog);
   const scroll=dialog.querySelector<HTMLElement>('.reader-scroll')!;
   const storageKey=`pentashapes.study-reader.v1:${guide.id??guide.title}:${lessonId}`;

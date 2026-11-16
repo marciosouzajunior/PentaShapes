@@ -10,7 +10,7 @@ test('standard tuning, open strings, octave and highest supported fret', () => {
     assert.equal(noteAt(string, 12).pitchClass, noteAt(string, 0).pitchClass);
     assert.equal(noteAt(string, 24).midi, string.midi + 24);
   }
-  assert.equal(noteAt(STANDARD_TUNING[0], 5).name, 'Lá');
+  assert.equal(noteAt(STANDARD_TUNING[0], 5).name, 'A');
   assert.equal(noteAt(STANDARD_TUNING[1], 8).degree, '♭7');
 });
 
