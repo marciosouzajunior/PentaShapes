@@ -84,6 +84,7 @@ app.innerHTML = `
     <strong>PentaShapes</strong>
     <p>Um espaço para explorar a música do seu jeito.</p>
     <nav class="footer-links" aria-label="Links do projeto">
+      <a href="https://github.com/marciosouzajunior/PentaShapes" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
       <a href="/legacy/" target="_blank" rel="noopener noreferrer">Legacy <span aria-hidden="true">↗</span></a>
     </nav>
   </footer>
